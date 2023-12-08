@@ -1,27 +1,33 @@
 <template>
   <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">PŘIJÍMAČKY-ONLINE</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="#">Náhodné cvičení</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Přehled</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Generování testů</a>
-        </li>
-      </ul>
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">PŘIJÍMAČKY-ONLINE</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <RouterLink to="/" class="nav-link">
+              Náhodné cvičení
+            </RouterLink>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" aria-disabled="true">Generování testů</a>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
 </template>
   
-<script setup>
+<script setup lang="ts">
 
 </script>
+
+<style scoped>
+.nav-link {
+  text-decoration: none;
+}
+</style>
