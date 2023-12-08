@@ -7,7 +7,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav me-auto">
           <li class="nav-item">
             <RouterLink to="/" class="nav-link">
               Náhodné cvičení
@@ -17,6 +17,7 @@
             <a class="nav-link disabled" aria-disabled="true">Generování testů</a>
           </li>
         </ul>
+        <button type="button" class="btn btn-outline-light">Přihlásit se</button>
       </div>
     </div>
   </nav>
