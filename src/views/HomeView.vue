@@ -1,11 +1,34 @@
 <template>
   <div class="main-page">
-    <div class="question-container bg-primary">Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis
-      repellendus minima quis tempore, iste pariatur neque, aut consectetur aliquam deleniti accusamus maxime atque rem
-      voluptatem id explicabo, omnis non fugit!</div>
+    <div class="page-title">
+      <p>Náhodné cvičení</p>
+    </div>
+    <div class="container-fluid bg-dark w-auto rounded p-3 shadow-lg m-1">
+      <div class="question-title">
+        5 Které z následujících tvrzení o slovesném tvaru podtrženém v TEXTU 1 je
+pravdivé?
+      </div>
+      <br>
+      <div class="question-option">
+        A) Tvar ztráceje v textu vyjadřuje děj následující po jiném ději – dotyčný prchal
+a chvíli poté začal ztrácet rovnováhu.
+      </div>
+      <div class="question-option">
+        A) Tvar ztráceje v textu vyjadřuje děj následující po jiném ději – dotyčný prchal
+a chvíli poté začal ztrácet rovnováhu.
+      </div>
+      <div class="question-option">
+        A) Tvar ztráceje v textu vyjadřuje děj následující po jiném ději – dotyčný prchal
+a chvíli poté začal ztrácet rovnováhu.
+      </div>
+      <div class="question-option">
+        A) Tvar ztráceje v textu vyjadřuje děj následující po jiném ději – dotyčný prchal
+a chvíli poté začal ztrácet rovnováhu.
+      </div>
+    </div>
   
   <div class="footer">
-    <span>Prosím podpořte tento projekt <a href="https://www.buymeacoffee.com/sanyl">zde</a></span>
+    <a href="https://www.buymeacoffee.com/sanyl">PODPORA PROJEKTU</a>
   </div>
 </div>
 </template>
@@ -17,17 +40,10 @@
   flex-direction: column;
   justify-content: center;
 }
-
-.question-container {
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  margin-top: 1rem;
-  width: 50rem;
-  height: 35rem;
-  max-width: 90vw;
-  max-height: 80vh;
+.page-title {
+  font-size: 3em;
 }
+
 .footer {
   position: absolute;
   bottom: 1rem;
