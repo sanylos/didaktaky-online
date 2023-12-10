@@ -19,7 +19,11 @@
             :value="option" v-model="answer">
           <label class="btn text-white fw-normal" :for="'option' + index">{{ option }}</label>
         </div>
-        {{ answer }}
+      </div>
+      <div class="mt-4 d-flex justify-content-between">
+        <button class="btn btn-primary">⮜ Předchozí</button>
+        <button class="btn btn-outline-success">✍🏼 Zkontrolovat</button>
+        <button class="btn btn-primary">Další ⮞</button>
       </div>
     </div>
     <div class="footer">
@@ -35,6 +39,7 @@ import { reactive, ref } from 'vue';
 
 let answer = ref('');
 let exercises: any = ref([]);
+let answered = ref(false);
 
 const getQuestion = async () => {
   const { data } = await supabase
