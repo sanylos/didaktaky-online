@@ -11,9 +11,13 @@
         </div>
       </div>
       <div>
+        ({{ exercises.description }})
+      </div>
+      <div>
         <div v-for="option, index in exercises.answers" :key="index" class="question-option mb-1">
-          <input type="radio" class="btn-check" name="options-base" :id="'option'+index" autocomplete="off" :value="option" v-model="answer">
-          <label class="btn text-white fw-normal" :for="'option'+index">{{option}}</label>
+          <input type="radio" class="btn-check" name="options-base" :id="'option' + index" autocomplete="off"
+            :value="option" v-model="answer">
+          <label class="btn text-white fw-normal" :for="'option' + index">{{ option }}</label>
         </div>
         {{ answer }}
       </div>
