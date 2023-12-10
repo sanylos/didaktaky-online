@@ -6,10 +6,10 @@
     <div class="container-md bg-dark rounded p-3 shadow-lg m-1 w-100">
 
       <div v-if="loading" class="d-flex justify-content-center">
-  <div class="spinner-border" role="status">
-    <span class="visually-hidden">Loading...</span>
-  </div>
-</div>
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
 
       <div v-if="!loading">
         <div class="question-title">
@@ -19,7 +19,7 @@
           </div>
         </div>
 
-        <div>
+        <div v-if="exercises.description">
           ({{ exercises.description }})
         </div>
 
