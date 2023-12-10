@@ -5,17 +5,15 @@
     </div>
     <div class="container-fluid bg-dark w-auto rounded p-3 shadow-lg m-1">
       <div class="question-title">
-        <div>
-          <b>{{ exercises.number }}</b>
+        <div class="fw-bolder">
+          {{ exercises.number }}
           {{ exercises.title }}
         </div>
       </div>
-      <br>
       <div>
-        <div v-for="option, index in exercises.answers" class="question-option">
-          <div :class="[(option==exercises.correct_answer)&(answer == option) ? 'bg-success' : ''],
-          [(option!=exercises.correct_answer)&(answer == option) ? 'bg-danger' : '']" class="rounded p-2 mb-1"
-            @click="answer = option">{{ option }}</div>
+        <div v-for="option, index in exercises.answers" :key="index" class="question-option mb-1">
+          <input type="radio" class="btn-check" name="options-base" :id="'option'+index" autocomplete="off" :value="option" v-model="answer">
+          <label class="btn text-white fw-normal" :for="'option'+index">{{option}}</label>
         </div>
         {{ answer }}
       </div>
@@ -31,14 +29,13 @@ import { supabase } from '@/supabase'
 import { reactive, ref } from 'vue';
 
 
-let answer = ref('fsdfd');
-let exercises = ref([]);
+let answer = ref('');
+let exercises: any = ref([]);
 
 const getQuestion = async () => {
   const { data } = await supabase
     .from('random_exercise')
-    .select('*')
-    .limit(1);
+    .select('*');
   exercises.value = data[0];
   console.log(exercises.value)
 }
