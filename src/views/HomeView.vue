@@ -13,17 +13,18 @@
 
       <div v-if="!loading">
 
-        <div class="exercise">
-          <div class="question-title">
-            <div class="fw-bolder">
-              {{ exercises.number }}
-              {{ exercises.title }}
-            </div>
+        <div class="question-title">
+          <div class="fw-bolder">
+            {{ exercises.number }}
+            {{ exercises.title }}
           </div>
+        </div>
 
-          <div v-if="exercises.description">
+        <div v-if="exercises.description">
             ({{ exercises.description }})
           </div>
+
+        <div class="exercise">
 
           <div>
             <div v-for="option, index in exercises.answers" :key="index" class="question-option mb-1">
@@ -46,7 +47,7 @@
           Zkontrolovat</button>
         <button v-if="answered" class="btn btn-primary" @click="getQuestion">Další ⮞</button>
       </div>
-      
+
     </div>
   </div>
 </template>
