@@ -1,5 +1,6 @@
 <template>
   <div class="main-page">
+    <LoginModal></LoginModal>
     <div class="page-title">
       Náhodné cvičení
     </div>
@@ -73,11 +74,12 @@
 </template>
 
 <script lang="ts" setup>
+import LoginModal from '@/components/LoginModal.vue';
 import { supabase } from '@/supabase'
 import { reactive, ref } from 'vue';
 
 let loading = ref(false);
-
+let isTextShown = ref(false);
 let exercises: any = ref([]);
 let answer = ref([]);
 let answered = ref(false);

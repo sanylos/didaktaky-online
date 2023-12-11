@@ -17,7 +17,7 @@
             <a class="nav-link disabled" aria-disabled="true">Generování testů</a>
           </li>
         </ul>
-        <button type="button" class="btn btn-outline-light">Přihlásit se</button>
+        <button type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#loginModal">Přihlásit se</button>
       </div>
     </div>
   </nav>
