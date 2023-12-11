@@ -12,35 +12,41 @@
       </div>
 
       <div v-if="!loading">
-        <div class="question-title">
-          <div class="fw-bolder">
-            {{ exercises.number }}
-            {{ exercises.title }}
+
+        <div class="exercise">
+          <div class="question-title">
+            <div class="fw-bolder">
+              {{ exercises.number }}
+              {{ exercises.title }}
+            </div>
           </div>
-        </div>
 
-        <div v-if="exercises.description">
-          ({{ exercises.description }})
-        </div>
-
-        <div>
-          <div v-for="option, index in exercises.answers" :key="index" class="question-option mb-1">
-            <input type="radio" class="btn-check" name="options-base" :id="'option' + index" autocomplete="off"
-              :value="index" v-model="answer" :disabled="answered">
-            <label class="btn text-white fw-normal" :for="'option' + index" :class="{
-              'bg-success': index == exercises.correct_answer && answered,
-              'bg-danger': index == answer && index != exercises.correct_answer && answered,
-            }">{{ option }}</label>
+          <div v-if="exercises.description">
+            ({{ exercises.description }})
           </div>
+
+          <div>
+            <div v-for="option, index in exercises.answers" :key="index" class="question-option mb-1">
+              <input type="radio" class="btn-check" name="options-base" :id="'option' + index" autocomplete="off"
+                :value="index" v-model="answer" :disabled="answered">
+              <label class="btn text-white fw-normal" :for="'option' + index" :class="{
+                'bg-success': index == exercises.correct_answer && answered,
+                'bg-danger': index == answer && index != exercises.correct_answer && answered,
+              }">{{ option }}</label>
+            </div>
+          </div>
+
         </div>
 
-        <div class="mt-4 d-flex justify-content-between">
-          <button class="btn btn-primary">⮜ Předchozí</button>
-          <button v-if="!answered" class="btn btn-success" @click="handleSubmit" :disabled="answer == null">✍🏼
-            Zkontrolovat</button>
-          <button v-if="answered" class="btn btn-primary" @click="getQuestion">Další ⮞</button>
-        </div>
       </div>
+
+      <div class="mt-4 d-flex justify-content-between">
+        <button class="btn btn-primary">⮜ Předchozí</button>
+        <button v-if="!answered" class="btn btn-success" @click="handleSubmit" :disabled="answer == null">✍🏼
+          Zkontrolovat</button>
+        <button v-if="answered" class="btn btn-primary" @click="getQuestion">Další ⮞</button>
+      </div>
+      
     </div>
   </div>
 </template>
