@@ -2,7 +2,7 @@
     <div class="app-container">
         <Navbar />
         <RouterView />
-        <div class="footer">
+        <div class="footer mb-1">
             <a href="https://www.buymeacoffee.com/sanyl">PODPORA PROJEKTU</a>
         </div>
     </div>
@@ -15,8 +15,8 @@ import Navbar from '@/components/Navbar.vue';
 
 <style scoped>
 .app-container {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
 }
 
@@ -25,7 +25,5 @@ import Navbar from '@/components/Navbar.vue';
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: absolute;
-    bottom: 1rem;
 }
 </style>
