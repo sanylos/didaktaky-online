@@ -7,8 +7,11 @@
                     <button type="button" class="btn-close" id="close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div v-if="errorMessage">
+                        fsdfs
+                    </div>
                     <div v-if="pageType == 'Přihlášení'">
-                        <form @click.prevent="handleLogin">
+                        <form>
                             <div class="mb-3">
                                 <label for="emailInput" class="form-label">Email</label>
                                 <input type="email" v-model="email" class="form-control bg-dark text-white border-secondary"
@@ -20,17 +23,14 @@
                                     class="form-control bg-dark text-white border-secondary" id="passwordInput">
                             </div>
                             <div class="d-flex justify-content-between">
-                                <button type="submit" class="btn btn-primary">Přihlásit</button>
-
+                                <button type="submit" @click.prevent="handleLogin" class="btn btn-primary">Přihlásit</button>
+                                <a @click="pageType = 'Registrace'" class="">Nemáš účet? Registruj se</a>
                             </div>
                         </form>
-                        <div class="d-flex justify-content-end">
-                            <a @click="pageType = 'Registrace'" class="">Nemáš účet? Registruj se</a>
-                        </div>
                     </div>
 
                     <div v-else>
-                        <form @click.prevent="handleRegister">
+                        <form>
                             <div class="mb-3">
                                 <label for="emailInput" class="form-label">Email</label>
                                 <input type="email" v-model="email" class="form-control bg-dark text-white border-secondary"
@@ -42,12 +42,10 @@
                                     class="form-control bg-dark text-white border-secondary" id="passwordInput">
                             </div>
                             <div class="d-flex justify-content-between">
-                                <button type="submit" class="btn btn-primary">Registrovat</button>
+                                <button type="submit" @click.prevent="handleRegister" class="btn btn-primary">Registrovat</button>
+                                <a @click="pageType = 'Přihlášení'" class="">Máš účet? Přihlaš se</a>
                             </div>
                         </form>
-                        <div class="d-flex justify-content-end">
-                            <a @click="pageType = 'Přihlášení'" class="">Máš účet? Přihlaš se</a>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -61,7 +59,7 @@ import { supabase } from '@/supabase';
 import { useUserStore } from '@/stores/user';
 
 const pageType = ref("Přihlášení");
-const errorMessage = ref("");
+const errorMessage = ref(null);
 const email = ref("");
 const password = ref("");
 
