@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">PŘIJÍMAČKY-ONLINE</a>
+      <a class="navbar-brand" href="#">PRJMCKY</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -17,14 +17,18 @@
             <a class="nav-link disabled" aria-disabled="true">Generování testů</a>
           </li>
         </ul>
-        <button type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#loginModal">Přihlásit se</button>
+        <button v-if="!userStore.isLoggedIn" type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#loginModal">Přihlásit se</button>
+        <button v-if="userStore.isLoggedIn" @click="userStore.signOut" type="button" class="btn btn-outline-danger">Odhlásit se</button>
       </div>
     </div>
   </nav>
 </template>
   
 <script setup lang="ts">
-
+import { useUserStore } from '@/stores/user';
+import { storeToRefs } from 'pinia';
+const userStore = useUserStore();
+const { isLoggedIn } = storeToRefs(userStore);
 </script>
 
 <style scoped>
