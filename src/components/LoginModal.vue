@@ -64,7 +64,7 @@ import { supabase } from '@/supabase';
 import { useUserStore } from '@/stores/user';
 
 const pageType = ref("Přihlášení");
-const errorMessage = ref(null);
+const errorMessage = ref("");
 const email = ref("");
 const password = ref("");
 
