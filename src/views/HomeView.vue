@@ -27,20 +27,27 @@
 
           <div class="d-flex flex-column justify-content-start">
 
+            <div class="question-claims">
+              <div v-for="claim, index in exercises.claims" :key="index">
+                <span class="fw-bold">Tvrzení č. {{ index + 1 }}: </span><span v-html="claim"></span>
+              </div>
+            </div>
+
             <div class="question-title">
               <div class="">
                 <span class="fw-bold" v-html="exercises.title"></span>
               </div>
             </div>
 
-            <div v-if="exercises.description" class="">
+            <div v-if="exercises.description" class="mb-2">
               ({{ exercises.description }})
             </div>
 
             <!--SINGLE OPTION-->
             <div class="exercise-options" v-if="exercises.type == 'option'">
               <div>
-                <div v-for="option, index in exercises.answers" :key="index" class="question-option mb-1 d-flex flex-column align-content-start">
+                <div v-for="option, index in exercises.answers" :key="index"
+                  class="question-option mb-1 d-flex flex-column align-content-start">
                   <input type="radio" class="btn-check" name="options-base" :id="'option' + index" autocomplete="off"
                     :value="index" v-model="answer" :disabled="answered">
                   <label class="btn text-white text-start fw-normal bg-unanswered" :for="'option' + index" :class="{
@@ -57,11 +64,11 @@
                 <div class="row text-center">
                   <div class="col-10">
                   </div>
-                  <div class="col-1 p-1">ANO</div>
-                  <div class="col-1 p-1">NE</div>
+                  <div class="col-1">ANO</div>
+                  <div class="col-1">NE</div>
                 </div>
                 <div v-for="option, index in exercises.answers" :key="index"
-                  class="row question-option mb-1 mt-1 p-1 rounded" :class="{
+                  class="row question-option rounded mb-1" :class="{
                     'bg-success': answer[index] == exercises.correct_answer[index] && answered,
                     'bg-danger': answer[index] != exercises.correct_answer[index] && answered,
                   }">
@@ -144,6 +151,7 @@ getQuestion();
 .bg-unanswered {
   background-color: rgba(245, 245, 220, 0.036);
 }
+
 .bg-unanswered:hover {
   background-color: rgba(255, 255, 255, 0.13);
 }
