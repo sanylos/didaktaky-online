@@ -67,8 +67,8 @@
                   <div class="col-1">ANO</div>
                   <div class="col-1">NE</div>
                 </div>
-                <div v-for="option, index in exercises.answers" :key="index"
-                  class="row question-option rounded mb-1" :class="{
+                <div v-for="option, index in exercises.answers" :key="index" class="row question-option rounded mb-1"
+                  :class="{
                     'bg-success': answer[index] == exercises.correct_answer[index] && answered,
                     'bg-danger': answer[index] != exercises.correct_answer[index] && answered,
                   }">
@@ -79,6 +79,22 @@
                     :name="'input' + index" :id="'option' + index" autocomplete="off" value="NE" :disabled="answered">
                 </div>
               </div>
+            </div>
+
+            <!--ASSIGN OPTIONS-->
+            <div class="exercise-options" v-if="exercises.type == 'assign'">
+              <div class="mb-3">
+                <div v-for="option, index in exercises.answers" :key="index"
+                  class="question-option mb-1 d-flex flex-row align-content-start justify-content-between">
+                  <span>{{ option }}</span>
+                  <input type="text" class="text-center text-white fw-bold bg-secondary border-0 rounded"
+                    style="width:30px" maxlength="1">
+                </div>
+              </div>
+              <div v-for="sentence, index in exercises.sentences" :key="index" class="mb-1">
+                {{ sentence }}
+              </div>
+
             </div>
 
           </div>
