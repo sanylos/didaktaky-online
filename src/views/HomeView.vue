@@ -85,19 +85,20 @@
             <div class="exercise-options" v-if="exercises.type == 'assign'">
               <div class="mb-3">
                 <div v-for="option, index in exercises.answers" :key="index"
-                  class="question-option mb-1 d-flex flex-row align-content-start justify-content-between p-1 rounded" :class="{
+                  class="question-option mb-1 d-flex flex-row align-content-start justify-content-between p-1 rounded"
+                  :class="{
                     'bg-success': answer[index] == exercises.correct_answer[index] && answered,
                     'bg-danger': answer[index] != exercises.correct_answer[index] && answered,
                   }">
                   <span>{{ option }}</span>
-                  <input v-model="answer[index]" type="text"
-                    class="text-center text-white fw-bold bg-secondary border-0 rounded" style="width:30px;" maxlength="1" :disabled="answered">
+                  <input v-model="answer[index]" type="text" v-on:input="convertAnswerArrayToUpperCase"
+                    class="text-center text-white fw-bold bg-secondary border-0 rounded" style="width:30px;" maxlength="1"
+                    :disabled="answered">
                 </div>
               </div>
               <div v-for="sentence, index in exercises.sentences" :key="index" class="mb-1">
                 {{ sentence }}
               </div>
-
             </div>
 
           </div>
@@ -117,7 +118,6 @@
 <script lang="ts" setup>
 import LoginModal from '@/components/LoginModal.vue';
 import { supabase } from '@/supabase'
-import { getTextOfJSDocComment } from 'typescript';
 import { reactive, ref } from 'vue';
 
 let loading = ref(false);
@@ -126,6 +126,10 @@ let exercises: any = ref([]);
 let answer: any = ref([]);
 let answered = ref(false);
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+const convertAnswerArrayToUpperCase = () => {
+  answer.value = answer.value.map(index => index.toUpperCase());
+}
 
 const handleSubmit = () => {
   answered.value = true;
@@ -144,7 +148,7 @@ const getQuestion = async () => {
   answer.value = null;
   exercises.value = data[0];
 
-  if (exercises.value.type == 'anone' || exercises.value.type == 'assign') answer.value = Array(exercises.value.answers.length).fill(null); //If exercise type is ANO/NE, set array to null
+  if (exercises.value.type == 'anone' || exercises.value.type == 'assign') answer.value = Array(exercises.value.answers.length).fill(''); //If exercise type is ANO/NE, set array to null
 
   console.log(exercises.value)
   loading.value = false;
