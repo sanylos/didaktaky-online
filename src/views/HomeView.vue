@@ -137,9 +137,6 @@
                     :disabled="answered">
                 </div>
               </div>
-              <div v-for="sentence, index in exercises.sentences" :key="index" class="mb-1">
-                {{ sentence }}
-              </div>
             </div>
 
           </div>
