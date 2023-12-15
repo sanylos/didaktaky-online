@@ -4,7 +4,7 @@
     <div class="page-title">
       Náhodné cvičení
     </div>
-    <div class="container-md bg-dark rounded p-3 shadow-lg m-1 w-auto">
+    <div class="container bg-dark rounded p-3 shadow-lg m-1 w-auto">
 
       <div v-if="loading" class="d-flex justify-content-center">
         <div class="spinner-border" role="status">
@@ -15,16 +15,17 @@
       <div v-if="!loading">
 
         <div class="d-flex flex-column">
-<div class="d-flex flex-column justify-content-center">
-          <div v-if="exercises.text1imgPath" class="col mb-1">
-            <span class="row fw-bold">TEXT 1</span>
-            <img class="exercise-text-image" :src="'src/assets/exercise_texts/' + exercises.text1imgPath + '.png'">
+
+          <div class="d-flex flex-column justify-content-center align-items-center">
+            <div v-if="exercises.text1imgPath" class="col mb-1">
+              <span class="row fw-bold">TEXT 1</span>
+              <img class="exercise-text-image" :src="'src/assets/exercise_texts/' + exercises.text1imgPath + '.png'">
+            </div>
+            <div v-if="exercises.text2imgPath" class="col mb-1">
+              <span class="row fw-bold">TEXT 2</span>
+              <img class="exercise-text-image" :src="'src/assets/exercise_texts/' + exercises.text2imgPath + '.png'">
+            </div>
           </div>
-          <div v-if="exercises.text2imgPath" class="col mb-1">
-            <span class="row fw-bold">TEXT 2</span>
-            <img class="exercise-text-image" :src="'src/assets/exercise_texts/' + exercises.text2imgPath + '.png'">
-          </div>
-        </div>
 
           <div class="d-flex flex-column justify-content-start">
 
@@ -125,8 +126,7 @@
             <!--TEXT OPTIONS-->
             <div class="exercise-options" v-if="exercises.type == 'text'">
               <div class="mb-3 d-flex flex-row align-content-start">
-                <div v-for="item, index in exercises.correct_answer" :key="index"
-                  class="question-option mb-2 p-1 rounded"
+                <div v-for="item, index in exercises.correct_answer" :key="index" class="question-option mb-2 mx-1 p-1 rounded"
                   :class="{
                     'bg-success': answer[index] == exercises.correct_answer[index] && answered,
                     'bg-danger': answer[index] != exercises.correct_answer[index] && answered,
@@ -138,6 +138,25 @@
               </div>
               <div v-for="sentence, index in exercises.sentences" :key="index" class="mb-1">
                 {{ sentence }}
+              </div>
+            </div>
+
+            <!--SORT OPTIONS-->
+            <div class="exercise-options" v-if="exercises.type == 'sort'">
+              <div v-for="sentence, index in exercises.sentences" :key="index" class="mb-1 border p-1">
+                {{ sentence }}
+              </div>
+              <div class="d-flex flex-row align-content-center justify-content-center mt-3">
+                <div v-for="option, index in exercises.correct_answer" :key="index"
+                  class="question-option mb-2 mx-1 p-1 rounded" :class="{
+                    'bg-success': answer[index] == exercises.correct_answer[index] && answered,
+                    'bg-danger': answer[index] != exercises.correct_answer[index] && answered,
+                  }">
+                  <input v-model="answer[index]" type="text"
+                    class="text-center text-white fw-bold bg-secondary border-0 rounded fs-4"
+                    style="width:40px; height:40px;" maxlength="1" v-on:input="convertAnswerArrayToUpperCase"
+                    :disabled="answered">
+                </div>
               </div>
             </div>
 
@@ -184,10 +203,10 @@ const getQuestion = async () => {
   loading.value = true;
   await sleep(0);
 
-  const { data,error } = await supabase
+  const { data, error } = await supabase
     .from('random_exercise')
     .select('*')
-    //.eq('subject','CJL')
+    .eq('subject', 'CJL')
     .limit(1);
 
   answered.value = false;
@@ -195,9 +214,10 @@ const getQuestion = async () => {
   exercises.value = data[0];
 
   if (exercises.value.type == 'anone' ||
-   exercises.value.type == 'assign' || 
-   exercises.value.type == 'text' ||
-   exercises.value.type == 'text-multiple') answer.value = Array(exercises.value.correct_answer.length).fill(''); //If exercise type is ANO/NE, set array to null
+    exercises.value.type == 'assign' ||
+    exercises.value.type == 'text' ||
+    exercises.value.type == 'sort' ||
+    exercises.value.type == 'text-multiple') answer.value = Array(exercises.value.correct_answer.length).fill(''); //If exercise type is ANO/NE, set array to null
 
   console.log(exercises.value)
   loading.value = false;
