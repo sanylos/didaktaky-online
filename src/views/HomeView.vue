@@ -123,19 +123,21 @@
             </div>
 
             <!--TEXT OPTIONS-->
-            <div class="exercise-options" v-if="exercises.type == 'text-multiple'">
-              <div class="mb-3">
-                <div v-for="option, index in exercises.answers" :key="index"
-                  class="question-option mb-2 d-flex flex-column align-content-start justify-content-between p-1 rounded"
+            <div class="exercise-options" v-if="exercises.type == 'text'">
+              <div class="mb-3 d-flex flex-row align-content-start">
+                <div v-for="item, index in exercises.correct_answer" :key="index"
+                  class="question-option mb-2 p-1 rounded"
                   :class="{
                     'bg-success': answer[index] == exercises.correct_answer[index] && answered,
                     'bg-danger': answer[index] != exercises.correct_answer[index] && answered,
                   }">
-                  <span v-html="option"></span>
                   <input v-model="answer[index]" type="text"
-                    class="text-start text-white fw-bold bg-secondary border-0 rounded" style="width:auto;"
+                    class="text-start text-white fw-bold bg-secondary border-0 rounded" style="width:150px;"
                     :disabled="answered">
                 </div>
+              </div>
+              <div v-for="sentence, index in exercises.sentences" :key="index" class="mb-1">
+                {{ sentence }}
               </div>
             </div>
 
@@ -194,7 +196,8 @@ const getQuestion = async () => {
 
   if (exercises.value.type == 'anone' ||
    exercises.value.type == 'assign' || 
-   exercises.value.type == 'text-multiple') answer.value = Array(exercises.value.answers.length).fill(''); //If exercise type is ANO/NE, set array to null
+   exercises.value.type == 'text' ||
+   exercises.value.type == 'text-multiple') answer.value = Array(exercises.value.correct_answer.length).fill(''); //If exercise type is ANO/NE, set array to null
 
   console.log(exercises.value)
   loading.value = false;
