@@ -140,9 +140,10 @@ const getQuestion = async () => {
   loading.value = true;
   await sleep(0);
 
-  const { data } = await supabase
+  const { data,error } = await supabase
     .from('random_exercise')
-    .select('*');
+    .select('*')
+    .limit(1);
 
   answered.value = false;
   answer.value = null;
