@@ -1,4 +1,5 @@
 <template>
+  <LoginModal></LoginModal>
   <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">DIDAKTAKY-ONLINE</a>
@@ -17,8 +18,10 @@
             <a class="nav-link disabled" aria-disabled="true">Generování testů</a>
           </li>
         </ul>
-        <button v-if="!userStore.isLoggedIn" type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#loginModal">Přihlásit se</button>
-        <button v-if="userStore.isLoggedIn" @click="userStore.signOut" type="button" class="btn btn-outline-danger">Odhlásit se</button>
+        <button v-if="!userStore.isLoggedIn" type="button" class="btn btn-outline-light" data-bs-toggle="modal"
+          data-bs-target="#loginModal">Přihlásit se</button>
+        <button v-if="userStore.isLoggedIn" @click="userStore.signOut" type="button"
+          class="btn btn-outline-danger">Odhlásit se</button>
       </div>
     </div>
   </nav>
@@ -27,6 +30,7 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
+import LoginModal from './LoginModal.vue';
 const userStore = useUserStore();
 </script>
 

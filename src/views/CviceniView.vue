@@ -1,6 +1,5 @@
 <template>
     <div class="main-page">
-        <LoginModal></LoginModal>
         <div class="page-title">
             Náhodné cvičení
         </div>
