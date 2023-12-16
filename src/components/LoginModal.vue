@@ -1,5 +1,5 @@
 <template>
-    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="login" aria-hidden="true">
+    <div class="modal fade text-white" id="loginModal" tabindex="-1" aria-labelledby="login" aria-hidden="true" data-bs-theme="dark">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
