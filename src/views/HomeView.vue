@@ -126,8 +126,8 @@
             <!--TEXT OPTIONS-->
             <div class="exercise-options" v-if="exercises.type == 'text'">
               <div class="mb-3 d-flex flex-row align-content-start">
-                <div v-for="item, index in exercises.correct_answer" :key="index" class="question-option mb-2 mx-1 p-1 rounded"
-                  :class="{
+                <div v-for="item, index in exercises.correct_answer" :key="index"
+                  class="question-option mb-2 mx-1 p-1 rounded" :class="{
                     'bg-success': answer[index] == exercises.correct_answer[index] && answered,
                     'bg-danger': answer[index] != exercises.correct_answer[index] && answered,
                   }">
@@ -205,13 +205,21 @@ const getQuestion = async () => {
 
   const { data, error } = await supabase
     .from('random_exercise')
-    .select('*')
+    .select(`
+    *
+    tests (
+      subject
+    )
+  `)
     .eq('subject', 'CJL')
     .limit(1);
 
+  if (error) console.log(error);
+
+  exercises.value = data[0];
   answered.value = false;
   answer.value = null;
-  exercises.value = data[0];
+
 
   if (exercises.value.type == 'anone' ||
     exercises.value.type == 'assign' ||
