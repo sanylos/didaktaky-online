@@ -13,10 +13,10 @@
 
     <!--EXAM SUBJECT-->
     <div class="d-flex mb-3">
-      <div class="mx-1" v-for="option in filteredExamSubjects" :key="option.id">
-        <input type="radio" class="btn-check" name="examOption" :id="option.id" autocomplete="off" :value="option.id"
+      <div class="mx-1" v-for="option in examOptions.examSubjects" :key="option.id">
+        <input type="radio" class="btn-check" name="examSubject" :id="option.id" autocomplete="off" :value="option.id"
           v-model="selectedFilter.examSubject">
-        <label class="btn btn-outline-light" :for="option.id">{{ option.subject }}</label>
+        <label class="btn btn-outline-light" :for="option.id">{{ option.title }}</label>
       </div>
     </div>
 
@@ -24,17 +24,17 @@
     <div class="d-flex mb-3">
       <div class="mx-1" v-for="option in examOptions.examYears" :key="option">
         <input type="radio" class="btn-check" name="examYear" :id="option" autocomplete="off" :value="option"
-          v-model="selectedFilter.examYear" @click="selectedFilter.examVariant = null">
+          v-model="selectedFilter.examYear">
         <label class="btn btn-outline-light" :for="option">{{ option }}</label>
       </div>
     </div>
 
     <!--EXAM VARIANT-->
     <div class="d-flex mb-3">
-      <div class="mx-1" v-for="option in filteredExamVariants" :key="option.id">
+      <div class="mx-1" v-for="option in examOptions.examVariants" :key="option.id">
         <input type="radio" class="btn-check" name="examVariant" :id="option.id" autocomplete="off" :value="option.id"
           v-model="selectedFilter.examVariant">
-        <label class="btn btn-outline-light" :for="option.id">{{ option.variant }}</label>
+        <label class="btn btn-outline-light" :for="option.id">{{ option.title }}</label>
       </div>
     </div>
 
@@ -51,88 +51,23 @@ const selectedFilter = reactive({
   examSubject: null,
 });
 
-const filteredExamVariants = computed(() => {
-  const examVariants = examOptions.examVariants;
-  const variantType = examVariants.find(variant => {
-    return variant.type === selectedFilter.examType;
-  });
-  if (variantType && variantType.data) {
-    const yearData = variantType.data.find(data => data.year === selectedFilter.examYear);
-    if (yearData && yearData.variants && yearData.variants.length > 0) {
-      return yearData.variants[0]; //Return variants if found
-    }
-  }
-  return null; //Return null if no variant is found
-});
-
-const filteredExamSubjects = computed(() => {
-  const selectedType = selectedFilter.examType;
-  const matchedSubjects = examOptions.examSubjects.find(subject => {
-    return subject.type === selectedType;
-  });
-
-  if (matchedSubjects && matchedSubjects.data) {
-    return matchedSubjects.data;
-  }
-  return []; //Return null if no subject is found
-});
-
 const examOptions = reactive({
   examTypes: [
     { "id": "PRIJIMACKY", "title": "Přijímačky" },
-    { "id": "MATURITA", "title": "Maturita" }
+    { "id": "MATURITA", "title": "Maturita" },
   ],
   examSubjects: [
-    {
-      "type": "PRIJIMACKY", "data": [
-        { "id": "CJL", "subject": "Český jazyk a literatura" },
-        { "id": "MAT", "subject": "Matematika" }
-      ]
-    },
-    {
-      "type": "MATURITA", "data": [
-        { "id": "CJL", "subject": "Český jazyk a literatura" },
-        { "id": "MAT", "subject": "Matematika" },
-        { "id": "ANJ", "subject": "Anglický jazyk" }
-      ]
-    }
+    { "id": "CJL", "title": "Český jazyk a literatura" },
+    { "id": "MAT", "title": "Matematika" },
+    { "id": "ANJ", "title": "Anglický jazyk" },
   ],
   examYears: ["2023", "2022", "2021", "2020"],
   examVariants: [
-    {
-      "type": "PRIJIMACKY", "data": [
-        {
-          "year": "2023", "variants": [[
-            { "id": "1", "variant": "1. řádný" },
-            { "id": "2", "variant": "2. řádný" },
-            { "id": "3", "variant": "1. náhradní" },
-            { "id": "4", "variant": "2. náhradní" },
-          ]]
-        },
-        {
-          "year": "2022", "variants": [[
-            { "id": "1", "variant": "1. řádný" },
-            { "id": "2", "variant": "2. řádný" },
-            { "id": "3", "variant": "1. náhradní" },
-            { "id": "4", "variant": "2. náhradní" },
-          ]]
-        },
-        {
-          "year": "2021", "variants": [[
-            { "id": "1", "variant": "1. řádný" },
-            { "id": "2", "variant": "2. řádný" },
-            { "id": "3", "variant": "1. náhradní" },
-            { "id": "4", "variant": "2. náhradní" },
-            { "id": "5", "variant": "Ilustrační" },
-          ]]
-        },
-        {
-          "year": "2020", "variants": [[
-            { "id": "1", "variant": "1. řádný" },
-            { "id": "2", "variant": "Ilustrační" },
-          ]]
-        }]
-    },
+    { "id": "1", "title": "1. řádný" },
+    { "id": "2", "title": "2. řádný" },
+    { "id": "3", "title": "1. náhradní" },
+    { "id": "4", "title": "2. náhradní" },
+    { "id": "5", "title": "Ilustrační" },
   ],
 })
 </script>
