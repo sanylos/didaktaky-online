@@ -180,8 +180,11 @@
   
 <script lang="ts" setup>
 import LoginModal from '@/components/LoginModal.vue';
+import { useUserStore } from '@/stores/user';
 import { supabase } from '@/supabase'
 import { reactive, ref } from 'vue';
+
+const userStore = useUserStore();
 
 let loading = ref(false);
 let isTextShown = ref(false);
@@ -208,12 +211,16 @@ const getQuestion = async () => {
     await sleep(0);
 
     const { data, error } = await supabase
-        .from('tests')
+        .from('random_test')
         .select(`
             *,
             random_exercise ( * )
         `)
-        .eq('subject','CJL')
+        //.or('subject.in.("CJL")')
+        //.or('variant.in.("1")')
+        //.eq('subject','CJL')
+        .filter('subject','in','('+userStore.exerciseFilters.examSubject+')')
+        .filter('variant','in','('+userStore.exerciseFilters.examVariant+')')
         .limit(1);
     console.log(data);
     if (error) console.log(error);
