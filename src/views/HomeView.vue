@@ -1,6 +1,5 @@
 <template>
-  <div class="container d-flex flex-column justify-content-center align-items-center mt-2 bg-dark">
-    {{ selectedFilter }}
+  <div class="container d-flex flex-column justify-content-center align-items-center mt-2 bg-dark p-3">
 
     <!--EXAM TYPE-->
     <div class="d-flex mb-3">
@@ -38,18 +37,29 @@
       </div>
     </div>
 
+    <button class="btn btn-success" @click="handleSubmit">Začít 🚀</button>
+
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, reactive, ref } from "vue";
+import { useUserStore } from "@/stores/user"
+import router from "@/router";
 
-const selectedFilter = reactive({
-  examType: null,
-  examYear: null,
-  examVariant: null,
-  examSubject: null,
+const userStore = useUserStore();
+
+const selectedFilter: { examType: string, examYear: string, examVariant: string, examSubject: string } = reactive({
+  examType: '',
+  examYear: '',
+  examVariant: '',
+  examSubject: '',
 });
+
+const handleSubmit = () => {
+  userStore.exerciseFilters = selectedFilter;
+  router.push('/cviceni');
+}
 
 const examOptions = reactive({
   examTypes: [
