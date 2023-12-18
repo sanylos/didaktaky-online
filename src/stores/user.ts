@@ -8,6 +8,7 @@ export const useUserStore = defineStore({
     id: null,
     email: null,
     isLoggedIn: false,
+    exerciseFilters: {}, //Empty object
   }),
 
   actions: {
