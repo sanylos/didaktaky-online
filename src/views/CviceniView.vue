@@ -213,38 +213,42 @@ const getQuestion = async () => {
 
     loading.value = true;
     await sleep(0);
-
-    const { data, error } = await supabase
-        .from('random_test')
-        .select(`
+    try {
+        const { data, error } = await supabase
+            .from('random_test')
+            .select(`
             *,
             random_exercise ( * )
         `)
-        //.or('subject.in.("CJL")')
-        //.or('variant.in.("1")')
-        //.eq('subject','CJL')
-        .filter('subject', 'in', '(' + userStore.exerciseFilters.examSubjects + ')')
-        .filter('variant', 'in', '(' + userStore.exerciseFilters.examVariants + ')')
-        .limit(1);
-    console.log(data);
-    if (error) {
+            //.or('subject.in.("CJL")')
+            //.or('variant.in.("1")')
+            //.eq('subject','CJL')
+            .filter('subject', 'in', '(' + userStore.exerciseFilters.examSubjects + ')')
+            .filter('variant', 'in', '(' + userStore.exerciseFilters.examVariants + ')')
+            .limit(1);
+
+        if (error) {
+            errorMessage.value = "Nenalezena žádná cvičení odpovídající zadaným filtrům"
+            console.log(error);
+        }
+        else {
+            //console.log(data[0].random_exercise[0]);
+            exercises.value = data[0].random_exercise[0];
+            answered.value = false;
+            answer.value = null;
+
+
+            if (exercises.value.type == 'anone' ||
+                exercises.value.type == 'assign' ||
+                exercises.value.type == 'text' ||
+                exercises.value.type == 'sort' ||
+                exercises.value.type == 'text-multiple') answer.value = Array(exercises.value.correct_answer.length).fill(''); //If exercise type is ANO/NE, set array to null
+
+            loading.value = false;
+        }
+    } catch (error) {
         errorMessage.value = "Nenalezena žádná cvičení odpovídající zadaným filtrům"
         console.log(error);
-    }
-    else {
-        //console.log(data[0].random_exercise[0]);
-        exercises.value = data[0].random_exercise[0];
-        answered.value = false;
-        answer.value = null;
-
-
-        if (exercises.value.type == 'anone' ||
-            exercises.value.type == 'assign' ||
-            exercises.value.type == 'text' ||
-            exercises.value.type == 'sort' ||
-            exercises.value.type == 'text-multiple') answer.value = Array(exercises.value.correct_answer.length).fill(''); //If exercise type is ANO/NE, set array to null
-
-        loading.value = false;
     }
 }
 
