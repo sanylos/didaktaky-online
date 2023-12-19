@@ -3,11 +3,14 @@
         <div class="page-title">
             Náhodné cvičení
         </div>
-        <div class="container bg-dark rounded p-3 shadow-lg m-1 w-auto">
+        <div class="container rounded bg-dark p-3 shadow-lg m-1 w-auto" data-bs-theme="dark">
 
-            <div v-if="loading" class="d-flex justify-content-center">
-                <div class="spinner-border" role="status">
+            <div v-if="loading" class="d-flex justify-content-center flex-column align-items-center">
+                <div v-if="!errorMessage" class="spinner-border" role="status">
                     <span class="visually-hidden">Loading...</span>
+                </div>
+                <div v-if="errorMessage" class="alert alert-danger" role="alert">
+                    {{ errorMessage }}🥺
                 </div>
             </div>
 
@@ -179,7 +182,6 @@
 </template>
   
 <script lang="ts" setup>
-import LoginModal from '@/components/LoginModal.vue';
 import { useUserStore } from '@/stores/user';
 import { supabase } from '@/supabase'
 import { reactive, ref } from 'vue';
@@ -191,6 +193,8 @@ let isTextShown = ref(false);
 let exercises: any = ref([]);
 let answer: any = ref([]);
 let answered = ref(false);
+const errorMessage = ref('');
+
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const convertAnswerArrayToUpperCase = () => {
@@ -219,24 +223,29 @@ const getQuestion = async () => {
         //.or('subject.in.("CJL")')
         //.or('variant.in.("1")')
         //.eq('subject','CJL')
-        .filter('subject','in','('+userStore.exerciseFilters.examSubject+')')
-        .filter('variant','in','('+userStore.exerciseFilters.examVariant+')')
+        .filter('subject', 'in', '(' + userStore.exerciseFilters.examSubjects + ')')
+        .filter('variant', 'in', '(' + userStore.exerciseFilters.examVariants + ')')
         .limit(1);
     console.log(data);
-    if (error) console.log(error);
-    //console.log(data[0].random_exercise[0]);
-    exercises.value = data[0].random_exercise[0];
-    answered.value = false;
-    answer.value = null;
+    if (error) {
+        errorMessage.value = "Nenalezeny žádné cvičení odpovídající zadaným filtrům"
+        console.log(error);
+    }
+    else {
+        //console.log(data[0].random_exercise[0]);
+        exercises.value = data[0].random_exercise[0];
+        answered.value = false;
+        answer.value = null;
 
 
-    if (exercises.value.type == 'anone' ||
-        exercises.value.type == 'assign' ||
-        exercises.value.type == 'text' ||
-        exercises.value.type == 'sort' ||
-        exercises.value.type == 'text-multiple') answer.value = Array(exercises.value.correct_answer.length).fill(''); //If exercise type is ANO/NE, set array to null
+        if (exercises.value.type == 'anone' ||
+            exercises.value.type == 'assign' ||
+            exercises.value.type == 'text' ||
+            exercises.value.type == 'sort' ||
+            exercises.value.type == 'text-multiple') answer.value = Array(exercises.value.correct_answer.length).fill(''); //If exercise type is ANO/NE, set array to null
 
-    loading.value = false;
+        loading.value = false;
+    }
 }
 
 getQuestion();
