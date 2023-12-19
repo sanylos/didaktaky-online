@@ -225,6 +225,8 @@ const getQuestion = async () => {
             //.eq('subject','CJL')
             .filter('subject', 'in', '(' + userStore.exerciseFilters.examSubjects + ')')
             .filter('variant', 'in', '(' + userStore.exerciseFilters.examVariants + ')')
+            .filter('year', 'in', '(' + userStore.exerciseFilters.examYears + ')')
+            .filter('type', 'in', '(' + userStore.exerciseFilters.examType + ')')
             .limit(1);
 
         if (error) {
