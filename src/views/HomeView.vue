@@ -1,6 +1,6 @@
 <template>
   <div class="container d-flex flex-column justify-content-center align-items-center mt-2 bg-dark p-3">
-
+    
     <!--EXAM TYPE-->
     <div class="d-flex mb-3">
       <div class="mx-1" v-for="option in examOptions.examTypes" :key="option.id">
@@ -13,8 +13,8 @@
     <!--EXAM SUBJECT-->
     <div class="d-flex mb-3">
       <div class="mx-1" v-for="option in examOptions.examSubjects" :key="option.id">
-        <input type="radio" class="btn-check" name="examSubject" :id="option.id" autocomplete="off" :value="option.id"
-          v-model="selectedFilter.examSubject">
+        <input type="checkbox" class="btn-check" name="examSubject" :id="option.id" autocomplete="off" :value="option.id"
+          v-model="selectedFilter.examSubjects">
         <label class="btn btn-outline-light" :for="option.id">{{ option.title }}</label>
       </div>
     </div>
@@ -22,8 +22,8 @@
     <!--EXAM YEAR-->
     <div class="d-flex mb-3">
       <div class="mx-1" v-for="option in examOptions.examYears" :key="option">
-        <input type="radio" class="btn-check" name="examYear" :id="option" autocomplete="off" :value="option"
-          v-model="selectedFilter.examYear">
+        <input type="checkbox" class="btn-check" name="examYear" :id="option" autocomplete="off" :value="option"
+          v-model="selectedFilter.examYears">
         <label class="btn btn-outline-light" :for="option">{{ option }}</label>
       </div>
     </div>
@@ -31,8 +31,8 @@
     <!--EXAM VARIANT-->
     <div class="d-flex mb-3">
       <div class="mx-1" v-for="option in examOptions.examVariants" :key="option.id">
-        <input type="radio" class="btn-check" name="examVariant" :id="option.id" autocomplete="off" :value="option.id"
-          v-model="selectedFilter.examVariant">
+        <input type="checkbox" class="btn-check" name="examVariant" :id="option.id" autocomplete="off" :value="option.id"
+          v-model="selectedFilter.examVariants">
         <label class="btn btn-outline-light" :for="option.id">{{ option.title }}</label>
       </div>
     </div>
@@ -49,11 +49,11 @@ import router from "@/router";
 
 const userStore = useUserStore();
 
-const selectedFilter: { examType: string, examYear: string, examVariant: string, examSubject: string } = reactive({
+const selectedFilter: { examType: string, examYears: string[], examVariants: string[], examSubjects: string[] } = reactive({
   examType: '',
-  examYear: '',
-  examVariant: '',
-  examSubject: '',
+  examYears: [],
+  examVariants: [],
+  examSubjects: [],
 });
 
 const handleSubmit = () => {
