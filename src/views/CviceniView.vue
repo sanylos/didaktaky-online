@@ -228,7 +228,7 @@ const getQuestion = async () => {
         .limit(1);
     console.log(data);
     if (error) {
-        errorMessage.value = "Nenalezeny žádné cvičení odpovídající zadaným filtrům"
+        errorMessage.value = "Nenalezena žádná cvičení odpovídající zadaným filtrům"
         console.log(error);
     }
     else {
