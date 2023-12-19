@@ -1,6 +1,11 @@
 <template>
-  <div class="container d-flex flex-column justify-content-center align-items-center mt-2 bg-dark p-3">
-    
+  <div class="container d-flex flex-column justify-content-center align-items-center mt-2 bg-dark p-3"
+    data-bs-theme="dark">
+
+    <div v-if="errorMessage" class="alert alert-danger" role="alert">
+      {{ errorMessage }}
+    </div>
+
     <!--EXAM TYPE-->
     <div class="d-flex mb-3">
       <div class="mx-1" v-for="option in examOptions.examTypes" :key="option.id">
@@ -48,6 +53,7 @@ import { useUserStore } from "@/stores/user"
 import router from "@/router";
 
 const userStore = useUserStore();
+const errorMessage = ref('');
 
 const selectedFilter: { examType: string, examYears: string[], examVariants: string[], examSubjects: string[] } = reactive({
   examType: '',
@@ -57,8 +63,18 @@ const selectedFilter: { examType: string, examYears: string[], examVariants: str
 });
 
 const handleSubmit = () => {
-  userStore.exerciseFilters = selectedFilter;
-  router.push('/cviceni');
+  if (selectedFilter.examType == '') {
+    errorMessage.value = 'Vyber typ zkoušky!';
+  } else if (selectedFilter.examSubjects.length < 1) {
+    errorMessage.value = 'Vyber předmět!';
+  } else if (selectedFilter.examYears.length < 1) {
+    errorMessage.value = 'Vyber rok!';
+  } else if (selectedFilter.examVariants.length < 1) {
+    errorMessage.value = 'Vyber variantu!';
+  } else {
+    userStore.exerciseFilters = selectedFilter;
+    router.push('/cviceni');
+  }
 }
 
 const examOptions = reactive({
