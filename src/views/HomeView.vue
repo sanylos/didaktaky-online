@@ -79,8 +79,8 @@ const handleSubmit = () => {
 
 const examOptions = reactive({
   examTypes: [
-    { "id": "PRIJIMACKY", "title": "Přijímačky" },
-    { "id": "MATURITA", "title": "Maturita" },
+    { "id": "PZ", "title": "Přijímačky" },
+    { "id": "MAT", "title": "Maturita" },
   ],
   examSubjects: [
     { "id": "CJL", "title": "Český jazyk a literatura" },
