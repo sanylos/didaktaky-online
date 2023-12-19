@@ -8,7 +8,12 @@ export const useUserStore = defineStore({
     id: null,
     email: null,
     isLoggedIn: false,
-    exerciseFilters: {}, //Empty object
+    exerciseFilters: {
+      examType: 'PZ',
+      examYears: ['2023'],
+      examVariants: ['1'],
+      examSubjects: ['CJL'],
+    },
   }),
 
   actions: {
