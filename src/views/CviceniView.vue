@@ -191,8 +191,9 @@ const userStore = useUserStore();
 let loading = ref(false);
 let isTextShown = ref(false);
 let exercises: any = ref([]);
-let answer: any = ref([]);
+let answer: any = ref(['']);
 let answered = ref(false);
+//TODO isAnswerCorrect
 const errorMessage = ref('');
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -206,7 +207,26 @@ const convertAnswerArrayToLowerCase = () => {
 }
 
 const handleSubmit = () => {
+    if (userStore.isLoggedIn) saveQuestionAnswer();
     answered.value = true;
+}
+
+const saveQuestionAnswer = async () => {
+    //TODO update answer in supabase
+}
+
+const saveQuestion = async () => {
+    try {
+        const { data, error } = await supabase
+            .from('userAnswers')
+            .upsert({
+                'exercise_id': exercises.value.id,
+                'answer': answer.value,
+            })
+            if(error) console.log(error);
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 const getQuestion = async () => {
@@ -236,8 +256,9 @@ const getQuestion = async () => {
         else {
             //console.log(data[0].random_exercise[0]);
             exercises.value = data[0].random_exercise[0];
+            if (userStore.isLoggedIn) saveQuestion();
             answered.value = false;
-            answer.value = null;
+            answer.value = '';
 
 
             if (exercises.value.type == 'anone' ||
