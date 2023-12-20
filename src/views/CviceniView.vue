@@ -55,7 +55,7 @@
                                 <div v-for="option, index in exercises.answers" :key="index"
                                     class="question-option mb-1 d-flex flex-column align-content-start">
                                     <input type="radio" class="btn-check" name="options-base" :id="'option' + index"
-                                        autocomplete="off" :value="index" v-model="answer" :disabled="answered">
+                                        autocomplete="off" :value="index" v-model="answer[0]" :disabled="answered">
                                     <label class="btn text-white text-start fw-normal bg-unanswered" :for="'option' + index"
                                         :class="{
                                             'bg-success': index == exercises.correct_answer && answered,
@@ -189,11 +189,10 @@ import { reactive, ref } from 'vue';
 const userStore = useUserStore();
 
 let loading = ref(false);
-let isTextShown = ref(false);
 let exercises: any = ref([]);
-let answer: any = ref(['']);
+let answer: any = ref([""]);
 let answered = ref(false);
-const isAnswerCorrect = ref(false);
+const isAnswerCorrect = ref("FALSE");
 const userAnswerId = ref('');
 
 const errorMessage = ref('');
@@ -209,7 +208,7 @@ const convertAnswerArrayToLowerCase = () => {
 }
 
 const handleSubmit = () => {
-    //if()
+    if(answer.value.toString() === exercises.value.correct_answer.toString()) isAnswerCorrect.value = "TRUE";
     if (userStore.isLoggedIn) saveQuestionAnswer();
     answered.value = true;
 }
@@ -288,7 +287,7 @@ const getQuestion = async () => {
             exercises.value = data[0].random_exercise[0];
             answered.value = false;
             answer.value = '';
-            isAnswerCorrect.value = false;
+            isAnswerCorrect.value = "FALSE";
 
 
             answer.value = Array(exercises.value.correct_answer.length).fill(""); //If exercise type is ANO/NE, set array to null
