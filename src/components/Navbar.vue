@@ -43,12 +43,17 @@ import LoginModal from './LoginModal.vue';
 const userStore = useUserStore();
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .nav-link {
   text-decoration: none;
 }
 
 .userInfo span:hover {
   color: gray;
+}
+
+.router-link-active {
+  background-color: rgba(128, 128, 128, 0.192);
+  border-radius: 10px;
 }
 </style>
