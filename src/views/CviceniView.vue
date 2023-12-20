@@ -1,9 +1,9 @@
 <template>
-    <div class="main-page">
+    <div class="main-page text-white-50">
         <div class="page-title">
             Náhodné cvičení
         </div>
-        <div class="container rounded bg-dark p-3 shadow-lg m-1 w-auto" data-bs-theme="dark">
+        <div class="container rounded bg-dark p-3 shadow-lg m-1 w-auto">
 
             <div v-if="loading" class="d-flex justify-content-center flex-column align-items-center">
                 <div v-if="!errorMessage" class="spinner-border" role="status">
