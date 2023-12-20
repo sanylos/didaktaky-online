@@ -9,7 +9,7 @@
                 <div class="modal-body">
                     <div v-if="errorMessage">
                         <div class="alert alert-danger" role="alert">
-                            {{errorMessage}}
+                            ❗ {{ errorMessage }}
                         </div>
                     </div>
 
@@ -17,18 +17,17 @@
                         <form>
                             <div class="mb-3">
                                 <label for="emailInput" class="form-label">Email</label>
-                                <input type="email" v-model="email" class="form-control"
-                                    id="emailInput" aria-describedby="emailHelp">
+                                <input type="email" v-model="email" class="form-control" id="emailInput"
+                                    aria-describedby="emailHelp">
                             </div>
                             <div class="mb-3">
                                 <label for="passwordInput" class="form-label">Heslo</label>
-                                <input type="password" v-model="password"
-                                    class="form-control" id="passwordInput">
+                                <input type="password" v-model="password" class="form-control" id="passwordInput">
                             </div>
-                            <div class="d-flex justify-content-between">
+                            <div class="d-flex justify-content-between flex-column align-items-center">
                                 <button type="submit" @click.prevent="handleLogin"
-                                    class="btn btn-primary">Přihlásit</button>
-                                <a @click="pageType = 'Registrace'" class="">Nemáš účet? Registruj se</a>
+                                    class="btn btn-primary w-100 row">Přihlásit</button>
+                                <a @click="pageType = 'Registrace'" class="text-center mt-2">Nemáš účet? Registruj se</a>
                             </div>
                         </form>
                     </div>
@@ -37,18 +36,17 @@
                         <form>
                             <div class="mb-3">
                                 <label for="emailInput" class="form-label">Email</label>
-                                <input type="email" v-model="email" class="form-control"
-                                    id="emailInput" aria-describedby="emailHelp">
+                                <input type="email" v-model="email" class="form-control" id="emailInput"
+                                    aria-describedby="emailHelp">
                             </div>
                             <div class="mb-3">
                                 <label for="passwordInput" class="form-label">Heslo</label>
-                                <input type="password" v-model="password"
-                                    class="form-control" id="passwordInput">
+                                <input type="password" v-model="password" class="form-control" id="passwordInput">
                             </div>
-                            <div class="d-flex justify-content-between">
+                            <div class="d-flex justify-content-between flex-column align-items-center">
                                 <button type="submit" @click.prevent="handleRegister"
-                                    class="btn btn-primary">Registrovat</button>
-                                <a @click="pageType = 'Přihlášení'" class="">Máš účet? Přihlaš se</a>
+                                    class="btn btn-primary w-100 row">Registrovat</button>
+                                <a @click="pageType = 'Přihlášení'" class="text-center mt-2">Máš účet? Přihlaš se</a>
                             </div>
                         </form>
                     </div>
@@ -79,6 +77,7 @@ const handleLogin = async () => {
     else {
         document.getElementById('close').click();
         userStore.initialize();
+        password.value = "";
     }
 }
 
@@ -91,12 +90,13 @@ const handleRegister = async () => {
     else {
         document.getElementById('close').click();
         userStore.initialize();
+        password.value = "";
     }
 }
 </script>
 
 <style>
 .modal {
-    color:rgb(37, 37, 37);
+    color: rgb(37, 37, 37);
 }
 </style>
