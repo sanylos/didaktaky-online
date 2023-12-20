@@ -256,7 +256,7 @@ const getQuestion = async () => {
         else {
             //console.log(data[0].random_exercise[0]);
             exercises.value = data[0].random_exercise[0];
-            if (userStore.isLoggedIn) saveQuestion();
+            if (userStore.isLoggedIn) await saveQuestion();
             answered.value = false;
             answer.value = '';
 
