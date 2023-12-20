@@ -208,12 +208,17 @@ const convertAnswerArrayToLowerCase = () => {
 }
 
 const handleSubmit = () => {
-    if(answer.value.toString() === exercises.value.correct_answer.toString()) isAnswerCorrect.value = "TRUE";
+    //COMPARE ARRAYS CONTENT
+    if (answer.value.toString() === exercises.value.correct_answer.toString()) isAnswerCorrect.value = "TRUE";
+
+    //IF USER IS LOGGED IN -> SAVE TO DB
     if (userStore.isLoggedIn) saveQuestionAnswer();
+
     answered.value = true;
 }
 
 const saveQuestionAnswer = async () => {
+    //POST EXERCISE ANSWER AND STATE (CORRECT(true)/INCORRECT(false))
     try {
         const { data, error } = await supabase
             .from('userAnswers')
@@ -221,7 +226,7 @@ const saveQuestionAnswer = async () => {
                 'answer': answer.value,
                 'isCorrect': isAnswerCorrect.value,
             })
-            .eq('id',userAnswerId.value);
+            .eq('id', userAnswerId.value);
         if (error) console.log(error);
     } catch (error) {
         console.log(error);
@@ -260,8 +265,13 @@ const saveQuestion = async () => {
 }
 
 const getQuestion = async () => {
+
     loading.value = true;
+
+    //DELAY BETWEEN FETCHES
     await sleep(0);
+
+    //FETCH EXERCISE
     try {
         const { data, error } = await supabase
             .from('random_test')
@@ -290,7 +300,7 @@ const getQuestion = async () => {
             isAnswerCorrect.value = "FALSE";
 
 
-            answer.value = Array(exercises.value.correct_answer.length).fill(""); //If exercise type is ANO/NE, set array to null
+            answer.value = Array(exercises.value.correct_answer.length).fill(""); //FILL ARRAY WITH EMPTY STRINGS TO MAINTAIN SAME ARRAY LENGTHS WITH DATABASE
 
             if (userStore.isLoggedIn) await saveQuestion();
             loading.value = false;
