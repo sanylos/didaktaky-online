@@ -20,8 +20,17 @@
         </ul>
         <button v-if="!userStore.isLoggedIn" type="button" class="btn btn-outline-light" data-bs-toggle="modal"
           data-bs-target="#loginModal">Přihlásit se</button>
-        <button v-if="userStore.isLoggedIn" @click="userStore.signOut" type="button"
-          class="btn btn-outline-danger">Odhlásit se</button>
+
+        <div v-if="userStore.isLoggedIn" class="dropdown mx-1">
+          <button class="userInfo text-white bg-dark rounded rounded-pill btn-secondary btn row btn-outline-secondary"
+            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <span>{{ userStore.email }}</span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a @click="userStore.signOut" class="dropdown-item text-danger" href="#">Odhlásit se</a></li>
+          </ul>
+        </div>
+
       </div>
     </div>
   </nav>
@@ -37,5 +46,9 @@ const userStore = useUserStore();
 <style scoped>
 .nav-link {
   text-decoration: none;
+}
+
+.userInfo span:hover {
+  color: gray;
 }
 </style>
