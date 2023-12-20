@@ -9,12 +9,17 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto">
-          <li class="nav-item">
+          <li class="nav-item mx-1">
             <RouterLink to="/" class="nav-link">
               Náhodné cvičení
             </RouterLink>
           </li>
-          <li class="nav-item">
+          <li class="nav-item mx-1">
+            <RouterLink to="/prehled" class="nav-link">
+              Přehled
+            </RouterLink>
+          </li>
+          <li class="nav-item mx-1">
             <a class="nav-link disabled" aria-disabled="true">Generování testů</a>
           </li>
         </ul>
