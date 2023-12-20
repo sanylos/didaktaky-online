@@ -193,7 +193,9 @@ let isTextShown = ref(false);
 let exercises: any = ref([]);
 let answer: any = ref(['']);
 let answered = ref(false);
-//TODO isAnswerCorrect
+const isAnswerCorrect = ref(false);
+const userAnswerId = ref('');
+
 const errorMessage = ref('');
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -207,15 +209,28 @@ const convertAnswerArrayToLowerCase = () => {
 }
 
 const handleSubmit = () => {
+    //if()
     if (userStore.isLoggedIn) saveQuestionAnswer();
     answered.value = true;
 }
 
 const saveQuestionAnswer = async () => {
-    //TODO update answer in supabase
+    try {
+        const { data, error } = await supabase
+            .from('userAnswers')
+            .update({
+                'answer': answer.value,
+                'isCorrect': isAnswerCorrect.value,
+            })
+            .eq('id',userAnswerId.value);
+        if (error) console.log(error);
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 const saveQuestion = async () => {
+    //INSERT NEW EXERCISE TO DB
     try {
         const { data, error } = await supabase
             .from('userAnswers')
@@ -223,14 +238,29 @@ const saveQuestion = async () => {
                 'exercise_id': exercises.value.id,
                 'answer': answer.value,
             })
-            if(error) console.log(error);
+        if (error) console.log(error);
+    } catch (error) {
+        console.log(error);
+    }
+
+    //FETCH LATEST EXERCISE ID
+    try {
+        const { data, error } = await supabase
+            .from('userAnswers')
+            .select('id')
+            .eq('user_id', userStore.id)
+            .order('generated_at', { ascending: false })
+            .limit(1);
+        if (error) console.log(error);
+        else {
+            userAnswerId.value = data[0].id;
+        }
     } catch (error) {
         console.log(error);
     }
 }
 
 const getQuestion = async () => {
-
     loading.value = true;
     await sleep(0);
     try {
@@ -247,7 +277,7 @@ const getQuestion = async () => {
             .filter('variant', 'in', '(' + userStore.exerciseFilters.examVariants + ')')
             .filter('year', 'in', '(' + userStore.exerciseFilters.examYears + ')')
             .filter('type', 'in', '(' + userStore.exerciseFilters.examType + ')')
-            .limit(1);
+            .limit(1)
 
         if (error) {
             errorMessage.value = "Nenalezena žádná cvičení odpovídající zadaným filtrům"
@@ -256,17 +286,14 @@ const getQuestion = async () => {
         else {
             //console.log(data[0].random_exercise[0]);
             exercises.value = data[0].random_exercise[0];
-            if (userStore.isLoggedIn) await saveQuestion();
             answered.value = false;
             answer.value = '';
+            isAnswerCorrect.value = false;
 
 
-            if (exercises.value.type == 'anone' ||
-                exercises.value.type == 'assign' ||
-                exercises.value.type == 'text' ||
-                exercises.value.type == 'sort' ||
-                exercises.value.type == 'text-multiple') answer.value = Array(exercises.value.correct_answer.length).fill(''); //If exercise type is ANO/NE, set array to null
+            answer.value = Array(exercises.value.correct_answer.length).fill(""); //If exercise type is ANO/NE, set array to null
 
+            if (userStore.isLoggedIn) await saveQuestion();
             loading.value = false;
         }
     } catch (error) {
