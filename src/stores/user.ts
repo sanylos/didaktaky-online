@@ -17,6 +17,11 @@ export const useUserStore = defineStore({
   }),
 
   actions: {
+    resetUserData() {
+      this.isLoggedIn = false;
+      this.id = null;
+      this.email = null;
+    },
     async initialize() {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
@@ -24,12 +29,12 @@ export const useUserStore = defineStore({
         this.isLoggedIn = true;
         this.id = user.id;
       } else {
-        this.isLoggedIn = false;
+        this.resetUserData();
       }
     },
     async signOut() {
       const { error } = await supabase.auth.signOut();
-      this.isLoggedIn = false;
+      this.resetUserData();
       if (error) alert(error);
     }
   },
