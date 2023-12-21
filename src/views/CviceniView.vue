@@ -5,6 +5,7 @@
         </div>
         <div class="container rounded bg-dark p-3 shadow-lg m-1 w-auto">
 
+            <!--SPINNER LOADING-->
             <div v-if="loading" class="d-flex justify-content-center flex-column align-items-center">
                 <div v-if="!errorMessage" class="spinner-border" role="status">
                     <span class="visually-hidden">Loading...</span>
@@ -12,6 +13,11 @@
                 <div v-if="errorMessage" class="alert alert-danger" role="alert">
                     {{ errorMessage }}🥺
                 </div>
+            </div>
+
+            <!--ERROR MESSAGE DISPLAY-->
+            <div v-if="errorMessage" class="alert alert-danger" role="alert">
+                ❗ {{ errorMessage }}
             </div>
 
             <div v-if="!loading">
@@ -209,16 +215,20 @@ const convertAnswerArrayToLowerCase = () => {
 }
 
 const handlePrevious = () => {
-    exercisePagination.value++; //INCREMENT PAGINATION - MOVE TO OLDER QUESTIONS
-    getQuestionByPagination(exercisePagination.value);
+    if (userStore.isLoggedIn) { //ALLOW browsing history only if isLoggedIn
+        exercisePagination.value++; //INCREMENT PAGINATION - MOVE TO OLDER QUESTIONS
+        getQuestionByPagination(exercisePagination.value);
+    } else errorMessage.value = "Pro zobrazení historie tvých odpovědí se musíš přihlásit!";
 }
 
 const handleNext = () => {
     if (exercisePagination.value == 1) { //IF PAGINATION IS 0 - MOVE GENERATE NEW QUESTION
         getQuestion();
     } else {
-        exercisePagination.value--; //DECREMENT PAGINATION - MOVE TO NEWER QUESTIONS
-        getQuestionByPagination(exercisePagination.value);
+        if (userStore.isLoggedIn) { //ALLOW browsing history only if isLoggedIn
+            exercisePagination.value--; //DECREMENT PAGINATION - MOVE TO NEWER QUESTIONS
+            getQuestionByPagination(exercisePagination.value);
+        } else errorMessage.value = "Pro zobrazení historie tvých odpovědí se musíš přihlásit!";
     }
 }
 
@@ -229,7 +239,7 @@ const getQuestionByPagination = async (pagination: number) => {
             .select('*')
             .order('generated_at', { ascending: false })
             .eq('user_id', userStore.id)
-            .range(pagination-1, pagination-1); //PAGINATION-1 TO GET PREVIOUS EXERCISE
+            .range(pagination - 1, pagination - 1); //PAGINATION-1 TO GET PREVIOUS EXERCISE
 
         const exerciseId = userData[0].exercise_id; //STORE ID OF THE EXERCISE
 
@@ -243,7 +253,6 @@ const getQuestionByPagination = async (pagination: number) => {
 
     } catch (error) {
         console.log(error);
-        errorMessage.value = 'Pro zobrazení historie tvých odpovědí se musíš přihlásit!'
     }
 }
 
@@ -306,6 +315,7 @@ const saveQuestion = async () => {
 }
 
 const getQuestion = async () => {
+    errorMessage.value = "";
 
     loading.value = true;
 
