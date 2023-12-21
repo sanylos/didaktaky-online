@@ -1,5 +1,5 @@
 <template>
-  <div class="container rounded w-auto d-flex flex-column justify-content-center align-items-center mt-2 bg-dark p-3" >
+  <div class="container rounded w-auto d-flex flex-column justify-content-center align-items-center mt-2 bg-dark p-3">
 
     <div v-if="errorMessage" class="alert alert-danger" role="alert">
       ❗ {{ errorMessage }}
@@ -62,18 +62,19 @@ const selectedFilter: { examType: string, examYears: string[], examVariants: str
 });
 
 const handleSubmit = () => {
-  if (selectedFilter.examType == '') {
-    errorMessage.value = 'Vyber typ zkoušky!';
-  } else if (selectedFilter.examSubjects.length < 1) {
-    errorMessage.value = 'Vyber předmět!';
-  } else if (selectedFilter.examYears.length < 1) {
-    errorMessage.value = 'Vyber rok!';
-  } else if (selectedFilter.examVariants.length < 1) {
-    errorMessage.value = 'Vyber variantu!';
-  } else {
-    userStore.exerciseFilters = selectedFilter;
-    router.push('/cviceni');
+  if (selectedFilter.examType != '') {
+    userStore.exerciseFilters.examType = selectedFilter.examType;
   }
+  if (selectedFilter.examSubjects.length > 0) {
+    userStore.exerciseFilters.examSubjects = selectedFilter.examSubjects;
+  }
+  if (selectedFilter.examYears.length > 0) {
+    userStore.exerciseFilters.examYears = selectedFilter.examYears;
+  }
+  if (selectedFilter.examVariants.length > 0) {
+    userStore.exerciseFilters.examVariants = selectedFilter.examVariants;
+  }
+  router.push('/cviceni');
 }
 
 const examOptions = reactive({
