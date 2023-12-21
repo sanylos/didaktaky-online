@@ -194,7 +194,7 @@ let answer: any = ref([""]);
 let answered = ref(false);
 const isAnswerCorrect = ref("FALSE");
 const userAnswerId = ref('');
-const exercisePagination = ref(0);
+const exercisePagination = ref(1);
 
 const errorMessage = ref('');
 
@@ -214,7 +214,7 @@ const handlePrevious = () => {
 }
 
 const handleNext = () => {
-    if (exercisePagination.value == 0) { //IF PAGINATION IS 0 - MOVE GENERATE NEW QUESTION
+    if (exercisePagination.value == 1) { //IF PAGINATION IS 0 - MOVE GENERATE NEW QUESTION
         getQuestion();
     } else {
         exercisePagination.value--; //DECREMENT PAGINATION - MOVE TO NEWER QUESTIONS
@@ -223,20 +223,27 @@ const handleNext = () => {
 }
 
 const getQuestionByPagination = async (pagination: number) => {
-    console.log(pagination);
     try {
-        const {data, error} = await supabase
+        const { data: userData, error } = await supabase
             .from('userAnswers')
             .select('*')
             .order('generated_at', { ascending: false })
             .eq('user_id', userStore.id)
-            .range(pagination - 1, pagination - 1)
-            console.log(error);
-            //console.log(data);
-            //exercises.value=data;
+            .range(pagination-1, pagination-1); //PAGINATION-1 TO GET PREVIOUS EXERCISE
+
+        const exerciseId = userData[0].exercise_id; //STORE ID OF THE EXERCISE
+
+        const { data: exerciseData } = await supabase
+            .from('exercises')
+            .select('*')
+            .eq('id', exerciseId);
+
+        exercises.value = exerciseData[0]; //SET exercise data
+        answer.value = userData[0].answer; //SET answer
+
     } catch (error) {
         console.log(error);
-        errorMessage.value='Pro zobrazení historie tvých odpovědí se musíš přihlásit!'
+        errorMessage.value = 'Pro zobrazení historie tvých odpovědí se musíš přihlásit!'
     }
 }
 
