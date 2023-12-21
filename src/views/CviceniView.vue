@@ -172,9 +172,9 @@
             </div>
 
             <div class="mt-4 d-flex justify-content-between">
-                <button class="btn btn-primary">⮜ Předchozí</button>
+                <button :disabled="!answered" class="btn btn-primary" @click="handlePrevious">⮜ Předchozí</button>
                 <button v-if="!answered" class="btn btn-success" @click="handleSubmit">✍🏼Zkontrolovat</button>
-                <button v-if="answered" class="btn btn-primary" @click="getQuestion">Další ⮞</button>
+                <button v-if="answered" class="btn btn-primary" @click="handleNext">Další ⮞</button>
             </div>
 
         </div>
@@ -194,6 +194,7 @@ let answer: any = ref([""]);
 let answered = ref(false);
 const isAnswerCorrect = ref("FALSE");
 const userAnswerId = ref('');
+const exercisePagination = ref(0);
 
 const errorMessage = ref('');
 
@@ -205,6 +206,38 @@ const convertAnswerArrayToUpperCase = () => {
 
 const convertAnswerArrayToLowerCase = () => {
     answer.value = answer.value.map(index => index.toLowerCase());
+}
+
+const handlePrevious = () => {
+    exercisePagination.value++; //INCREMENT PAGINATION - MOVE TO OLDER QUESTIONS
+    getQuestionByPagination(exercisePagination.value);
+}
+
+const handleNext = () => {
+    if (exercisePagination.value == 0) { //IF PAGINATION IS 0 - MOVE GENERATE NEW QUESTION
+        getQuestion();
+    } else {
+        exercisePagination.value--; //DECREMENT PAGINATION - MOVE TO NEWER QUESTIONS
+        getQuestionByPagination(exercisePagination.value);
+    }
+}
+
+const getQuestionByPagination = async (pagination: number) => {
+    console.log(pagination);
+    try {
+        const {data, error} = await supabase
+            .from('userAnswers')
+            .select('*')
+            .order('generated_at', { ascending: false })
+            .eq('user_id', userStore.id)
+            .range(pagination - 1, pagination - 1)
+            console.log(error);
+            //console.log(data);
+            //exercises.value=data;
+    } catch (error) {
+        console.log(error);
+        errorMessage.value='Pro zobrazení historie tvých odpovědí se musíš přihlásit!'
+    }
 }
 
 const handleSubmit = () => {
@@ -225,6 +258,7 @@ const saveQuestionAnswer = async () => {
             .update({
                 'answer': answer.value,
                 'isCorrect': isAnswerCorrect.value,
+                'answered_at': new Date(),
             })
             .eq('id', userAnswerId.value);
         if (error) console.log(error);
