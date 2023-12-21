@@ -51,6 +51,11 @@ const userStore = useUserStore();
 <style scoped lang="scss">
 .nav-link {
   text-decoration: none;
+  &:hover {
+    background-color: rgba(128, 128, 128, 0.056);
+  border-radius: 10px;
+  color:rgb(255, 255, 255);
+  }
 }
 
 .userInfo span:hover {
