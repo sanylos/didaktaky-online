@@ -9,10 +9,10 @@ export const useUserStore = defineStore({
     email: null,
     isLoggedIn: false,
     exerciseFilters: {
-      examType: 'PZ',
-      examYears: ['2023'],
-      examVariants: ['1'],
-      examSubjects: ['CJL'],
+      examType: ["PZ"],
+      examYears: ["2023"],
+      examVariants: ["1"],
+      examSubjects: ["CJL"],
     },
   }),
 
