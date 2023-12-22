@@ -9,7 +9,7 @@
     <div class="d-flex mb-3">
       <div class="mx-1" v-for="option in examOptions.examTypes" :key="option.id">
         <input type="radio" class="btn-check" name="examOption" :id="option.id" autocomplete="off" :value="option.id"
-          v-model="selectedFilter.examType">
+          v-model="selectedFilter.examType[0]">
         <label class="btn btn-outline-light" :for="option.id">{{ option.title }}</label>
       </div>
     </div>
@@ -54,15 +54,15 @@ import router from "@/router";
 const userStore = useUserStore();
 const errorMessage = ref('');
 
-const selectedFilter: { examType: string, examYears: string[], examVariants: string[], examSubjects: string[] } = reactive({
-  examType: '',
+const selectedFilter: { examType: string[], examYears: string[], examVariants: string[], examSubjects: string[] } = reactive({
+  examType: [],
   examYears: [],
   examVariants: [],
   examSubjects: [],
 });
 
 const handleSubmit = () => {
-  if (selectedFilter.examType != '') {
+  if (selectedFilter.examType.length > 0) {
     userStore.exerciseFilters.examType = selectedFilter.examType;
   }
   if (selectedFilter.examSubjects.length > 0) {
