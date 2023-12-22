@@ -322,22 +322,13 @@ const getQuestion = async () => {
     //DELAY BETWEEN FETCHES
     await sleep(0);
 
-    //FETCH EXERCISE
+    //FETCH RANDOM EXERCISE USING POSTGRES FUNCTION
     try {
-        const { data, error } = await supabase
-            .from('random_test')
-            .select(`
-            *,
-            random_exercise ( * )
-        `)
-            //.or('subject.in.("CJL")')
-            //.or('variant.in.("1")')
-            //.eq('subject','CJL')
-            .filter('subject', 'in', '(' + userStore.exerciseFilters.examSubjects + ')')
-            .filter('variant', 'in', '(' + userStore.exerciseFilters.examVariants + ')')
-            .filter('year', 'in', '(' + userStore.exerciseFilters.examYears + ')')
-            .filter('type', 'in', '(' + userStore.exerciseFilters.examType + ')')
-            .limit(1)
+        const { data, error } = await supabase.rpc('getrandomexercise', { 
+        in_years: userStore.exerciseFilters.examYears, 
+        in_subjects: userStore.exerciseFilters.examSubjects, 
+        in_variants: userStore.exerciseFilters.examVariants, 
+        in_types: userStore.exerciseFilters.examType });
 
         if (error) {
             errorMessage.value = "Nenalezena žádná cvičení odpovídající zadaným filtrům"
@@ -345,7 +336,7 @@ const getQuestion = async () => {
         }
         else {
             //console.log(data[0].random_exercise[0]);
-            exercises.value = data[0].random_exercise[0];
+            exercises.value = data;
             answered.value = false;
             answer.value = '';
             isAnswerCorrect.value = "FALSE";
