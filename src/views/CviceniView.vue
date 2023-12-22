@@ -10,9 +10,6 @@
                 <div v-if="!errorMessage" class="spinner-border" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
-                <div v-if="errorMessage" class="alert alert-danger" role="alert">
-                    {{ errorMessage }}🥺
-                </div>
             </div>
 
             <!--ERROR MESSAGE DISPLAY-->
