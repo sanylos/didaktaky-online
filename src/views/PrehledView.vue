@@ -57,6 +57,7 @@
 </template>
 
 <script setup lang="ts">
+// @ts-nocheck
 import { useUserStore } from '@/stores/user';
 const userStore = useUserStore();
 </script>

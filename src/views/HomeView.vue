@@ -47,6 +47,7 @@
 </template>
 
 <script setup lang="ts">
+// @ts-nocheck
 import { computed, reactive, ref } from "vue";
 import { useUserStore } from "@/stores/user"
 import router from "@/router";

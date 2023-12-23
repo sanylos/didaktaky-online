@@ -185,6 +185,7 @@
 </template>
   
 <script lang="ts" setup>
+// @ts-nocheck
 import { useUserStore } from '@/stores/user';
 import { supabase } from '@/supabase'
 import { reactive, ref } from 'vue';

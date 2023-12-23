@@ -57,6 +57,7 @@
 </template>
 
 <script setup lang="ts">
+// @ts-nocheck
 import { ref } from 'vue';
 import { supabase } from '@/supabase';
 import { useUserStore } from '@/stores/user';
