@@ -49,7 +49,7 @@
                         </div>
 
                         <div v-if="exercises.description" class="mb-2">
-                            ({{ exercises.description }})
+                            (<span v-html="exercises.description"></span>)
                         </div>
 
                         <!--SINGLE OPTION-->
@@ -63,7 +63,7 @@
                                         :class="{
                                             'bg-success': index == exercises.correct_answer && answered,
                                             'bg-danger': index == answer && index != exercises.correct_answer && answered,
-                                        }">{{ option }}</label>
+                                        }" v-html="option"></label>
                                 </div>
                             </div>
                         </div>
