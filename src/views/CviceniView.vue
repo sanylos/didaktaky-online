@@ -52,8 +52,8 @@
                             (<span v-html="exercises.description"></span>)
                         </div>
 
-                        <!--SINGLE OPTION-->
-                        <div class="exercise-options" v-if="exercises.type == 'option'">
+                        <!--VÝBĚR Z MOŽNOSTÍ-->
+                        <div class="exercise-options" v-if="exercises.type == 'Výběr z možností'">
                             <div>
                                 <div v-for="option, index in exercises.answers" :key="index"
                                     class="question-option mb-1 d-flex flex-column align-content-start">
@@ -68,8 +68,8 @@
                             </div>
                         </div>
 
-                        <!--ANO/NE OPTIONS-->
-                        <div class="exercise-options" v-if="exercises.type == 'anone'">
+                        <!--Výběr mezi ANO/NE-->
+                        <div class="exercise-options" v-if="exercises.type == 'Výběr mezi ANO/NE'">
                             <div>
                                 <div class="row text-center">
                                     <div class="col-10">
@@ -93,8 +93,8 @@
                             </div>
                         </div>
 
-                        <!--ASSIGN OPTIONS-->
-                        <div class="exercise-options" v-if="exercises.type == 'assign'">
+                        <!--Přiřazení-->
+                        <div class="exercise-options" v-if="exercises.type == 'Přiřazení'">
                             <div class="mb-3">
                                 <div v-for="option, index in exercises.answers" :key="index"
                                     class="question-option mb-1 d-flex flex-row align-content-start justify-content-between p-1 rounded"
@@ -113,8 +113,8 @@
                             </div>
                         </div>
 
-                        <!--TEXT-MULTIPLE OPTIONS-->
-                        <div class="exercise-options" v-if="exercises.type == 'text-multiple'">
+                        <!--Více textových odpovědí-->
+                        <div class="exercise-options" v-if="exercises.type == 'Více textových odpovědí'">
                             <div class="mb-3">
                                 <div v-for="option, index in exercises.answers" :key="index"
                                     class="question-option mb-2 d-flex flex-column align-content-start justify-content-between p-1 rounded"
@@ -133,8 +133,8 @@
                             </div>
                         </div>
 
-                        <!--TEXT OPTIONS-->
-                        <div class="exercise-options" v-if="exercises.type == 'text'">
+                        <!--Textová odpověď-->
+                        <div class="exercise-options" v-if="exercises.type == 'Textová odpověď'">
                             <div class="mb-3 d-flex flex-row align-content-start">
                                 <div v-for="item, index in exercises.correct_answer" :key="index"
                                     class="question-option mb-2 mx-1 p-1 rounded" :class="{
@@ -151,8 +151,8 @@
                             </div>
                         </div>
 
-                        <!--SORT OPTIONS-->
-                        <div class="exercise-options" v-if="exercises.type == 'sort'">
+                        <!--Seřazení-->
+                        <div class="exercise-options" v-if="exercises.type == 'Seřazení'">
                             <div v-for="sentence, index in exercises.sentences" :key="index" class="mb-1 border p-1">
                                 {{ sentence }}
                             </div>
