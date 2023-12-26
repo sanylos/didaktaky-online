@@ -25,12 +25,12 @@
                         <div v-if="exercises.text1imgPath" class="col mb-1">
                             <span class="row fw-bold">TEXT 1</span>
                             <img class="exercise-text-image"
-                                :src="'./public/exercise_texts/' + exercises.text1imgPath + '.png'">
+                                :src="'/exercise_texts/' + exercises.text1imgPath + '.png'">
                         </div>
                         <div v-if="exercises.text2imgPath" class="col mb-1">
                             <span class="row fw-bold">TEXT 2</span>
                             <img class="exercise-text-image"
-                                :src="'./public/exercise_texts/' + exercises.text2imgPath + '.png'">
+                                :src="'/exercise_texts/' + exercises.text2imgPath + '.png'">
                         </div>
                     </div>
 
