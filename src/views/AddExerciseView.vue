@@ -87,7 +87,7 @@
         <button class="mt-1 btn btn-danger" @click="exerciseToAdd.claims = []">Vymazat</button>
         <br><br>
 
-        <div v-show="exerciseToAdd.type == 'Seřazení'">
+        <div v-show="exerciseToAdd.type == 'Přiřazení'">
             Věty<br>
             <input type="text" class="w-75" v-model="exerciseToAdd.sentences[0]"><br>
             <input type="text" class="w-75" v-model="exerciseToAdd.sentences[1]"><br>
