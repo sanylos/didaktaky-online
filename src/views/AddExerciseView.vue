@@ -42,10 +42,18 @@
 
         <div class="text-white">
             Odpovědi<br>
+            <div v-if="exerciseToAdd.type=='Seřazení'">
             <input type="text" class="w-75" v-model="exerciseToAdd.answers[0]">0<br>
             <input type="text" class="w-75" v-model="exerciseToAdd.answers[1]">1<br>
             <input type="text" class="w-75" v-model="exerciseToAdd.answers[2]">2<br>
             <input type="text" class="w-75" v-model="exerciseToAdd.answers[3]">3<br>
+            <input type="text" class="w-75" v-model="exerciseToAdd.answers[4]">4<br>
+            <input type="text" class="w-75" v-model="exerciseToAdd.answers[5]">5<br></div>
+            <div v-else>
+            <input type="text" class="w-75" v-model="exerciseToAdd.answers[0]">0<br>
+            <input type="text" class="w-75" v-model="exerciseToAdd.answers[1]">1<br>
+            <input type="text" class="w-75" v-model="exerciseToAdd.answers[2]">2<br>
+            <input type="text" class="w-75" v-model="exerciseToAdd.answers[3]">3<br></div>
             <button class="mt-1 btn btn-danger" @click="exerciseToAdd.answers = []">Vymazat</button>
         </div>
         <br><br>
