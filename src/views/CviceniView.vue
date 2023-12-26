@@ -153,8 +153,8 @@
 
                         <!--Seřazení-->
                         <div class="exercise-options" v-if="exercises.type == 'Seřazení'">
-                            <div v-for="sentence, index in exercises.sentences" :key="index" class="mb-1 border p-1">
-                                {{ sentence }}
+                            <div v-for="option, index in exercises.answers" :key="index" class="mb-1 border p-1">
+                                {{ option }}
                             </div>
                             <div class="d-flex flex-row align-content-center justify-content-center mt-3">
                                 <div v-for="option, index in exercises.correct_answer" :key="index"
