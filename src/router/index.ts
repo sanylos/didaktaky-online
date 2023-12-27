@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import CviceniView from '../views/CviceniView.vue'
 import PrehledView from '@/views/PrehledView.vue'
 import AddExerciseView from '@/views/AddExerciseView.vue'
+import NotFoundView from '@/views/NotFoundView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -28,12 +29,9 @@ const router = createRouter({
       component: CviceniView
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/HomeView.vue')
+      path: '/:pathMatch(.*)',
+      name: 'NotFound',
+      component: NotFoundView
     }
   ]
 })
