@@ -5,7 +5,7 @@ import PrehledView from '@/views/PrehledView.vue'
 import AddExerciseView from '@/views/AddExerciseView.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   routes: [
     {
       path: '/',
