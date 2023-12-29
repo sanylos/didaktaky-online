@@ -24,13 +24,13 @@
                     <div class="d-flex flex-column justify-content-center align-items-center">
                         <div v-if="exercises.text1imgPath" class="col mb-1">
                             <span class="row fw-bold">TEXT 1</span>
-                            <img class="exercise-text-image"
-                                :src="'/exercise_texts/' + exercises.text1imgPath + '.png'"> <!--PATH WORKING ONLY IN PRODUCTION-->
+                            <img class="exercise-text-image" :src="'/exercise_texts/' + exercises.text1imgPath + '.png'">
+                            <!--PATH WORKING ONLY IN PRODUCTION-->
                         </div>
                         <div v-if="exercises.text2imgPath" class="col mb-1">
                             <span class="row fw-bold">TEXT 2</span>
-                            <img class="exercise-text-image"
-                                :src="'/exercise_texts/' + exercises.text2imgPath + '.png'"> <!--PATH WORKING ONLY IN PRODUCTION-->
+                            <img class="exercise-text-image" :src="'/exercise_texts/' + exercises.text2imgPath + '.png'">
+                            <!--PATH WORKING ONLY IN PRODUCTION-->
                         </div>
                     </div>
 
@@ -185,7 +185,6 @@
 </template>
   
 <script lang="ts" setup>
-// @ts-nocheck
 import { useUserStore } from '@/stores/user';
 import { supabase } from '@/supabase'
 import { reactive, ref } from 'vue';
@@ -199,17 +198,18 @@ let answered = ref(false);
 const isAnswerCorrect = ref("FALSE");
 const userAnswerId = ref('');
 const exercisePagination = ref(1);
+const exerciseId = ref(0);
 
 const errorMessage = ref('');
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const convertAnswerArrayToUpperCase = () => {
-    answer.value = answer.value.map(index => index.toUpperCase());
+    answer.value = answer.value.map((index: string) => index.toUpperCase());
 }
 
 const convertAnswerArrayToLowerCase = () => {
-    answer.value = answer.value.map(index => index.toLowerCase());
+    answer.value = answer.value.map((index: string) => index.toLowerCase());
 }
 
 const handlePrevious = () => {
@@ -239,15 +239,16 @@ const getQuestionByPagination = async (pagination: number) => {
             .eq('user_id', userStore.id)
             .range(pagination - 1, pagination - 1); //PAGINATION-1 TO GET PREVIOUS EXERCISE
 
-        const exerciseId = userData[0].exercise_id; //STORE ID OF THE EXERCISE
+        if (userData) { exerciseId.value = userData[0].exercise_id; } //STORE ID OF THE EXERCISE
+        else console.log(error);
 
         const { data: exerciseData } = await supabase
             .from('exercises')
             .select('*')
-            .eq('id', exerciseId);
+            .eq('id', exerciseId.value);
 
-        exercises.value = exerciseData[0]; //SET exercise data
-        answer.value = userData[0].answer; //SET answer
+        if (exerciseData) { exercises.value = exerciseData[0]; }//SET exercise data
+        if (userData) { answer.value = userData[0].answer; } //SET answer
 
     } catch (error) {
         console.log(error);
@@ -322,11 +323,12 @@ const getQuestion = async () => {
 
     //FETCH RANDOM EXERCISE USING POSTGRES FUNCTION
     try {
-        const { data, error } = await supabase.rpc('getrandomexercise', { 
-        in_years: userStore.exerciseFilters.examYears, 
-        in_subjects: userStore.exerciseFilters.examSubjects, 
-        in_variants: userStore.exerciseFilters.examVariants, 
-        in_types: userStore.exerciseFilters.examType });
+        const { data, error } = await supabase.rpc('getrandomexercise', {
+            in_years: userStore.exerciseFilters.examYears,
+            in_subjects: userStore.exerciseFilters.examSubjects,
+            in_variants: userStore.exerciseFilters.examVariants,
+            in_types: userStore.exerciseFilters.examType
+        });
 
         if (error) {
             errorMessage.value = "Nenalezena žádná cvičení odpovídající zadaným filtrům"

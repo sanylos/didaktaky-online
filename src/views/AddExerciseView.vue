@@ -139,10 +139,8 @@
 </template>
 
 <script setup lang="ts">
-// @ts-nocheck
 import { reactive, ref } from 'vue';
 import { supabase } from '@/supabase';
-import router from '@/router';
 import { useUserStore } from '@/stores/user';
 
 const userStore = useUserStore();
