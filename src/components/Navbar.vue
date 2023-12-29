@@ -22,11 +22,6 @@
           <li class="nav-item mx-1">
             <a class="nav-link disabled" aria-disabled="true">🔧 Generování testů</a>
           </li>
-          <li class="nav-item mx-1">
-            <RouterLink to="/addExercise" class="nav-link">
-              + Přidat cvičení
-            </RouterLink>
-          </li>
         </ul>
 
         <a class="me-3 bg-dark rounded rounded-pill btn btn-secondary btn-outline-secondary text-white"
