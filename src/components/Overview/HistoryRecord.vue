@@ -14,7 +14,7 @@
     </td>
     <td>
         <span v-if="answer?.isCorrect" class="fw-bold text-success">SPRÁVNĚ</span>
-        <spam v-else class="fw-bold text-danger">ŠPATNĚ</spam>
+        <span v-else class="fw-bold text-danger">ŠPATNĚ</span>
     </td>
     <td>
         <span v-if="answer?.answered_at" class="text-success">{{ getTimeRangeOfDate(answer?.generated_at, answer?.answered_at) }}s</span>
