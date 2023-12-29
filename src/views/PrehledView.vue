@@ -57,7 +57,7 @@
                                 <th scope="col">TYP CVIČENÍ</th>
                                 <th score="col">PŘEDMĚT</th>
                                 <th scope="col">ZODPOVĚZENO</th>
-                                <th scope="col"></th>
+                                <th scope="col">ČAS</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -66,7 +66,6 @@
                             </tr>
                         </tbody>
                     </table>
-                    {{ answers }}
                 </div>
             </div>
         </div>
