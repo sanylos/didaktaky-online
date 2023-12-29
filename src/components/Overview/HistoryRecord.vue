@@ -15,7 +15,10 @@
     <td>
         <span v-if="answer.isCorrect" class="fw-bold text-success">SPRÁVNĚ</span>
         <spam v-else class="fw-bold text-danger">ŠPATNĚ</spam>
-        <i v-if="!answer.answered_at" style="font-size:12px"> (NEZODPOVĚZENO)</i>
+    </td>
+    <td>
+        <span v-if="answer.answered_at" class="text-success">{{ getTimeRangeOfDate(answer.generated_at, answer.answered_at) }}s</span>
+        <i v-else style="font-size:12px" class="text-danger"> NEZODPOVĚZENO</i>
     </td>
 </template>
 
@@ -23,6 +26,12 @@
 defineProps({
     answer: Object
 })
+
+const getTimeRangeOfDate = (from: string, to: string) => {
+    const startDate = new Date(from);
+    const endDate = new Date(to);
+    return ((endDate.getTime() - startDate.getTime()) / 1000)
+}
 </script>
 
 <style></style>
