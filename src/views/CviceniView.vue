@@ -288,8 +288,10 @@ const saveQuestion = async () => {
         const { data, error } = await supabase
             .from('userAnswers')
             .upsert({
-                'exercise_id': exercises.value.id,
+                'exercise_id': exercises.value.exercise_id,
                 'answer': answer.value,
+                'examType':exercises.value.test_type,
+                'examSubject':exercises.value.test_subject
             })
         if (error) console.log(error);
     } catch (error) {
@@ -335,7 +337,6 @@ const getQuestion = async () => {
             console.log(error);
         }
         else {
-            //console.log(data[0].random_exercise[0]);
             exercises.value = data;
             answered.value = false;
             answer.value = '';
@@ -347,6 +348,7 @@ const getQuestion = async () => {
             if (userStore.isLoggedIn) await saveQuestion();
             loading.value = false;
         }
+        console.log(exercises.value);
     } catch (error) {
         errorMessage.value = "Nenalezena žádná cvičení odpovídající zadaným filtrům"
         console.log(error);
