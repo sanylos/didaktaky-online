@@ -1,0 +1,93 @@
+CREATE OR REPLACE FUNCTION GetRandomExercise(
+    in_years TEXT[],
+    in_subjects TEXT[],
+    in_variants TEXT[],
+    in_types TEXT[],
+    OUT test_subject SUBJECT,
+    OUT test_type EXAMTYPE,
+    OUT exercise_id BIGINT,
+    OUT test_id BIGINT,
+    OUT number BIGINT,
+    OUT title TEXT,
+    OUT description TEXT,
+    OUT answers TEXT[],
+    OUT correct_answer TEXT[],
+    OUT "text1imgPath" TEXT,
+    OUT "text2imgPath" TEXT,
+    OUT claims TEXT[],
+    OUT sentences TEXT[],
+    OUT points NUMERIC,
+    OUT "group" public.exercisegroup,
+    OUT exercise_type public.exercisetype
+) AS $$
+DECLARE
+    exercise_record RECORD;
+BEGIN
+    SELECT tests.subject,
+           tests.type,
+           exercises.id,
+           exercises.test_id,
+           exercises.number,
+           exercises.title,
+           exercises.description,
+           exercises.answers,
+           exercises.correct_answer,
+           exercises."text1imgPath",
+           exercises."text2imgPath",
+           exercises.claims,
+           exercises.sentences,
+           exercises.points,
+           exercises."group",
+           exercises.type
+    INTO test_subject,
+         test_type,
+         exercise_id,
+         test_id,
+         number,
+         title,
+         description,
+         answers,
+         correct_answer,
+         "text1imgPath",
+         "text2imgPath",
+         claims,
+         sentences,
+         points,
+         "group",
+         exercise_type
+    FROM exercises 
+    JOIN tests ON exercises.test_id = tests.id
+    WHERE tests.year = ANY(in_years)
+        AND tests.subject = ANY(ARRAY(SELECT unnest(in_subjects)::public.subject))
+        AND tests.variant::TEXT = ANY(ARRAY(SELECT unnest(in_variants)::TEXT))
+        AND tests.type = ANY(ARRAY(SELECT unnest(in_types)::public.examtype))
+    ORDER BY RANDOM() 
+    LIMIT 1;
+END;
+$$ LANGUAGE plpgsql;
+
+---
+
+CREATE OR REPLACE FUNCTION GetRandomExercise(
+    in_years TEXT[],
+    in_subjects TEXT[],
+    in_variants TEXT[],
+    in_types TEXT[]
+) RETURNS exercises AS $$
+DECLARE
+    random_exercise exercises%ROWTYPE;
+BEGIN
+    SELECT *
+    INTO random_exercise
+    FROM exercises 
+    JOIN tests ON exercises.test_id = tests.id
+    WHERE tests.year = ANY(in_years)
+        AND tests.subject = ANY(ARRAY(SELECT unnest(in_subjects)::public.subject))
+        AND tests.variant::TEXT = ANY(in_variants)
+        AND tests.type = ANY(ARRAY(SELECT unnest(in_types)::public.examtype))
+    ORDER BY RANDOM() 
+    LIMIT 1;
+
+    RETURN random_exercise;
+END;
+$$ LANGUAGE plpgsql;
