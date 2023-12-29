@@ -62,7 +62,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="answer, index in answers" :key="index">
-                                <HistoryRecord :answer="answer"></HistoryRecord>
+                                <HistoryRecord v-if="answer" :answer="answer"></HistoryRecord>
                             </tr>
                         </tbody>
                     </table>
