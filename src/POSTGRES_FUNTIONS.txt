@@ -18,7 +18,7 @@ CREATE OR REPLACE FUNCTION GetRandomExercise(
     OUT sentences TEXT[],
     OUT points NUMERIC,
     OUT "group" public.exercisegroup,
-    OUT exercise_type public.exercisetype
+    OUT type public.exercisetype
 ) AS $$
 DECLARE
     exercise_record RECORD;
@@ -54,7 +54,7 @@ BEGIN
          sentences,
          points,
          "group",
-         exercise_type
+         type
     FROM exercises 
     JOIN tests ON exercises.test_id = tests.id
     WHERE tests.year = ANY(in_years)
@@ -65,6 +65,7 @@ BEGIN
     LIMIT 1;
 END;
 $$ LANGUAGE plpgsql;
+
 
 ---
 
