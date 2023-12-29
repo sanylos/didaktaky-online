@@ -53,31 +53,20 @@
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
-                                <th scope="col">PŘEDMĚT</th>
-                                <th scope="col">Last</th>
-                                <th scope="col">Handle</th>
+                                <th scope="col">TYP ZKOUŠKY</th>
+                                <th scope="col">TYP CVIČENÍ</th>
+                                <th score="col">PŘEDMĚT</th>
+                                <th scope="col">ZODPOVĚZENO</th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td colspan="2">Larry the Bird</td>
-                                <td>@twitter</td>
+                            <tr v-for="answer, index in answers" :key="index">
+                                <HistoryRecord :answer="answer"></HistoryRecord>
                             </tr>
                         </tbody>
                     </table>
+                    {{ answers }}
                 </div>
             </div>
         </div>
@@ -85,25 +74,47 @@
 </template>
 
 <script setup lang="ts">
+import HistoryRecord from '@/components/Overview/HistoryRecord.vue'
 import { useUserStore } from '@/stores/user';
 import { supabase } from '@/supabase';
-import { onMounted, ref } from 'vue';
-
-const answerCount = ref(0);
+import { onMounted, onUpdated, onBeforeMount, ref, onBeforeUpdate, onServerPrefetch, onActivated } from 'vue';
 
 const userStore = useUserStore();
-const getAnswerCount = async () => {
-    const { count, error } = await supabase
+const answerCount = ref(0);
+const answers = ref();
+
+const getData = async () => {
+
+    //FETCH ANSWER COUNT
+    const { count, error: countError } = await supabase
         .from('userAnswers')
         .select('*', { count: 'exact', head: true })
         .eq('user_id', userStore.id)
-    if (error) console.log(error);
+    if (countError) console.log(countError);
     else answerCount.value = count ? count : 0;
+
+    //FETCH ANSWERS
+    const { data, error: dataError } = await supabase
+        .from('userAnswers')
+        .select('*')
+        .eq('user_id', userStore.id)
+        .order('generated_at', { ascending: false })
+        .limit(10);
+    if (dataError) console.log(dataError);
+    else answers.value = data;
+    console.log(data);
+}
+
+const fetchData = () => {
+    getData();
 }
 
 onMounted(() => {
-    getAnswerCount();
+    fetchData();
 })
+/*onUpdated(() => {
+    fetchData();
+})*/
 </script>
 
 <style></style>
