@@ -291,7 +291,8 @@ const saveQuestion = async () => {
                 'exercise_id': exercises.value.exercise_id,
                 'answer': answer.value,
                 'examType':exercises.value.test_type,
-                'examSubject':exercises.value.test_subject
+                'examSubject':exercises.value.test_subject,
+                'exerciseType':exercises.value.type
             })
         if (error) console.log(error);
     } catch (error) {
