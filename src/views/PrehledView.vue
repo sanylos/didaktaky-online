@@ -9,7 +9,7 @@
                 <div class="col-xl-3 col-md-6">
                     <div class="container p-3 bg-dark rounded-1 shadow">
                         <div class=" mb-1 fs-6">
-                            📋 Vyplněných cvičení</div>
+                            📑 Vyplněných cvičení</div>
                         <div class="fs-3 d-flex flex-row justify-content-between">
                             <div class="">{{ answerCount }}</div><i class="bi bi-caret-up-fill text-success"></i>
                         </div>
@@ -19,9 +19,9 @@
                 <div class="col-xl-3 col-md-6">
                     <div class="container p-3 bg-dark rounded-1 shadow">
                         <div class=" mb-1 fs-6">
-                            📋 Vyplněných cvičení</div>
+                            📃 Vyplněných testů</div>
                         <div class="fs-3 d-flex flex-row justify-content-between">
-                            <div class="">126</div><i class="bi bi-caret-up-fill text-success"></i>
+                            <div class="">0</div><i class="bi bi-caret-up-fill text-success"></i>
                         </div>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                         <div class=" mb-1 fs-6">
                             📋 Vyplněných cvičení</div>
                         <div class="fs-3 d-flex flex-row justify-content-between">
-                            <div class="">126</div><i class="bi bi-caret-up-fill text-success"></i>
+                            <div class="">0</div><i class="bi bi-caret-up-fill text-success"></i>
                         </div>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
                         <div class=" mb-1 fs-6">
                             📋 Vyplněných cvičení</div>
                         <div class="fs-3 d-flex flex-row justify-content-between">
-                            <div class="">126</div><i class="bi bi-caret-up-fill text-success"></i>
+                            <div class="">0</div><i class="bi bi-caret-up-fill text-success"></i>
                         </div>
                     </div>
                 </div>
@@ -72,7 +72,7 @@ const getData = async () => {
         .select('*', { count: 'exact', head: true })
         .eq('user_id', userStore.id)
     if (countError) console.log(countError);
-    else answerCount.value = count ? count : 0;
+    if (count) answerCount.value = count;
 
     //FETCH ANSWERS
     const { data, error: dataError } = await supabase
