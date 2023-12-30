@@ -48,32 +48,14 @@
 
             </div>
             <div class="container rounded-3 bg-dark table-responsive">
-                <div class="">
-                    <table class="table table-dark table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">TYP ZKOUŠKY</th>
-                                <th scope="col">TYP CVIČENÍ</th>
-                                <th score="col">PŘEDMĚT</th>
-                                <th scope="col">ZODPOVĚZENO</th>
-                                <th scope="col">ČAS</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="answer, index in answers" :key="index">
-                                <HistoryRecord v-if="answer" :answer="answer"></HistoryRecord>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <HistoryTable :data="answers"></HistoryTable>
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import HistoryRecord from '@/components/Overview/HistoryRecord.vue'
+import HistoryTable from '@/components/Overview/HistoryTable.vue'
 import { useUserStore } from '@/stores/user';
 import { supabase } from '@/supabase';
 import { onMounted, onUpdated, onBeforeMount, ref, onBeforeUpdate, onServerPrefetch, onActivated } from 'vue';
