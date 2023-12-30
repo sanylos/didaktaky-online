@@ -292,7 +292,8 @@ const saveQuestion = async () => {
                 'answer': answer.value,
                 'examType':exercises.value.test_type,
                 'examSubject':exercises.value.test_subject,
-                'exerciseType':exercises.value.type
+                'exerciseType':exercises.value.type,
+                'exerciseGroup':exercises.value.group
             })
         if (error) console.log(error);
     } catch (error) {
