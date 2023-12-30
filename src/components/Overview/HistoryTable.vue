@@ -36,7 +36,7 @@
                 <td>
                     <span v-if="answer?.answered_at" class="text-success">{{ getTimeRangeOfDate(answer?.generated_at,
                         answer?.answered_at) }}s</span>
-                    <i v-else style="font-size:12px" class="text-danger"> NEZODPOVĚZENO</i>
+                    <i v-else style="font-size:12px" class="text-danger">NEZODPOVĚZENO</i>
                 </td>
             </tr>
         </tbody>
