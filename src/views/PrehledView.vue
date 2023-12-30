@@ -48,7 +48,7 @@
 
             </div>
             <div class="container rounded-3 bg-dark table-responsive">
-                <HistoryTable :data="answers"></HistoryTable>
+                <HistoryTable></HistoryTable>
             </div>
         </div>
     </div>
@@ -73,17 +73,6 @@ const getData = async () => {
         .eq('user_id', userStore.id)
     if (countError) console.log(countError);
     if (count) answerCount.value = count;
-
-    //FETCH ANSWERS
-    const { data, error: dataError } = await supabase
-        .from('userAnswers')
-        .select('*')
-        .eq('user_id', userStore.id)
-        .order('generated_at', { ascending: false })
-        .limit(10);
-    if (dataError) console.log(dataError);
-    else answers.value = data;
-    console.log(data);
 }
 
 const fetchData = () => {

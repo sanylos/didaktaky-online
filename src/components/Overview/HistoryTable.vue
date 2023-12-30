@@ -12,7 +12,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="answer, index in data" :key="index">
+            <tr v-for="answer, index in answers" :key="index">
                 <td>
                     {{ answer?.id }}
                 </td>
@@ -44,15 +44,33 @@
 </template>
 
 <script setup lang="ts">
-defineProps({
-    data: Array as any
-})
+import { supabase } from '@/supabase';
+import { useUserStore } from '@/stores/user';
+import { onMounted, ref } from 'vue';
+
+const userStore = useUserStore();
+const answers = ref();
+
+const fetchData = async () => {
+    const { data, error: dataError } = await supabase
+        .from('userAnswers')
+        .select('*')
+        .eq('user_id', userStore.id)
+        .order('generated_at', { ascending: false })
+        .limit(14);
+    if (dataError) console.log(dataError);
+    else answers.value = data;
+}
 
 const getTimeRangeOfDate = (from: string, to: string) => {
     const startDate = new Date(from);
     const endDate = new Date(to);
     return ((endDate.getTime() - startDate.getTime()) / 1000).toString();
 }
+
+onMounted(() => {
+    fetchData();
+})
 </script>
 
 <style></style>
