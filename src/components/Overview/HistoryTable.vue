@@ -5,6 +5,7 @@
                 <th scope="col">ID</th>
                 <th scope="col">TYP ZKOUŠKY</th>
                 <th scope="col">TYP CVIČENÍ</th>
+                <th score="col">SKUPINA CVIČENÍ</th>
                 <th score="col">PŘEDMĚT</th>
                 <th scope="col">ZODPOVĚZENO</th>
                 <th scope="col">ČAS</th>
@@ -21,6 +22,9 @@
                 </td>
                 <td>
                     {{ answer?.exerciseType }}
+                </td>
+                <td>
+                    {{ answer?.exerciseGroup }}
                 </td>
                 <td>
                     {{ answer?.examSubject }}
