@@ -9,7 +9,7 @@
                 <div class="col-xl-3 col-md-6">
                     <div class="container p-3 bg-dark rounded-1 shadow">
                         <div class=" mb-1 fs-6">
-                            📑 Vyplněných cvičení</div>
+                            💬 Vyplněných cvičení</div>
                         <div class="fs-3 d-flex flex-row justify-content-between">
                             <div class="text-dark-emphasis">{{ answerCount.total }}</div>
                             <div class="fs-6 d-flex align-items-center">
@@ -29,7 +29,7 @@
                 <div class="col-xl-3 col-md-6">
                     <div class="container p-3 bg-dark rounded-1 shadow">
                         <div class=" mb-1 fs-6">
-                            📃 Vyplněných testů</div>
+                            📋 Vyplněných testů</div>
                         <div class="fs-3 d-flex flex-row justify-content-between">
                             <div class="">0</div><i class="bi bi-caret-up-fill text-success"></i>
                         </div>
@@ -39,7 +39,7 @@
                 <div class="col-xl-3 col-md-6">
                     <div class="container p-3 bg-dark rounded-1 shadow">
                         <div class=" mb-1 fs-6">
-                            📋 Vyplněných cvičení</div>
+                            🤙 Nejúspěšnější typ cvičení</div>
                         <div class="fs-3 d-flex flex-row justify-content-between">
                             <div class="">0</div><i class="bi bi-caret-up-fill text-success"></i>
                         </div>
@@ -49,7 +49,7 @@
                 <div class="col-xl-3 col-md-6">
                     <div class="container p-3 bg-dark rounded-1 shadow">
                         <div class=" mb-1 fs-6">
-                            📋 Vyplněných cvičení</div>
+                            🤟 Nejúspěšnější skupina cvičení</div>
                         <div class="fs-3 d-flex flex-row justify-content-between">
                             <div class="">0</div><i class="bi bi-caret-up-fill text-success"></i>
                         </div>
