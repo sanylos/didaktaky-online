@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex justify-content-center text-white">
+    <div class="d-flex justify-content-center text-dark-emphasis">
         <div class="alert alert-danger" role="alert" v-if="!userStore.isLoggedIn">
             ❗ Pro zobrazení přehledu se musíš přihlásit!
         </div>
@@ -11,8 +11,17 @@
                         <div class=" mb-1 fs-6">
                             📑 Vyplněných cvičení</div>
                         <div class="fs-3 d-flex flex-row justify-content-between">
-                            <div class="">{{ answerCount.total }}</div>{{ answerCountImprovementPercentage.toFixed() }}%<i
-                                class="bi bi-caret-up-fill text-success"></i>
+                            <div class="text-dark-emphasis">{{ answerCount.total }}</div>
+                            <div class="fs-6 d-flex align-items-center">
+                                <div v-if="answerCountImprovementPercentage > 0">
+                                    {{ answerCountImprovementPercentage.toFixed() }}%
+                                    <i class="bi bi-caret-up-fill text-success"></i>
+                                </div>
+                                <div v-if="answerCountImprovementPercentage < 0">
+                                    {{ answerCountImprovementPercentage.toFixed() }}%
+                                    <i class="bi bi-caret-down-fill text-danger"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -82,9 +91,8 @@ const getData = async () => {
 const answerCountImprovementPercentage = computed(() => {
     const lastTwoWeeks = answerCount.value.lastTwoWeeks;
     const lastWeek = answerCount.value.lastWeek;
-    console.log(lastWeek);
-    console.log(lastTwoWeeks);
-    return ((lastTwoWeeks - lastWeek) / lastTwoWeeks) * 100;
+    
+    return ((lastWeek - (lastTwoWeeks - lastWeek)) / oldWeek) * 100
 })
 
 const getAnswerCountImprovement = async () => {
