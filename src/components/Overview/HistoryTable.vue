@@ -36,11 +36,14 @@
                 <td>
                     <span v-if="answer?.answered_at" class="text-success">{{ getTimeRangeOfDate(answer?.generated_at,
                         answer?.answered_at) }}s</span>
-                    <i v-else style="font-size:12px" class="text-danger"> NEZODPOVĚZENO</i>
+                    <i v-else style="font-size:12px" class="text-danger">NEZODPOVĚZENO</i>
                 </td>
             </tr>
         </tbody>
     </table>
+    <div class="d-flex justify-content-center mb-3 fs-6">
+        <a href="javascript:;" @click="fetchMoreData">Zobrazit více</a>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -49,17 +52,21 @@ import { useUserStore } from '@/stores/user';
 import { onMounted, ref } from 'vue';
 
 const userStore = useUserStore();
-const answers = ref();
+const answers: any = ref([]);
+const pagination = ref(0);
 
-const fetchData = async () => {
+const fetchMoreData = async () => {
     const { data, error: dataError } = await supabase
         .from('userAnswers')
         .select('*')
         .eq('user_id', userStore.id)
         .order('generated_at', { ascending: false })
-        .limit(14);
+        .range(pagination.value, pagination.value + 9)
     if (dataError) console.log(dataError);
-    else answers.value = data;
+    else {
+        answers.value.push(...data);
+        pagination.value += 10;
+    }
 }
 
 const getTimeRangeOfDate = (from: string, to: string) => {
@@ -69,7 +76,7 @@ const getTimeRangeOfDate = (from: string, to: string) => {
 }
 
 onMounted(() => {
-    fetchData();
+    fetchMoreData();
 })
 </script>
 
