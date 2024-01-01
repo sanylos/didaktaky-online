@@ -2,7 +2,7 @@
     <div class="app-container bg-dark-subtle" data-bs-theme="dark">
         <Navbar />
         <RouterView />
-        <div class="footer mb-1">
+        <div class="footer mt-1">
             <a href="https://www.buymeacoffee.com/sanyl">PODPORA PROJEKTU</a>
         </div>
     </div>
