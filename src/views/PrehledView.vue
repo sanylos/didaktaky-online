@@ -91,8 +91,8 @@ const getData = async () => {
 const answerCountImprovementPercentage = computed(() => {
     const lastTwoWeeks = answerCount.value.lastTwoWeeks;
     const lastWeek = answerCount.value.lastWeek;
-    
-    return ((lastWeek - (lastTwoWeeks - lastWeek)) / oldWeek) * 100
+
+    return ((lastWeek - (lastTwoWeeks - lastWeek)) / (lastTwoWeeks - lastWeek)) * 100
 })
 
 const getAnswerCountImprovement = async () => {
