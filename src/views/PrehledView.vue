@@ -6,7 +6,7 @@
         <div v-else class="container d-flex flex-column">
             <div class="row my-2">
 
-                <div class="col-xl-3 col-md-6">
+                <div v-if="answerCount.total" class="col-xl-3 col-md-6">
                     <div class="container p-3 bg-dark rounded-1 shadow">
                         <div class=" mb-1 fs-6">
                             💬 Vyplněných cvičení</div>
@@ -46,12 +46,12 @@
                     </div>
                 </div>
 
-                <div class="col-xl-3 col-md-6">
+                <div v-if="bestExerciseGroup" class="col-xl-3 col-md-6">
                     <div class="container p-3 bg-dark rounded-1 shadow">
                         <div class=" mb-1 fs-6">
                             🤟 Nejúspěšnější skupina cvičení</div>
                         <div class="fs-3 d-flex flex-row justify-content-between">
-                            <div class="">0</div><i class="bi bi-caret-up-fill text-success"></i>
+                            <div class="">{{ bestExerciseGroup }}</div>
                         </div>
                     </div>
                 </div>
@@ -75,7 +75,28 @@ const answerCount = ref({
     total: 0,
     lastTwoWeeks: 0,
     lastWeek: 0,
+    exerciseGroups: []
 });
+
+const bestExerciseGroup = computed(() => {
+    let currentlyBest = answerCount.value.exerciseGroups[0];
+    if (answerCount.value.exerciseGroups.length > 0) {
+        answerCount.value.exerciseGroups.forEach((group) => {
+            if(group.count > currentlyBest.count) currentlyBest = group;
+        })
+
+        return currentlyBest.exercisegroup;
+    }
+})
+
+const fetchAnsweredExerciseGroups = async () => {
+    const { data, error } = await supabase.rpc('getcountexercisegroups', {
+        user_id: userStore.id
+    })
+    console.log(data);
+    if (error) console.log(error);
+    if (data) answerCount.value.exerciseGroups = data;
+}
 
 const getData = async () => {
 
@@ -87,6 +108,8 @@ const getData = async () => {
     if (countError) console.log(countError);
     if (count) answerCount.value.total = count;
 }
+
+
 
 const answerCountImprovementPercentage = computed(() => {
     const lastTwoWeeks = answerCount.value.lastTwoWeeks;
@@ -149,6 +172,7 @@ const getAnswerCountImprovement = async () => {
 const fetchData = () => {
     getData();
     getAnswerCountImprovement();
+    fetchAnsweredExerciseGroups();
 }
 
 onMounted(() => {
