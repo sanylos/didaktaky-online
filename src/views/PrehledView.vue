@@ -50,8 +50,8 @@
                     <div class="container p-3 bg-dark rounded-1 shadow">
                         <div class=" mb-1 fs-6">
                             🤟 Nejúspěšnější skupina cvičení</div>
-                        <div class="fs-3 d-flex flex-row justify-content-between">
-                            <div class="">{{ bestExerciseGroup }}</div>
+                        <div class="fs-3 d-flex flex-row justify-content-between align-items-center">
+                            <div class="">{{ bestExerciseGroup.exercisegroup }}</div><div class="fs-6 text-success">({{ bestExerciseGroup.successRate }}%)</div>
                         </div>
                     </div>
                 </div>
@@ -70,22 +70,37 @@ import { useUserStore } from '@/stores/user';
 import { supabase } from '@/supabase';
 import { onMounted, onUpdated, onBeforeMount, ref, onBeforeUpdate, onServerPrefetch, onActivated, computed } from 'vue';
 
+interface ExerciseGroup {
+    exercisegroup: string;
+    count: number;
+}
+
 const userStore = useUserStore();
 const answerCount = ref({
     total: 0,
     lastTwoWeeks: 0,
     lastWeek: 0,
-    exerciseGroups: []
+    exerciseGroups: [] as ExerciseGroup[]
 });
 
 const bestExerciseGroup = computed(() => {
     let currentlyBest = answerCount.value.exerciseGroups[0];
+    let currentlyBestSuccessRate = 0;
     if (answerCount.value.exerciseGroups.length > 0) {
         answerCount.value.exerciseGroups.forEach((group) => {
-            if(group.count > currentlyBest.count) currentlyBest = group;
+            let groupsWithSameType = answerCount.value.exerciseGroups.filter(groupItem => groupItem.exercisegroup === group.exercisegroup);
+            console.log(groupsWithSameType);
+            let group1 = groupsWithSameType[0];
+            let group2 = groupsWithSameType[1] ? groupsWithSameType[1] : { count: 0 };
+            let successRate = (100 / (group1.count + group2.count)) * group1.count; console.log(successRate);
+            if (successRate > currentlyBestSuccessRate) {
+                currentlyBestSuccessRate = successRate;
+                currentlyBest = group1;
+            }
+
         })
 
-        return currentlyBest.exercisegroup;
+        return { exercisegroup: currentlyBest.exercisegroup, successRate: currentlyBestSuccessRate };
     }
 })
 
