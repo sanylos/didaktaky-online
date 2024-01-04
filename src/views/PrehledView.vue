@@ -51,7 +51,8 @@
                         <div class=" mb-1 fs-6">
                             🤟 Nejúspěšnější skupina cvičení</div>
                         <div class="fs-3 d-flex flex-row justify-content-between align-items-center">
-                            <div class="">{{ bestExerciseGroup.exercisegroup }}</div><div class="fs-6 text-success">({{ bestExerciseGroup.successRate }}%)</div>
+                            <div class="">{{ bestExerciseGroup.exercisegroup }}</div>
+                            <div class="fs-6 text-success">({{ bestExerciseGroup.successRate }}%)</div>
                         </div>
                     </div>
                 </div>
@@ -83,7 +84,7 @@ const answerCount = ref({
     exerciseGroups: [] as ExerciseGroup[]
 });
 
-const bestExerciseGroup = computed(() => {
+const bestExerciseGroup = computed(() => { //method for getting the exercise with most right answers ratio
     let currentlyBest = answerCount.value.exerciseGroups[0];
     let currentlyBestSuccessRate = 0;
     if (answerCount.value.exerciseGroups.length > 0) {
@@ -126,14 +127,14 @@ const getData = async () => {
 
 
 
-const answerCountImprovementPercentage = computed(() => {
+const answerCountImprovementPercentage = computed(() => { //GET answer count improvement against last week
     const lastTwoWeeks = answerCount.value.lastTwoWeeks;
     const lastWeek = answerCount.value.lastWeek;
 
     return ((lastWeek - (lastTwoWeeks - lastWeek)) / (lastTwoWeeks - lastWeek)) * 100
 })
 
-const getAnswerCountImprovement = async () => {
+const getAnswerCountImprovement = async () => { //FETCH answer count improvement against last week
 
     let dateFourteenDaysAgo = new Date();
     dateFourteenDaysAgo.setDate(dateFourteenDaysAgo.getDate() - 14);
@@ -156,46 +157,16 @@ const getAnswerCountImprovement = async () => {
     if (lastTwoWeeksCountError) console.log(lastTwoWeeksCountError);
     if (lastTwoWeeksCount) answerCount.value.lastTwoWeeks = lastTwoWeeksCount;
 }
-/*
-   //FETCH ANSWER COUNT FOR LAST 14 DAYS
-    let date14daysAgo = new Date();
-    date14daysAgo.setDate(date14daysAgo.getDate() - 14);
-    let date7daysAgo = new Date();
-    date7daysAgo.setDate(date7daysAgo.getDate() - 7);
-    let answerCountLast14D = 0;
-    let answerCountLast7D = 0;
 
-    const { count: DBanswerCount14, error: last14countError } = await supabase
-        .from('userAnswers')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', userStore.id)
-        .gte('generated_at', date14daysAgo.toISOString())
-    if (last14countError) console.log(last14countError);
-    if (DBanswerCount14) answerCountLast14D = DBanswerCount14;
-
-    const { count: DBanswerCount7, error: last7countError } = await supabase
-        .from('userAnswers')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', userStore.id)
-        .gte('generated_at', date7daysAgo.toISOString())
-    if (last7countError) console.log(last7countError);
-    if (DBanswerCount7) answerCountLast7D = DBanswerCount7;
-
-    answerCountImprovement.value = (answerCount.value / 100) * (answerCountLast14D - answerCountLast7D);
-}
-*/
-const fetchData = () => {
-    getData();
-    getAnswerCountImprovement();
-    fetchAnsweredExerciseGroups();
+const fetchData = async () => {
+    await getAnswerCountImprovement();
+    await fetchAnsweredExerciseGroups();
+    await getData();
 }
 
 onMounted(() => {
     fetchData();
 })
-/*onUpdated(() => {
-    fetchData();
-})*/
 </script>
 
 <style></style>
