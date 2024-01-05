@@ -6,7 +6,7 @@
         <div v-else class="container d-flex flex-column">
             <div class="row my-2">
 
-                <div v-if="answerCount.total" class="col-xl-3 col-md-6">
+                <div v-if="answerCount.total" class="col-xl-3 col-md-6 my-2">
                     <div class="container p-3 bg-dark rounded-1 shadow">
                         <div class=" mb-1 fs-6">
                             💬 Vyplněných cvičení</div>
@@ -26,17 +26,18 @@
                     </div>
                 </div>
 
-                <div class="col-xl-3 col-md-6">
+                <div class="col-xl-3 col-md-6 my-2">
                     <div class="container p-3 bg-dark rounded-1 shadow">
                         <div class=" mb-1 fs-6">
                             📋 Vyplněných testů</div>
                         <div class="fs-3 d-flex flex-row justify-content-between">
                             <div class="">0</div><i class="bi bi-caret-up-fill text-success"></i>
                         </div>
+                        <div id="spark1"></div>
                     </div>
                 </div>
 
-                <div class="col-xl-3 col-md-6">
+                <div class="col-xl-3 col-md-6 my-2">
                     <div class="container p-3 bg-dark rounded-1 shadow">
                         <div class=" mb-1 fs-6">
                             🤙 Nejúspěšnější typ cvičení</div>
@@ -46,7 +47,7 @@
                     </div>
                 </div>
 
-                <div v-if="bestExerciseGroup" class="col-xl-3 col-md-6">
+                <div v-if="bestExerciseGroup" class="col-xl-3 col-md-6 my-2">
                     <div class="container p-3 bg-dark rounded-1 shadow">
                         <div class=" mb-1 fs-6">
                             🤟 Nejúspěšnější skupina cvičení</div>
@@ -57,7 +58,18 @@
                     </div>
                 </div>
 
+                <div class="col-xl-3 col-md-6 my-2">
+                    <div class="container p-3 bg-dark rounded-1 shadow">
+                        <div class=" mb-1 fs-6">📂 Skupiny cvičení</div>
+                        <apexchart type="radar" height="100%" width="100%" :options="chartOptions" :series="series">
+                        </apexchart>
+                    </div>
+                </div>
+
             </div>
+
+
+
             <div class="container rounded-3 bg-dark table-responsive">
                 <HistoryTable></HistoryTable>
             </div>
@@ -69,7 +81,50 @@
 import HistoryTable from '@/components/Overview/HistoryTable.vue'
 import { useUserStore } from '@/stores/user';
 import { supabase } from '@/supabase';
-import { onMounted, onUpdated, onBeforeMount, ref, onBeforeUpdate, onServerPrefetch, onActivated, computed } from 'vue';
+import { addSyntheticTrailingComment } from 'typescript';
+import { onMounted, onUpdated, onBeforeMount, ref, onBeforeUpdate, onServerPrefetch, onActivated, computed, reactive } from 'vue';
+
+
+const series = ref([{
+    name: 'Series 1',
+    data: [80, 50, 30, 40, 100, 20],
+}, {
+    name: 'Series 2',
+    data: [20, 30, 40, 80, 20, 80],
+},
+])
+const chartOptions = reactive({
+    chart: {
+        toolbar: {
+            show: false
+        },
+        type: 'radar',
+        dropShadow: {
+            enabled: true,
+            blur: 1,
+            left: 1,
+            top: 1
+        }
+    },
+    legend: {
+        show: false
+    },
+    stroke: {
+        width: 2
+    },
+    fill: {
+        opacity: 0.1
+    },
+    markers: {
+        size: 0
+    },
+    xaxis: {
+        categories: ['Literatrura', '2012', '2013', '2014', '2015', '2016']
+    },
+    yaxis: {
+        show: false
+    }
+})
 
 interface ExerciseGroup {
     exercisegroup: string;
