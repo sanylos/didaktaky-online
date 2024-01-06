@@ -1,5 +1,5 @@
 <template>
-    <apexchart type="radar" height="250" width="250" :options="chartOptions" :series="series">
+    <apexchart type="radar" height="350" width="350" :options="chartOptions" :series="series">
     </apexchart>
 </template>
 
