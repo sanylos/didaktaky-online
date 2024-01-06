@@ -54,7 +54,7 @@
                             🤟 Nejúspěšnější skupina cvičení</div>
                         <div class="fs-3 d-flex flex-row justify-content-between align-items-center">
                             <div class="">{{ bestExerciseGroup.exercisegroup }}</div>
-                            <div class="fs-6 text-success">({{ bestExerciseGroup.successRate }}%)</div>
+                            <div class="fs-6 text-success">({{ bestExerciseGroup.successRate.toFixed() }}%)</div>
                         </div>
                     </div>
                 </div>
