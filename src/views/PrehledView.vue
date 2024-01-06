@@ -58,21 +58,46 @@
                         </div>
                     </div>
                 </div>
-
-                <div v-if="exerciseGroupsArray.labels.length && exerciseGroupsArray.correct.length && exerciseGroupsArray.incorrect.length"
-                    class="col-xl-3 col-md-6 my-2">
-                    <div class="container p-3 bg-dark rounded-1 shadow">
-                        <div class=" mb-1 fs-6">📂 Skupiny cvičení</div>
-                        <RadarGraph :labels="exerciseGroupsArray.labels" :correct-series="exerciseGroupsArray.correct"
-                            :incorrect-series="exerciseGroupsArray.incorrect"></RadarGraph>
-                    </div>
-                </div>
-
             </div>
 
-            {{ exerciseGroupsArray }} |||| {{ answerCount.exerciseGroups }}
+            <div v-if="exerciseGroupsArray.labels.length && exerciseGroupsArray.correct.length && exerciseGroupsArray.incorrect.length">
+                <div class="container p-3 bg-dark rounded-1 shadow">
+                    <div class=" mb-1 fs-6">📂 Skupiny cvičení</div>
+                    <div class="d-flex flex-row align-items-center">
+                        <RadarGraph :labels="exerciseGroupsArray.labels" :correct-series="exerciseGroupsArray.correct"
+                            :incorrect-series="exerciseGroupsArray.incorrect"></RadarGraph>
+                        <div class="table-responsive">
+                            <table class="table table-dark table-hover">
+                                <thead class="text-center">
+                                    <tr>
+                                        <th v-for="label, index in exerciseGroupsArray.labels" :key="index" scope="col">{{
+                                            label }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-center">
+                                    <tr>
+                                        <td v-for="count, index in exerciseGroupsArray.correct" :key="index"
+                                            class="text-success">{{ count }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td v-for="count, index in exerciseGroupsArray.incorrect" :key="index"
+                                            class="text-danger">{{ count }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold" :class="{
+                                            'text-success': getSuccessRateByLabel(label).toFixed() >= 50,
+                                            'text-danger': getSuccessRateByLabel(label).toFixed() < 50,
+                                        }" v-for="label, index in exerciseGroupsArray.labels" :key="index">{{
+                                        getSuccessRateByLabel(label).toFixed() }}%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <div class="container rounded-3 bg-dark table-responsive">
+            <div class="mt-3 container rounded-3 bg-dark table-responsive">
                 <HistoryTable></HistoryTable>
             </div>
         </div>
@@ -85,6 +110,7 @@ import { useUserStore } from '@/stores/user';
 import { supabase } from '@/supabase';
 import { onMounted, onUpdated, onBeforeMount, ref, onBeforeUpdate, onServerPrefetch, onActivated, computed, reactive, watch } from 'vue';
 import RadarGraph from '@/components/Overview/RadarGraph.vue'
+import { right } from '@popperjs/core';
 
 interface ExerciseGroup {
     exercisegroup: string;
@@ -125,6 +151,14 @@ const exerciseGroupsArray = computed(() => {
 
     return { correct: correctGroup, incorrect: incorrectGroup, labels: uniqueLabels }
 })
+
+const getSuccessRateByLabel = (label: String) => {
+    let wrongAnswerGroup = answerCount.value.exerciseGroups.find(group => group.exercisegroup === label && group.iscorrect == false);
+    let rightAnswerGroup = answerCount.value.exerciseGroups.find(group => group.exercisegroup === label && group.iscorrect == true);
+    if (!rightAnswerGroup) return 0;
+    if (!wrongAnswerGroup) return 100;
+    return 100 / (wrongAnswerGroup.count + rightAnswerGroup.count) * rightAnswerGroup.count;
+}
 
 const bestExerciseGroup = computed(() => { //method for getting the exercise with most right answers ratio
     let currentlyBest = answerCount.value.exerciseGroups[0];
