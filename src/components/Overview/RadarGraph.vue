@@ -1,16 +1,23 @@
 <template>
-    <apexchart type="radar" height="100%" width="100%" :options="chartOptions" :series="series">
+    <apexchart type="radar" height="250" width="250" :options="chartOptions" :series="series">
     </apexchart>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref } from "vue";
+
+const props = defineProps({
+    correctSeries: Array,
+    incorrectSeries: Array,
+    labels: Array
+})
+
 const series = ref([{
     name: 'Series 1',
-    data: [ "50", "10", "20", "3","10", "10", "20", "30", "40"],
+    data: props.incorrectSeries,//[ "50", "10", "20", "3","10", "10", "20", "30", "40"],
 }, {
     name: 'Series 2',
-    data: ["10", "10", "20", "30", "40", "50", "10", "20", "3"],
+    data: props.correctSeries,//["10", "10", "20", "30", "40", "50", "10", "20", "3"],
 },
 ])
 const chartOptions = reactive({
@@ -30,18 +37,26 @@ const chartOptions = reactive({
         show: false
     },
     stroke: {
-        width: 2
+        width: 1,
+        colors: ["tomato", "green"]
     },
     fill: {
-        opacity: 0.1
+        opacity: 0.5,
+        colors: ["tomato", "green"]
     },
     markers: {
         size: 0
     },
     xaxis: {
-        categories: ['Literatrura', '2012', '2013', '2014', '2015', '2016']
+        categories: props.labels,//['Literatrura', '2012', '2013', '2014', '2015', '2016']
+        labels: {
+            show: true,
+            style: {
+                fontSize: "8px",
+            },
+        }
     },
-    yaxis: {
+        yaxis: {
         show: false
     }
 })
