@@ -60,38 +60,44 @@
                 </div>
             </div>
 
-            <div v-if="exerciseGroupsArray.labels.length && exerciseGroupsArray.correct.length && exerciseGroupsArray.incorrect.length">
+            <div
+                v-if="exerciseGroupsArray.labels.length && exerciseGroupsArray.correct.length && exerciseGroupsArray.incorrect.length">
                 <div class="container p-3 bg-dark rounded-1 shadow">
-                    <div class=" mb-1 fs-6">📂 Skupiny cvičení</div>
-                    <div class="d-flex flex-row align-items-center">
-                        <RadarGraph :labels="exerciseGroupsArray.labels" :correct-series="exerciseGroupsArray.correct"
-                            :incorrect-series="exerciseGroupsArray.incorrect"></RadarGraph>
-                        <div class="table-responsive">
-                            <table class="table table-dark table-hover">
-                                <thead class="text-center">
-                                    <tr>
-                                        <th v-for="label, index in exerciseGroupsArray.labels" :key="index" scope="col">{{
-                                            label }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-center">
-                                    <tr>
-                                        <td v-for="count, index in exerciseGroupsArray.correct" :key="index"
-                                            class="text-success">{{ count }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td v-for="count, index in exerciseGroupsArray.incorrect" :key="index"
-                                            class="text-danger">{{ count }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-bold" :class="{
-                                            'text-success': getSuccessRateByLabel(label).toFixed() >= 50,
-                                            'text-danger': getSuccessRateByLabel(label).toFixed() < 50,
-                                        }" v-for="label, index in exerciseGroupsArray.labels" :key="index">{{
-                                        getSuccessRateByLabel(label).toFixed() }}%</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <div class="mb-1 fs-6">📂 Skupiny cvičení</div>
+                    <div class="container d-flex flex-column flex-sm-row align-items-center">
+                        <div class="">
+                            <RadarGraph :labels="exerciseGroupsArray.labels" :correct-series="exerciseGroupsArray.correct"
+                                :incorrect-series="exerciseGroupsArray.incorrect"></RadarGraph>
+                        </div>
+                        <div class="container" style="overflow: auto">
+                            <div class="table-responsive">
+                                <table class="table table-dark table-hover">
+                                    <thead class="text-center">
+                                        <tr>
+                                            <th v-for="label, index in exerciseGroupsArray.labels" :key="index" scope="col">
+                                                {{
+                                                    label }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-center">
+                                        <tr>
+                                            <td v-for="count, index in exerciseGroupsArray.correct" :key="index"
+                                                class="text-success">{{ count }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td v-for="count, index in exerciseGroupsArray.incorrect" :key="index"
+                                                class="text-danger">{{ count }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold" :class="{
+                                                'text-success': getSuccessRateByLabel(label).toFixed() >= 50,
+                                                'text-danger': getSuccessRateByLabel(label).toFixed() < 50,
+                                            }" v-for="label, index in exerciseGroupsArray.labels" :key="index">{{
+    getSuccessRateByLabel(label).toFixed() }}%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
