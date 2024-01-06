@@ -47,7 +47,8 @@
                     </div>
                 </div>
 
-                <div v-if="bestExerciseGroup?.exercisegroup && bestExerciseGroup?.successRate" class="col-xl-3 col-md-6 my-2">
+                <div v-if="bestExerciseGroup?.exercisegroup && bestExerciseGroup?.successRate"
+                    class="col-xl-3 col-md-6 my-2">
                     <div class="container p-3 bg-dark rounded-1 shadow">
                         <div class=" mb-1 fs-6">
                             🤟 Nejúspěšnější skupina cvičení</div>
@@ -115,6 +116,8 @@ const exerciseGroupsArray = computed(() => {
     let labels = answerCount.value.exerciseGroups.map(groupItem => {
         return groupItem.exercisegroup;
     });
+
+    
     return { correct: correctGroup, incorrect: incorrectGroup, labels: labels }
 })
 
@@ -123,14 +126,16 @@ const bestExerciseGroup = computed(() => { //method for getting the exercise wit
     let currentlyBestSuccessRate = 0;
     if (answerCount.value.exerciseGroups.length > 0) {
         answerCount.value.exerciseGroups.forEach((group) => {
-            let groupsWithSameType = answerCount.value.exerciseGroups.filter(groupItem => groupItem.exercisegroup === group.exercisegroup);
-            //console.log(groupsWithSameType);
-            let group1 = groupsWithSameType[0];
-            let group2 = groupsWithSameType[1] ? groupsWithSameType[1] : { count: 0 };
-            let successRate = (100 / (group1.count + group2.count)) * group1.count; //console.log(successRate);
-            if (successRate > currentlyBestSuccessRate) {
-                currentlyBestSuccessRate = successRate;
-                currentlyBest = group1;
+            if (group.iscorrect) {
+                let groupsWithSameType = answerCount.value.exerciseGroups.filter(groupItem => groupItem.exercisegroup === group.exercisegroup);
+                //console.log(groupsWithSameType);
+                let group1 = groupsWithSameType[0];
+                let group2 = groupsWithSameType[1] ? groupsWithSameType[1] : { count: 0 }; //IF group2 does not exist, set count to 0
+                let successRate = (100 / (group1.count + group2.count)) * group1.count;
+                if (successRate > currentlyBestSuccessRate) {
+                    currentlyBestSuccessRate = successRate;
+                    currentlyBest = group1;
+                }
             }
 
         })
