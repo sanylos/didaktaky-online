@@ -83,7 +83,6 @@
 import HistoryTable from '@/components/Overview/HistoryTable.vue'
 import { useUserStore } from '@/stores/user';
 import { supabase } from '@/supabase';
-import { group } from 'console';
 import { onMounted, onUpdated, onBeforeMount, ref, onBeforeUpdate, onServerPrefetch, onActivated, computed, reactive, watch } from 'vue';
 import RadarGraph from '@/components/Overview/RadarGraph.vue'
 
@@ -104,21 +103,27 @@ const answerCount = ref({
 });
 
 const exerciseGroupsArray = computed(() => {
-    let correctGroup = answerCount.value.exerciseGroups.map(groupItem => {
-        if (groupItem.iscorrect === true) return groupItem.count;
-        else return 0;
+
+    let correctGroup: Array<Number> = [];
+    let incorrectGroup: Array<Number> = [];
+
+    let allLabels = answerCount.value.exerciseGroups.map(groupItem => groupItem.exercisegroup);
+    let uniqueLabels: Array<String> = [];
+
+    allLabels.forEach(label => {
+        if (!uniqueLabels.includes(label)) {
+            uniqueLabels.push(label);
+        }
     });
 
-    let incorrectGroup = answerCount.value.exerciseGroups.map(groupItem => {
-        if (groupItem.iscorrect === false) return groupItem.count;
-        else return 0;
-    });
-    let labels = answerCount.value.exerciseGroups.map(groupItem => {
-        return groupItem.exercisegroup;
-    });
+    uniqueLabels.forEach((label => {
+        const correctAnswerGroup = answerCount.value.exerciseGroups.find((group) => group.exercisegroup === label && group.iscorrect == true);
+        const incorrectAnswerGroup = answerCount.value.exerciseGroups.find((group) => group.exercisegroup === label && group.iscorrect == false);
+        if (correctAnswerGroup) { correctGroup.push(correctAnswerGroup.count); } else correctGroup.push(0);
+        if (incorrectAnswerGroup) { incorrectGroup.push(incorrectAnswerGroup.count); } else incorrectGroup.push(0);
+    }))
 
-    
-    return { correct: correctGroup, incorrect: incorrectGroup, labels: labels }
+    return { correct: correctGroup, incorrect: incorrectGroup, labels: uniqueLabels }
 })
 
 const bestExerciseGroup = computed(() => { //method for getting the exercise with most right answers ratio
