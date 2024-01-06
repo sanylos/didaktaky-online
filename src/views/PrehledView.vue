@@ -90,8 +90,8 @@
                                         </tr>
                                         <tr>
                                             <td class="fw-bold" :class="{
-                                                'text-success': getSuccessRateByLabel(label).toFixed() >= 50,
-                                                'text-danger': getSuccessRateByLabel(label).toFixed() < 50,
+                                                'text-success': getSuccessRateByLabel(label) >= 50,
+                                                'text-danger': getSuccessRateByLabel(label) < 50,
                                             }" v-for="label, index in exerciseGroupsArray.labels" :key="index">{{
     getSuccessRateByLabel(label).toFixed() }}%</td>
                                         </tr>
