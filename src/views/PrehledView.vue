@@ -6,7 +6,7 @@
         <div v-else class="container d-flex flex-column">
             <div class="row my-2">
 
-                <div class="col-xl-3 col-md-6">
+                <div v-if="answerCount.total" class="col-xl-3 col-md-6 my-2">
                     <div class="container p-3 bg-dark rounded-1 shadow">
                         <div class=" mb-1 fs-6">
                             💬 Vyplněných cvičení</div>
@@ -26,17 +26,18 @@
                     </div>
                 </div>
 
-                <div class="col-xl-3 col-md-6">
+                <div class="col-xl-3 col-md-6 my-2">
                     <div class="container p-3 bg-dark rounded-1 shadow">
                         <div class=" mb-1 fs-6">
                             📋 Vyplněných testů</div>
                         <div class="fs-3 d-flex flex-row justify-content-between">
                             <div class="">0</div><i class="bi bi-caret-up-fill text-success"></i>
                         </div>
+                        <div id="spark1"></div>
                     </div>
                 </div>
 
-                <div class="col-xl-3 col-md-6">
+                <div class="col-xl-3 col-md-6 my-2">
                     <div class="container p-3 bg-dark rounded-1 shadow">
                         <div class=" mb-1 fs-6">
                             🤙 Nejúspěšnější typ cvičení</div>
@@ -46,18 +47,63 @@
                     </div>
                 </div>
 
-                <div class="col-xl-3 col-md-6">
+                <div v-if="bestExerciseGroup?.exercisegroup && bestExerciseGroup?.successRate"
+                    class="col-xl-3 col-md-6 my-2">
                     <div class="container p-3 bg-dark rounded-1 shadow">
                         <div class=" mb-1 fs-6">
                             🤟 Nejúspěšnější skupina cvičení</div>
-                        <div class="fs-3 d-flex flex-row justify-content-between">
-                            <div class="">0</div><i class="bi bi-caret-up-fill text-success"></i>
+                        <div class="fs-3 d-flex flex-row justify-content-between align-items-center">
+                            <div class="">{{ bestExerciseGroup.exercisegroup }}</div>
+                            <div class="fs-6 text-success">({{ bestExerciseGroup.successRate.toFixed() }}%)</div>
                         </div>
                     </div>
                 </div>
-
             </div>
-            <div class="container rounded-3 bg-dark table-responsive">
+
+            <div
+                v-if="exerciseGroupsArray.labels.length && exerciseGroupsArray.correct.length && exerciseGroupsArray.incorrect.length">
+                <div class="container p-3 bg-dark rounded-1 shadow">
+                    <div class="mb-1 fs-6">📂 Skupiny cvičení</div>
+                    <div class="container d-flex flex-column flex-sm-row align-items-center">
+                        <div class="">
+                            <RadarGraph :labels="exerciseGroupsArray.labels" :correct-series="exerciseGroupsArray.correct"
+                                :incorrect-series="exerciseGroupsArray.incorrect"></RadarGraph>
+                        </div>
+                        <div class="container" style="overflow: auto">
+                            <div class="table-responsive">
+                                <table class="table table-dark table-hover">
+                                    <thead class="text-center">
+                                        <tr>
+                                            <th v-for="label, index in exerciseGroupsArray.labels" :key="index" scope="col">
+                                                {{
+                                                    label }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-center">
+                                        <tr>
+                                            <td v-for="count, index in exerciseGroupsArray.correct" :key="index"
+                                                class="text-success">{{ count }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td v-for="count, index in exerciseGroupsArray.incorrect" :key="index"
+                                                class="text-danger">{{ count }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold" :class="{
+                                                'text-success': getSuccessRateByLabel(label) >= 50,
+                                                'text-danger': getSuccessRateByLabel(label) < 50,
+                                            }" v-for="label, index in exerciseGroupsArray.labels" :key="index">{{
+    getSuccessRateByLabel(label).toFixed() }}%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-3 container rounded-3 bg-dark table-responsive">
                 <HistoryTable></HistoryTable>
             </div>
         </div>
@@ -68,14 +114,88 @@
 import HistoryTable from '@/components/Overview/HistoryTable.vue'
 import { useUserStore } from '@/stores/user';
 import { supabase } from '@/supabase';
-import { onMounted, onUpdated, onBeforeMount, ref, onBeforeUpdate, onServerPrefetch, onActivated, computed } from 'vue';
+import { onMounted, onUpdated, onBeforeMount, ref, onBeforeUpdate, onServerPrefetch, onActivated, computed, reactive, watch } from 'vue';
+import RadarGraph from '@/components/Overview/RadarGraph.vue'
+import { right } from '@popperjs/core';
+
+interface ExerciseGroup {
+    exercisegroup: string;
+    iscorrect: boolean;
+    count: number;
+}
+
+
 
 const userStore = useUserStore();
 const answerCount = ref({
     total: 0,
     lastTwoWeeks: 0,
     lastWeek: 0,
+    exerciseGroups: [] as ExerciseGroup[],
 });
+
+const exerciseGroupsArray = computed(() => {
+
+    let correctGroup: Array<Number> = [];
+    let incorrectGroup: Array<Number> = [];
+
+    let allLabels = answerCount.value.exerciseGroups.map(groupItem => groupItem.exercisegroup);
+    let uniqueLabels: Array<String> = [];
+
+    allLabels.forEach(label => {
+        if (!uniqueLabels.includes(label)) {
+            uniqueLabels.push(label);
+        }
+    });
+
+    uniqueLabels.forEach((label => {
+        const correctAnswerGroup = answerCount.value.exerciseGroups.find((group) => group.exercisegroup === label && group.iscorrect == true);
+        const incorrectAnswerGroup = answerCount.value.exerciseGroups.find((group) => group.exercisegroup === label && group.iscorrect == false);
+        if (correctAnswerGroup) { correctGroup.push(correctAnswerGroup.count); } else correctGroup.push(0);
+        if (incorrectAnswerGroup) { incorrectGroup.push(incorrectAnswerGroup.count); } else incorrectGroup.push(0);
+    }))
+
+    return { correct: correctGroup, incorrect: incorrectGroup, labels: uniqueLabels }
+})
+
+const getSuccessRateByLabel = (label: String) => {
+    let wrongAnswerGroup = answerCount.value.exerciseGroups.find(group => group.exercisegroup === label && group.iscorrect == false);
+    let rightAnswerGroup = answerCount.value.exerciseGroups.find(group => group.exercisegroup === label && group.iscorrect == true);
+    if (!rightAnswerGroup) return 0;
+    if (!wrongAnswerGroup) return 100;
+    return 100 / (wrongAnswerGroup.count + rightAnswerGroup.count) * rightAnswerGroup.count;
+}
+
+const bestExerciseGroup = computed(() => { //method for getting the exercise with most right answers ratio
+    let currentlyBest = answerCount.value.exerciseGroups[0];
+    let currentlyBestSuccessRate = 0;
+    if (answerCount.value.exerciseGroups.length > 0) {
+        answerCount.value.exerciseGroups.forEach((group) => {
+            if (group.iscorrect) {
+                let groupsWithSameType = answerCount.value.exerciseGroups.filter(groupItem => groupItem.exercisegroup === group.exercisegroup);
+                //console.log(groupsWithSameType);
+                let group1 = groupsWithSameType[0];
+                let group2 = groupsWithSameType[1] ? groupsWithSameType[1] : { count: 0 }; //IF group2 does not exist, set count to 0
+                let successRate = (100 / (group1.count + group2.count)) * group1.count;
+                if (successRate > currentlyBestSuccessRate) {
+                    currentlyBestSuccessRate = successRate;
+                    currentlyBest = group1;
+                }
+            }
+
+        })
+
+        return { exercisegroup: currentlyBest.exercisegroup, successRate: currentlyBestSuccessRate };
+    }
+})
+
+const fetchAnsweredExerciseGroups = async () => {
+    const { data, error } = await supabase.rpc('getcountexercisegroups', {
+        user_id: userStore.id
+    })
+    if (error) console.log(error);
+    if (data) answerCount.value.exerciseGroups = data;
+}
 
 const getData = async () => {
 
@@ -88,14 +208,16 @@ const getData = async () => {
     if (count) answerCount.value.total = count;
 }
 
-const answerCountImprovementPercentage = computed(() => {
+
+
+const answerCountImprovementPercentage = computed(() => { //GET answer count improvement against last week
     const lastTwoWeeks = answerCount.value.lastTwoWeeks;
     const lastWeek = answerCount.value.lastWeek;
 
     return ((lastWeek - (lastTwoWeeks - lastWeek)) / (lastTwoWeeks - lastWeek)) * 100
 })
 
-const getAnswerCountImprovement = async () => {
+const getAnswerCountImprovement = async () => { //FETCH answer count improvement against last week
 
     let dateFourteenDaysAgo = new Date();
     dateFourteenDaysAgo.setDate(dateFourteenDaysAgo.getDate() - 14);
@@ -118,45 +240,16 @@ const getAnswerCountImprovement = async () => {
     if (lastTwoWeeksCountError) console.log(lastTwoWeeksCountError);
     if (lastTwoWeeksCount) answerCount.value.lastTwoWeeks = lastTwoWeeksCount;
 }
-/*
-   //FETCH ANSWER COUNT FOR LAST 14 DAYS
-    let date14daysAgo = new Date();
-    date14daysAgo.setDate(date14daysAgo.getDate() - 14);
-    let date7daysAgo = new Date();
-    date7daysAgo.setDate(date7daysAgo.getDate() - 7);
-    let answerCountLast14D = 0;
-    let answerCountLast7D = 0;
 
-    const { count: DBanswerCount14, error: last14countError } = await supabase
-        .from('userAnswers')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', userStore.id)
-        .gte('generated_at', date14daysAgo.toISOString())
-    if (last14countError) console.log(last14countError);
-    if (DBanswerCount14) answerCountLast14D = DBanswerCount14;
-
-    const { count: DBanswerCount7, error: last7countError } = await supabase
-        .from('userAnswers')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', userStore.id)
-        .gte('generated_at', date7daysAgo.toISOString())
-    if (last7countError) console.log(last7countError);
-    if (DBanswerCount7) answerCountLast7D = DBanswerCount7;
-
-    answerCountImprovement.value = (answerCount.value / 100) * (answerCountLast14D - answerCountLast7D);
-}
-*/
-const fetchData = () => {
-    getData();
-    getAnswerCountImprovement();
+const fetchData = async () => {
+    await fetchAnsweredExerciseGroups();
+    await getAnswerCountImprovement();
+    await getData();
 }
 
-onMounted(() => {
+onBeforeMount(() => {
     fetchData();
 })
-/*onUpdated(() => {
-    fetchData();
-})*/
 </script>
 
 <style></style>
