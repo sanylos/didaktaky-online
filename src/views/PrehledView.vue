@@ -139,15 +139,17 @@ const exerciseGroupsArray = computed(() => {
     let correctGroup: Array<Number> = [];
     let incorrectGroup: Array<Number> = [];
 
-    let allLabels = answerCount.value.exerciseGroups.map(groupItem => groupItem.exercisegroup);
+    let allLabels = answerCount.value.exerciseGroups.map(groupItem => groupItem.exercisegroup); //MAP all labels
     let uniqueLabels: Array<String> = [];
 
+    //PUSH label to array if is unique
     allLabels.forEach(label => {
         if (!uniqueLabels.includes(label)) {
             uniqueLabels.push(label);
         }
     });
 
+    //PUSH (in)correct answer count to its array
     uniqueLabels.forEach((label => {
         const correctAnswerGroup = answerCount.value.exerciseGroups.find((group) => group.exercisegroup === label && group.iscorrect == true);
         const incorrectAnswerGroup = answerCount.value.exerciseGroups.find((group) => group.exercisegroup === label && group.iscorrect == false);
