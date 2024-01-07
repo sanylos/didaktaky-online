@@ -134,8 +134,8 @@
                         </div>
 
                         <!--Textová odpověď-->
-                        <div class="exercise-options" v-if="exercises.type == 'Textová odpověď'">
-                            <div class="mb-3 d-flex flex-row align-content-start">
+                        <div class="exercise-options container" v-if="exercises.type == 'Textová odpověď'">
+                            <div class="mb-3 d-flex flex-wrap align-content-start">
                                 <div v-for="item, index in exercises.correct_answer" :key="index"
                                     class="question-option mb-2 mx-1 p-1 rounded" :class="{
                                         'bg-success': answer[index] == exercises.correct_answer[index] && answered,
@@ -185,6 +185,9 @@
 </template>
   
 <script lang="ts" setup>
+
+//TODO - fix v-html for exercise answers
+
 import { useUserStore } from '@/stores/user';
 import { supabase } from '@/supabase'
 import { reactive, ref } from 'vue';
