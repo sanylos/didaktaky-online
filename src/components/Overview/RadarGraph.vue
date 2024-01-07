@@ -1,5 +1,5 @@
 <template>
-    <apexchart type="radar" height="350" width="350" :options="chartOptions" :series="series">
+    <apexchart type="radar" height="100%" width="100%" :options="chartOptions" :series="series">
     </apexchart>
 </template>
 
@@ -31,6 +31,9 @@ const chartOptions = reactive({
             blur: 1,
             left: 1,
             top: 1
+        },
+        sparkline: {
+            enabled: true
         }
     },
     legend: {
@@ -38,11 +41,11 @@ const chartOptions = reactive({
     },
     stroke: {
         width: 1,
-        colors: ["tomato", "green"]
+        colors: ["crimson", "#2AAA8A"]
     },
     fill: {
         opacity: 0.5,
-        colors: ["tomato", "green"]
+        colors: ['#dc143c', '#2AAA8A']
     },
     markers: {
         size: 0
