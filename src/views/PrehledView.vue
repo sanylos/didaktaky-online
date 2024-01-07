@@ -71,7 +71,7 @@
                         </div>
                         <div class="container" style="overflow: auto">
                             <div class="table-responsive">
-                                <table class="table table-dark table-hover">
+                                <table class="table table-dark table-hover" style="font-size: 14px;">
                                     <thead class="text-center">
                                         <tr>
                                             <th v-for="label, index in exerciseGroupsArray.labels" :key="index" scope="col">
@@ -102,7 +102,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="mt-3 container rounded-3 bg-dark table-responsive">
                 <HistoryTable></HistoryTable>
             </div>
@@ -117,6 +116,7 @@ import { supabase } from '@/supabase';
 import { onMounted, onUpdated, onBeforeMount, ref, onBeforeUpdate, onServerPrefetch, onActivated, computed, reactive, watch } from 'vue';
 import RadarGraph from '@/components/Overview/RadarGraph.vue'
 import { right } from '@popperjs/core';
+import { isForInStatement } from 'typescript';
 
 interface ExerciseGroup {
     exercisegroup: string;
@@ -157,7 +157,17 @@ const exerciseGroupsArray = computed(() => {
         if (incorrectAnswerGroup) { incorrectGroup.push(incorrectAnswerGroup.count); } else incorrectGroup.push(0);
     }))
 
-    return { correct: correctGroup, incorrect: incorrectGroup, labels: uniqueLabels }
+    //SHORTEN labels for better radar chart visibility
+    const displayedLabels = uniqueLabels.map(label => {
+        if (label.length > 20) {
+            let currentLabel = label.split(' ');
+            let firstTwoWords = currentLabel[0] + " " + currentLabel[1];
+            return firstTwoWords;
+        }
+        return label;
+    })
+
+    return { correct: correctGroup, incorrect: incorrectGroup, labels: displayedLabels }
 })
 
 const getSuccessRateByLabel = (label: String) => {
