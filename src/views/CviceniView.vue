@@ -299,7 +299,7 @@ const saveQuestion = async () => {
     try {
         const { data, error } = await supabase
             .from('userAnswers')
-            .upsert({
+            .insert({
                 'exercise_id': exercises.value.exercise_id,
                 'answer': answer.value,
                 'examType':exercises.value.test_type,
@@ -307,23 +307,9 @@ const saveQuestion = async () => {
                 'exerciseType':exercises.value.type,
                 'exerciseGroup':exercises.value.group
             })
+            .select();
         if (error) console.log(error);
-    } catch (error) {
-        console.log(error);
-    }
-
-    //FETCH LATEST EXERCISE ID
-    try {
-        const { data, error } = await supabase
-            .from('userAnswers')
-            .select('id')
-            .eq('user_id', userStore.id)
-            .order('generated_at', { ascending: false })
-            .limit(1);
-        if (error) console.log(error);
-        else {
-            userAnswerId.value = data[0].id;
-        }
+        else userAnswerId.value = data[0].id;
     } catch (error) {
         console.log(error);
     }
