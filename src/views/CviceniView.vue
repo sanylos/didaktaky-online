@@ -138,8 +138,8 @@
                             <div class="mb-3 d-flex flex-wrap align-content-start">
                                 <div v-for="item, index in exercises.correct_answer" :key="index"
                                     class="question-option mb-2 mx-1 p-1 rounded" :class="{
-                                        'bg-success': answer[index] == exercises.correct_answer[index] && answered,
-                                        'bg-danger': answer[index] != exercises.correct_answer[index] && answered,
+                                        'bg-success': exercises.correct_answer.includes(answer[index]) && answered,
+                                        'bg-danger': !exercises.correct_answer.includes(answer[index]) && answered,
                                     }">
                                     <input v-model="answer[index]" type="text"
                                         class="text-start text-white fw-bold bg-secondary border-0 rounded"
@@ -259,8 +259,17 @@ const getQuestionByPagination = async (pagination: number) => {
 }
 
 const handleSubmit = () => {
-    //COMPARE ARRAYS CONTENT
-    if (answer.value.toString() === exercises.value.correct_answer.toString()) isAnswerCorrect.value = "TRUE";
+    
+    if (exercises.value.type == "Textová odpověď") { //IF exercise type is text answer, check if it contains all correct answers
+        let correctAnswerCount = 0;
+        for (let i = 0; i < (exercises.value.correct_answer.length); i++) {
+            if (exercises.value.correct_answer.includes(answer.value[i])) {
+                correctAnswerCount++;
+            }
+        }
+        console.log(correctAnswerCount);
+        if (exercises.value.correct_answer.length == correctAnswerCount) isAnswerCorrect.value = "TRUE";
+    } else if (answer.value.toString() === exercises.value.correct_answer.toString()) isAnswerCorrect.value = "TRUE"; //COMPARE ARRAYS CONTENT
 
     //IF USER IS LOGGED IN -> SAVE TO DB
     if (userStore.isLoggedIn) saveQuestionAnswer();
