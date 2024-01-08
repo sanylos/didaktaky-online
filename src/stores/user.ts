@@ -10,14 +10,20 @@ export const useUserStore = defineStore({
     email: null,
     isLoggedIn: false,
     exerciseFilters: {
-      examType: ["PZ"],
-      examYears: ["2023"],
-      examVariants: ["1"],
-      examSubjects: ["CJL"],
+      examType: [""],
+      examYears: [""],
+      examVariants: [""],
+      examSubjects: [""],
     },
   }),
 
   actions: {
+    resetUserFilters() {
+      this.exerciseFilters.examType = ["PZ"];
+      this.exerciseFilters.examYears = ["2020","2021","2022","2023"];
+      this.exerciseFilters.examVariants = ["1","2","3","4","5","6"];
+      this.exerciseFilters.examSubjects = ["CJL","MAT","ANJ"];
+    },
     resetUserData() {
       this.isLoggedIn = false;
       this.id = null;
