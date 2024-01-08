@@ -238,7 +238,7 @@ const answerCountImprovementPercentage = computed(() => { //GET answer count imp
     else return null;
 })
 
-const getAnswerCountImprovement = async () => { //FETCH answer count improvement against last week
+const fetchAnswerCountImprovement = async () => { //FETCH answer count improvement against last week
 
     let dateFourteenDaysAgo = new Date();
     dateFourteenDaysAgo.setDate(dateFourteenDaysAgo.getDate() - 14);
@@ -264,7 +264,7 @@ const getAnswerCountImprovement = async () => { //FETCH answer count improvement
 
 const fetchData = async () => {
     await fetchAnsweredExerciseGroups();
-    await getAnswerCountImprovement();
+    await fetchAnswerCountImprovement();
     await getData();
 }
 
