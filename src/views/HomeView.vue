@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <button class="btn btn-success" @click="handleSubmit">Začít 🚀</button>
+    <button class="btn btn-success" @click="handleSubmit">Začít <i class="bi bi-rocket-takeoff"></i></button>
 
   </div>
 </template>
