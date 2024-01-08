@@ -1,4 +1,7 @@
 <template>
+    <div class="mx-1 my-3 fs-6">
+        <i class="bi bi-clock-history me-2"></i><span>Historie</span>
+    </div>
     <table class="table table-dark table-hover">
         <thead>
             <tr>
