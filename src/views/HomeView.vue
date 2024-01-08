@@ -1,5 +1,5 @@
 <template>
-  <div class="container rounded w-auto d-flex flex-column justify-content-center align-items-center mt-2 bg-dark p-3">
+  <div class="container rounded d-flex flex-column justify-content-center align-items-center mt-2 bg-dark p-3">
 
     <div v-if="errorMessage" class="alert alert-danger" role="alert">
       ❗ {{ errorMessage }}
@@ -96,6 +96,7 @@ const examOptions = reactive({
     { "id": "5", "title": "Ilustrační" },
   ],
 })
+userStore.resetUserFilters();
 </script>
 
 <style></style>
