@@ -9,10 +9,11 @@
                 <div v-if="answerCount.total" class="col-xl-3 col-md-6 my-2">
                     <div class="container p-3 bg-dark rounded-1 shadow">
                         <div class=" mb-1 fs-6">
-                            <i class="bi bi-send-plus"></i> Vyplněných cvičení</div>
+                            <i class="bi bi-send-plus"></i> Vyplněných cvičení
+                        </div>
                         <div class="fs-3 d-flex flex-row justify-content-between">
                             <div class="text-dark-emphasis">{{ answerCount.total }}</div>
-                            <div class="fs-6 d-flex align-items-center">
+                            <div class="fs-6 d-flex align-items-center" v-if="answerCountImprovementPercentage">
                                 <div v-if="answerCountImprovementPercentage > 0">
                                     {{ answerCountImprovementPercentage.toFixed() }}%
                                     <i class="bi bi-caret-up-fill text-success"></i>
@@ -29,7 +30,8 @@
                 <div class="col-xl-3 col-md-6 my-2">
                     <div class="container p-3 bg-dark rounded-1 shadow">
                         <div class=" mb-1 fs-6">
-                            <i class="bi bi-file-earmark-text-fill"></i> Vyplněných testů</div>
+                            <i class="bi bi-file-earmark-text-fill"></i> Vyplněných testů
+                        </div>
                         <div class="fs-3 d-flex flex-row justify-content-between">
                             <div class="">0</div><i class="bi bi-caret-up-fill text-success"></i>
                         </div>
@@ -40,7 +42,8 @@
                 <div class="col-xl-3 col-md-6 my-2">
                     <div class="container p-3 bg-dark rounded-1 shadow">
                         <div class=" mb-1 fs-6">
-                            <i class="bi bi-check2-square"></i> Nejúspěšnější typ cvičení</div>
+                            <i class="bi bi-check2-square"></i> Nejúspěšnější typ cvičení
+                        </div>
                         <div class="fs-3 d-flex flex-row justify-content-between">
                             <div class="">0</div><i class="bi bi-caret-up-fill text-success"></i>
                         </div>
@@ -51,7 +54,8 @@
                     class="col-xl-3 col-md-6 my-2">
                     <div class="container p-3 bg-dark rounded-1 shadow">
                         <div class=" mb-1 fs-6">
-                            <i class="bi bi-check2-circle"></i> Nejúspěšnější skupina cvičení</div>
+                            <i class="bi bi-check2-circle"></i> Nejúspěšnější skupina cvičení
+                        </div>
                         <div class="fs-3 d-flex flex-row justify-content-between align-items-center">
                             <div class="">{{ bestExerciseGroup.exercisegroup }}</div>
                             <div class="fs-6 text-success">({{ bestExerciseGroup.successRate.toFixed() }}%)</div>
@@ -64,7 +68,8 @@
                 v-if="exerciseGroupsArray.labels.length && exerciseGroupsArray.correct.length && exerciseGroupsArray.incorrect.length">
                 <div class="container p-3 bg-dark rounded-1 shadow">
                     <div class="mb-1 fs-6">
-                        <i class="bi bi-list-stars"></i> Skupiny cvičení</div>
+                        <i class="bi bi-list-stars"></i> Skupiny cvičení
+                    </div>
                     <div class="container d-flex flex-column flex-sm-row align-items-center">
                         <div class="">
                             <RadarGraph :labels="exerciseGroupsArray.labels" :correct-series="exerciseGroupsArray.correct"
@@ -227,7 +232,10 @@ const answerCountImprovementPercentage = computed(() => { //GET answer count imp
     const lastTwoWeeks = answerCount.value.lastTwoWeeks;
     const lastWeek = answerCount.value.lastWeek;
 
-    return ((lastWeek - (lastTwoWeeks - lastWeek)) / (lastTwoWeeks - lastWeek)) * 100
+    const percentage = ((lastWeek - (lastTwoWeeks - lastWeek)) / (lastTwoWeeks - lastWeek)) * 100;
+
+    if (typeof percentage === 'number' && percentage != Infinity) return percentage;
+    else return null;
 })
 
 const getAnswerCountImprovement = async () => { //FETCH answer count improvement against last week
