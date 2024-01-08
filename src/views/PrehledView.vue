@@ -103,7 +103,7 @@
                     </div>
                 </div>
             </div>
-            <div class="mt-3 container rounded-3 bg-dark table-responsive">
+            <div class="mt-3 container rounded-1 bg-dark table-responsive">
                 <HistoryTable></HistoryTable>
             </div>
         </div>
