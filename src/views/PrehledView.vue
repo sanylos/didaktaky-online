@@ -87,12 +87,11 @@
                                     </thead>
                                     <tbody class="text-center">
                                         <tr>
-                                            <td v-for="count, index in exerciseGroupsArray.correct" :key="index"
-                                                class="text-success">{{ count }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td v-for="count, index in exerciseGroupsArray.incorrect" :key="index"
-                                                class="text-danger">{{ count }}</td>
+                                            <td v-for="label, index in exerciseGroupsArray.labels" :key="index">
+                                                <span class="text-success">{{ exerciseGroupsArray.correct[index] }}</span>
+                                                <span class="text-secondary fw-bold"> / </span>
+                                                <span class="text-danger">{{ exerciseGroupsArray.incorrect[index] }}</span>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td class="fw-bold" :class="{
