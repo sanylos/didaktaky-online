@@ -196,7 +196,7 @@ const userStore = useUserStore();
 
 let loading = ref(false);
 let exercises: any = ref([]);
-let answer: any = ref([""]);
+let answer = userStore.exerciseAnswer;
 let answered = ref(false);
 const isAnswerCorrect = ref("FALSE");
 const userAnswerId = ref('');
@@ -208,11 +208,11 @@ const errorMessage = ref('');
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const convertAnswerArrayToUpperCase = () => {
-    answer.value = answer.value.map((index: string) => index.toUpperCase());
+    answer = answer.map((index: string) => index.toUpperCase());
 }
 
 const convertAnswerArrayToLowerCase = () => {
-    answer.value = answer.value.map((index: string) => index.toLowerCase());
+    answer = answer.map((index: string) => index.toLowerCase());
 }
 
 const handlePrevious = () => {
@@ -251,7 +251,7 @@ const getQuestionByPagination = async (pagination: number) => {
             .eq('id', exerciseId.value);
 
         if (exerciseData) { exercises.value = exerciseData[0]; }//SET exercise data
-        if (userData) { answer.value = userData[0].answer; } //SET answer
+        if (userData) { answer = userData[0].answer; } //SET answer
 
     } catch (error) {
         console.log(error);
@@ -263,13 +263,13 @@ const handleSubmit = () => {
     if (exercises.value.type == "Textová odpověď") { //IF exercise type is text answer, check if it contains all correct answers
         let correctAnswerCount = 0;
         for (let i = 0; i < (exercises.value.correct_answer.length); i++) {
-            if (exercises.value.correct_answer.includes(answer.value[i])) {
+            if (exercises.value.correct_answer.includes(answer[i])) {
                 correctAnswerCount++;
             }
         }
         console.log(correctAnswerCount);
         if (exercises.value.correct_answer.length == correctAnswerCount) isAnswerCorrect.value = "TRUE";
-    } else if (answer.value.toString() === exercises.value.correct_answer.toString()) isAnswerCorrect.value = "TRUE"; //COMPARE ARRAYS CONTENT
+    } else if (answer.toString() === exercises.value.correct_answer.toString()) isAnswerCorrect.value = "TRUE"; //COMPARE ARRAYS CONTENT
 
     //IF USER IS LOGGED IN -> SAVE TO DB
     if (userStore.isLoggedIn) saveQuestionAnswer();
@@ -283,7 +283,7 @@ const saveQuestionAnswer = async () => {
         const { data, error } = await supabase
             .from('userAnswers')
             .update({
-                'answer': answer.value,
+                'answer': answer,
                 'isCorrect': isAnswerCorrect.value,
                 'answered_at': new Date(),
             })
@@ -301,7 +301,7 @@ const saveQuestion = async () => {
             .from('userAnswers')
             .insert({
                 'exercise_id': exercises.value.exercise_id,
-                'answer': answer.value,
+                'answer': answer,
                 'examType':exercises.value.test_type,
                 'examSubject':exercises.value.test_subject,
                 'exerciseType':exercises.value.type,
@@ -339,11 +339,11 @@ const getQuestion = async () => {
         else {
             exercises.value = data;
             answered.value = false;
-            answer.value = '';
+            answer = '';
             isAnswerCorrect.value = "FALSE";
 
 
-            answer.value = Array(exercises.value.correct_answer.length).fill(""); //FILL ARRAY WITH EMPTY STRINGS TO MAINTAIN SAME ARRAY LENGTHS WITH DATABASE
+            answer = Array(exercises.value.correct_answer.length).fill(""); //FILL ARRAY WITH EMPTY STRINGS TO MAINTAIN SAME ARRAY LENGTHS WITH DATABASE
 
             if (userStore.isLoggedIn) await saveQuestion();
             loading.value = false;
