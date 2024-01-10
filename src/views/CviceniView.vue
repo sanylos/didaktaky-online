@@ -23,7 +23,7 @@
 
             <div class="mt-4 d-flex justify-content-between">
                 <button :disabled="!answered" class="btn btn-primary" @click="handlePrevious">⮜ Předchozí</button>
-                <button v-if="!answered" class="btn btn-success" @click="handleSubmit">✍🏼Zkontrolovat</button>
+                <button v-if="!answered" :disabled="!exercises.type" class="btn btn-success" @click="handleSubmit">✍🏼Zkontrolovat</button>
                 <button v-if="answered" class="btn btn-primary" @click="handleNext">Další ⮞</button>
             </div>
 
