@@ -18,7 +18,6 @@
             </div>
 
             <div v-if="!loading">
-
                 <Exercise :answered="answered" :exercises="exercises"></Exercise>
             </div>
 
@@ -216,23 +215,6 @@ getQuestion();
 
 .page-title {
     font-size: 2em;
-}
-
-.exercise-text-image {
-    max-width: 100%;
-}
-
-.bg-unanswered {
-    background-color: rgba(245, 245, 220, 0.036);
-}
-
-.bg-unanswered:hover {
-    background-color: rgba(255, 255, 255, 0.13);
-}
-
-.radio-anone {
-    width: 2rem;
-    height: 2rem;
 }
 </style>
   
