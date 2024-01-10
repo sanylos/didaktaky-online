@@ -161,10 +161,37 @@ import { useUserStore } from '@/stores/user';
 const userStore = useUserStore();
 const answer = userStore.exerciseAnswer;
 
-defineProps({
-    exercises: Object,
+interface Exercise {
+    answers: String[],
+    claims: String[],
+    correct_answer: String[],
+    description: String,
+    exercise_id: Number,
+    group: String,
+    number: Number,
+    points: Number,
+    sentences: String[],
+    test_id: Number,
+    test_subject: String,
+    test_type: String,
+    text1imgPath: String,
+    text2imgPath: String,
+    title: String,
+    type: String
+}
+
+defineProps<{
+    exercises: Exercise,
     answered: Boolean,
-})
+}>();
+
+const convertAnswerArrayToUpperCase = () => {
+    userStore.exerciseAnswer = userStore.exerciseAnswer.map((index: string) => index.toUpperCase());
+}
+
+const convertAnswerArrayToLowerCase = () => {
+    userStore.exerciseAnswer = userStore.exerciseAnswer.map((index: string) => index.toLowerCase());
+}
 
 </script>
 
