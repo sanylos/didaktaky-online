@@ -40,8 +40,8 @@
                         <input type="radio" class="btn-check" name="options-base" :id="'option' + index" autocomplete="off"
                             :value="index" v-model="userStore.exerciseAnswer[0]" :disabled="answered">
                         <label class="btn text-white text-start fw-normal bg-unanswered" :for="'option' + index" :class="{
-                            'bg-success': index == exercises.correct_answer && answered,
-                            'bg-danger': index == userStore.exerciseAnswer && index != exercises.correct_answer && answered,
+                            'bg-success': index == exercises.correct_answer[0] && answered,
+                            'bg-danger': index == userStore.exerciseAnswer[0] && index != exercises.correct_answer[0] && answered,
                         }" v-html="option"></label>
                     </div>
                 </div>
@@ -62,12 +62,12 @@
                             'bg-danger': userStore.exerciseAnswer[index] != exercises.correct_answer[index] && answered,
                         }">
                         <p class="col-10">{{ option }}</p>
-                        <input type="radio" class="col text-white fw-normal radio-anone" v-model="userStore.exerciseAnswer[index]"
-                            :name="'input' + index" :id="'option' + index" autocomplete="off" value="ANO"
-                            :disabled="answered">
-                        <input type="radio" class="col text-white fw-normal radio-anone" v-model="userStore.exerciseAnswer[index]"
-                            :name="'input' + index" :id="'option' + index" autocomplete="off" value="NE"
-                            :disabled="answered">
+                        <input type="radio" class="col text-white fw-normal radio-anone"
+                            v-model="userStore.exerciseAnswer[index]" :name="'input' + index" :id="'option' + index"
+                            autocomplete="off" value="ANO" :disabled="answered">
+                        <input type="radio" class="col text-white fw-normal radio-anone"
+                            v-model="userStore.exerciseAnswer[index]" :name="'input' + index" :id="'option' + index"
+                            autocomplete="off" value="NE" :disabled="answered">
                     </div>
                 </div>
             </div>
@@ -82,7 +82,8 @@
                             'bg-danger': userStore.exerciseAnswer[index] != exercises.correct_answer[index] && answered,
                         }">
                         <span>{{ option }}</span>
-                        <input v-model="userStore.exerciseAnswer[index]" type="text" v-on:input="convertAnswerArrayToUpperCase"
+                        <input v-model="userStore.exerciseAnswer[index]" type="text"
+                            v-on:input="convertAnswerArrayToUpperCase"
                             class="text-center text-white fw-bold bg-secondary border-0 rounded" style="width:30px;"
                             maxlength="1" :disabled="answered">
                     </div>
@@ -102,7 +103,8 @@
                             'bg-danger': userStore.exerciseAnswer[index] != exercises.correct_answer[index] && answered,
                         }">
                         <span v-html="option"></span>
-                        <input v-model="userStore.exerciseAnswer[index]" type="text" v-on:input="convertAnswerArrayToLowerCase"
+                        <input v-model="userStore.exerciseAnswer[index]" type="text"
+                            v-on:input="convertAnswerArrayToLowerCase"
                             class="text-start text-white fw-bold bg-secondary border-0 rounded" style="width:auto;"
                             :disabled="answered">
                     </div>
@@ -164,7 +166,7 @@ const answer = userStore.exerciseAnswer;
 interface Exercise {
     answers: String[],
     claims: String[],
-    correct_answer: String[],
+    correct_answer: String[] | Number[],
     description: String,
     exercise_id: Number,
     group: String,
@@ -182,7 +184,7 @@ interface Exercise {
 
 defineProps<{
     exercises: Exercise,
-    answered: Boolean,
+    answered: boolean | undefined,
 }>();
 
 const convertAnswerArrayToUpperCase = () => {
@@ -200,6 +202,7 @@ const convertAnswerArrayToLowerCase = () => {
     width: 2rem;
     height: 2rem;
 }
+
 .exercise-text-image {
     max-width: 100%;
 }
@@ -210,5 +213,4 @@ const convertAnswerArrayToLowerCase = () => {
 
 .bg-unanswered:hover {
     background-color: rgba(255, 255, 255, 0.13);
-}
-</style>
+}</style>
