@@ -153,7 +153,6 @@
 
         </div>
     </div>
-    {{ userStore.exerciseAnswer }}
 </template>
 
 <script lang="ts" setup>
