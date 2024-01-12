@@ -15,6 +15,7 @@ export const useUserStore = defineStore({
       examVariants: [""],
       examSubjects: [""],
     },
+    exerciseAnswer: [] as any[],
   }),
 
   actions: {
