@@ -7,11 +7,7 @@
                     <button type="button" class="btn-close" id="close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div v-if="errorMessage">
-                        <div class="alert alert-danger" role="alert">
-                            ❗ {{ errorMessage }}
-                        </div>
-                    </div>
+                    <Alert :message="errorMessage" type="danger"></Alert>
 
                     <div v-if="pageType == 'Přihlášení'">
                         <form>
@@ -58,9 +54,11 @@
 
 <script setup lang="ts">
 // @ts-nocheck
+import Alert from './Alert.vue';
 import { ref } from 'vue';
 import { supabase } from '@/supabase';
 import { useUserStore } from '@/stores/user';
+import type { error } from 'console';
 
 const pageType = ref("Přihlášení");
 const errorMessage = ref("");
