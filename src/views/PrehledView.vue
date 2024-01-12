@@ -1,8 +1,6 @@
 <template>
     <div class="d-flex justify-content-center text-dark-emphasis">
-        <div class="alert alert-danger" role="alert" v-if="!userStore.isLoggedIn">
-            ❗ Pro zobrazení přehledu se musíš přihlásit!
-        </div>
+        <Alert v-if="!userStore.isLoggedIn" message="Pro zobrazení přehledu se musíš přihlásit!" type="danger" class="mt-3"></Alert>
         <div v-else class="container d-flex flex-column">
             <div class="row my-2">
 
@@ -115,6 +113,7 @@
 </template>
 
 <script setup lang="ts">
+import Alert from '@/components/Alert.vue';
 import HistoryTable from '@/components/Overview/HistoryTable.vue'
 import { useUserStore } from '@/stores/user';
 import { supabase } from '@/supabase';

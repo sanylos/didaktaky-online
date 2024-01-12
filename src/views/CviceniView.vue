@@ -13,9 +13,7 @@
             </div>
 
             <!--ERROR MESSAGE DISPLAY-->
-            <div v-if="errorMessage" class="alert alert-danger" role="alert">
-                ❗ {{ errorMessage }}
-            </div>
+            <Alert :message="errorMessage" type="danger" />
 
             <div v-if="!loading">
                 <Exercise :answered="answered" :exercises="exercises"></Exercise>
@@ -35,6 +33,7 @@
 
 //TODO - fix v-html for exercise answers
 
+import Alert from '@/components/Alert.vue';
 import { useUserStore } from '@/stores/user';
 import { supabase } from '@/supabase'
 import { reactive, ref } from 'vue';
