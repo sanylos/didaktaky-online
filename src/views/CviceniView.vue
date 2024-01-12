@@ -54,14 +54,6 @@ const errorMessage = ref('');
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-const convertAnswerArrayToUpperCase = () => {
-    userStore.exerciseAnswer = userStore.exerciseAnswer.map((index: string) => index.toUpperCase());
-}
-
-const convertAnswerArrayToLowerCase = () => {
-    userStore.exerciseAnswer = userStore.exerciseAnswer.map((index: string) => index.toLowerCase());
-}
-
 const handlePrevious = () => {
     if (userStore.isLoggedIn) { //ALLOW browsing history only if isLoggedIn
         exercisePagination.value++; //INCREMENT PAGINATION - MOVE TO OLDER QUESTIONS
