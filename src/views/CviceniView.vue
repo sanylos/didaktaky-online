@@ -178,7 +178,7 @@ const getQuestion = async () => {
         else {
             exercises.value = data;
             answered.value = false;
-            userStore.exerciseAnswer = '';
+            userStore.exerciseAnswer = [];
             isAnswerCorrect.value = "FALSE";
 
 
