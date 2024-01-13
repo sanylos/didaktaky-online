@@ -213,7 +213,7 @@ const fetchAnsweredExerciseGroups = async () => {
     if (data) answerCount.value.exerciseGroups = data;
 }
 
-const getData = async () => {
+const fetchAnswerCount = async () => {
 
     //FETCH ANSWER COUNT
     const { count, error: countError } = await supabase
@@ -263,7 +263,7 @@ const fetchAnswerCountImprovement = async () => { //FETCH answer count improveme
 const fetchData = async () => {
     await fetchAnsweredExerciseGroups();
     await fetchAnswerCountImprovement();
-    await getData();
+    await fetchAnswerCount();
 }
 
 onBeforeMount(() => {
