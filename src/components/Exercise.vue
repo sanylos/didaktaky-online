@@ -41,7 +41,7 @@
                             :value="index" v-model="userStore.exerciseAnswer[0]" :disabled="answered">
                         <label class="btn text-white text-start fw-normal bg-unanswered" :for="'option' + index" :class="{
                             'bg-success': index == exercises.correct_answer[0] && answered,
-                            'bg-danger': index == userStore.exerciseAnswer[0] && index != exercises.correct_answer[0] && answered,
+                            'bg-danger': index === userStore.exerciseAnswer[0] && index != exercises.correct_answer[0] && answered,
                         }" v-html="option"></label>
                     </div>
                 </div>
