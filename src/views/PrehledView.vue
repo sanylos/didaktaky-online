@@ -233,7 +233,7 @@ const answerCountImprovementPercentage = computed(() => { //GET answer count imp
     const percentage = ((lastWeek - (lastTwoWeeks - lastWeek)) / (lastTwoWeeks - lastWeek)) * 100;
 
     if (typeof percentage === 'number' && percentage != Infinity) return percentage;
-    else return null;
+    else return lastWeek * 100;
 })
 
 const fetchAnswerCountImprovement = async () => { //FETCH answer count improvement against last week
