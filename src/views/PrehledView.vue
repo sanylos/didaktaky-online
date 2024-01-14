@@ -83,18 +83,18 @@
 
                             <input type="radio" value="CJL" @change="fetchAnsweredExerciseGroups"
                                 v-model="exerciseGroupsFilter.examSubject" class="btn-check" name="subjectOptions"
-                                id="option5" autocomplete="off" checked>
-                            <label class="btn btn-sm" for="option5">CJL</label>
+                                id="option3" autocomplete="off" checked>
+                            <label class="btn btn-sm" for="option3">CJL</label>
 
                             <input type="radio" value="MAT" @change="fetchAnsweredExerciseGroups"
                                 v-model="exerciseGroupsFilter.examSubject" class="btn-check" name="subjectOptions"
-                                id="option6" autocomplete="off">
-                            <label class="btn btn-sm" for="option6">MAT</label>
+                                id="option4" autocomplete="off">
+                            <label class="btn btn-sm" for="option4">MAT</label>
 
                             <input type="radio" value="ANJ" @change="fetchAnsweredExerciseGroups"
                                 v-model="exerciseGroupsFilter.examSubject" class="btn-check" name="subjectOptions"
-                                id="option7" autocomplete="off">
-                            <label class="btn btn-sm" for="option7">ANJ</label>
+                                id="option5" autocomplete="off">
+                            <label class="btn btn-sm" for="option5">ANJ</label>
                         </div>
                     </div>
 
