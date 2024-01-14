@@ -49,16 +49,17 @@
                     </div>
                 </div>
 
-                <div v-if="bestExerciseGroup?.exercisegroup && bestExerciseGroup?.successRate"
-                    class="col-xl-3 col-md-6 my-2">
-                    <div class="container p-3 bg-dark rounded-1 shadow">
+                <div class="col-xl-3 col-md-6 my-2">
+                    <div class="container p-3 bg-dark rounded-1 shadow h-100">
                         <div class=" mb-1 fs-6">
                             <i class="bi bi-check2-circle"></i> Nejúspěšnější skupina cvičení
                         </div>
-                        <div class="fs-3 d-flex flex-row justify-content-between align-items-center">
+                        <div v-if="bestExerciseGroup?.exercisegroup && bestExerciseGroup?.successRate"
+                            class="fs-3 d-flex flex-row justify-content-between align-items-center">
                             <div class="">{{ bestExerciseGroup.exercisegroup }}</div>
                             <div class="fs-6 text-success">({{ bestExerciseGroup.successRate.toFixed() }}%)</div>
                         </div>
+                        <div v-else class="text-secondary text-center fst-italic mt-3">Žádná data</div>
                     </div>
                 </div>
             </div>
@@ -68,28 +69,31 @@
                     <div class="mb-1 fs-6 d-flex justify-content-between">
                         <div><i class="bi bi-list-stars me-1"></i>Skupiny cvičení</div>
                         <div class="d-flex">
-                            {{ exerciseGroupsFilter }}
                             <input type="radio" value="PZ" @change="fetchAnsweredExerciseGroups"
                                 v-model="exerciseGroupsFilter.examType" class="btn-check" name="examOptions" id="option1"
                                 autocomplete="off" checked>
                             <label class="btn btn-sm" for="option1">PZ</label>
 
-                            <input type="radio" value="MZ" @change="fetchAnsweredExerciseGroups" v-model="exerciseGroupsFilter.examType" class="btn-check"
-                                name="examOptions" id="option2" autocomplete="off">
+                            <input type="radio" value="MZ" @change="fetchAnsweredExerciseGroups"
+                                v-model="exerciseGroupsFilter.examType" class="btn-check" name="examOptions" id="option2"
+                                autocomplete="off">
                             <label class="btn btn-sm" for="option2">MZ</label>
 
                             <div>|</div>
 
-                            <input type="radio" value="CJL" @change="fetchAnsweredExerciseGroups" v-model="exerciseGroupsFilter.examSubject" class="btn-check"
-                                name="subjectOptions" id="option5" autocomplete="off" checked>
+                            <input type="radio" value="CJL" @change="fetchAnsweredExerciseGroups"
+                                v-model="exerciseGroupsFilter.examSubject" class="btn-check" name="subjectOptions"
+                                id="option5" autocomplete="off" checked>
                             <label class="btn btn-sm" for="option5">CJL</label>
 
-                            <input type="radio" value="MAT" @change="fetchAnsweredExerciseGroups" v-model="exerciseGroupsFilter.examSubject" class="btn-check"
-                                name="subjectOptions" id="option6" autocomplete="off">
+                            <input type="radio" value="MAT" @change="fetchAnsweredExerciseGroups"
+                                v-model="exerciseGroupsFilter.examSubject" class="btn-check" name="subjectOptions"
+                                id="option6" autocomplete="off">
                             <label class="btn btn-sm" for="option6">MAT</label>
 
-                            <input type="radio" value="ANJ" @change="fetchAnsweredExerciseGroups" v-model="exerciseGroupsFilter.examSubject" class="btn-check"
-                                name="subjectOptions" id="option7" autocomplete="off">
+                            <input type="radio" value="ANJ" @change="fetchAnsweredExerciseGroups"
+                                v-model="exerciseGroupsFilter.examSubject" class="btn-check" name="subjectOptions"
+                                id="option7" autocomplete="off">
                             <label class="btn btn-sm" for="option7">ANJ</label>
                         </div>
                     </div>
@@ -130,9 +134,10 @@
                             </div>
                         </div>
                     </div>
-                    <div v-else class="text-secondary text-center fst-italic p-3">Nebyla nalezena žádná data odpovídající zadaným filtrům</div>
+                    <div v-else class="text-secondary text-center fst-italic p-3">Nebyla nalezena žádná data odpovídající
+                        zadaným filtrům</div>
                 </div>
-                
+
             </div>
 
             <div class="mt-3 container rounded-1 bg-dark">
@@ -244,7 +249,7 @@ const fetchAnsweredExerciseGroups = async () => {
         user_id: userStore.id
     })
         .eq('subject', exerciseGroupsFilter.examSubject)
-        .eq('examtype',exerciseGroupsFilter.examType)
+        .eq('examtype', exerciseGroupsFilter.examType)
     console.log(data);
     if (error) console.log(error);
     if (data) answerCount.value.exerciseGroups = data;
