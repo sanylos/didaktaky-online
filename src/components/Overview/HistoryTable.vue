@@ -82,7 +82,6 @@
 import { supabase } from '@/supabase';
 import { useUserStore } from '@/stores/user';
 import { computed, onMounted, reactive, ref } from 'vue';
-import { Obj } from '@popperjs/core';
 
 const userStore = useUserStore();
 const answers: any = ref([]);
