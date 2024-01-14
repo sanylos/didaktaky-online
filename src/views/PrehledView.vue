@@ -245,14 +245,18 @@ const bestExerciseGroup = computed(() => { //method for getting the exercise wit
 })
 
 const fetchAnsweredExerciseGroups = async () => {
-    const { data, error } = await supabase.rpc('getcountexercisegroups', {
-        user_id: userStore.id
-    })
-        .eq('subject', exerciseGroupsFilter.examSubject)
-        .eq('examtype', exerciseGroupsFilter.examType)
-    console.log(data);
-    if (error) console.log(error);
-    if (data) answerCount.value.exerciseGroups = data;
+    try {
+        const { data, error } = await supabase.rpc('getcountexercisegroups', {
+            user_id: userStore.id
+        })
+            .eq('subject', exerciseGroupsFilter.examSubject)
+            .eq('examtype', exerciseGroupsFilter.examType)
+            console.log(data)
+        if (error) console.log(error);
+        if (data) answerCount.value.exerciseGroups = data;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 const fetchAnswerCount = async () => {
@@ -302,13 +306,16 @@ const fetchAnswerCountImprovement = async () => { //FETCH answer count improveme
     if (lastTwoWeeksCount) answerCount.value.lastTwoWeeks = lastTwoWeeksCount;
 }
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 const fetchData = async () => {
-    await fetchAnsweredExerciseGroups();
+    await sleep(500);
     await fetchAnswerCountImprovement();
     await fetchAnswerCount();
+    await fetchAnsweredExerciseGroups();
 }
 
-onBeforeMount(() => {
+onMounted(() => {
     fetchData();
 })
 </script>
