@@ -1,5 +1,6 @@
 <template>
-    <div class="d-flex justify-content-center text-dark-emphasis">
+    <Spinner :isLoading="isLoading"></Spinner>
+    <div v-if="!isLoading" class="d-flex justify-content-center text-dark-emphasis">
         <Alert v-if="!userStore.isLoggedIn" message="Pro zobrazení přehledu se musíš přihlásit!" type="danger" class="mt-3">
         </Alert>
         <div v-else class="container d-flex flex-column">
@@ -148,6 +149,7 @@
 </template>
 
 <script setup lang="ts">
+import Spinner from '@/components/Spinner.vue';
 import Alert from '@/components/Alert.vue';
 import HistoryTable from '@/components/Overview/HistoryTable.vue'
 import { useUserStore } from '@/stores/user';
@@ -166,6 +168,7 @@ interface ExerciseGroup {
 
 
 const userStore = useUserStore();
+const isLoading = ref(false);
 const exerciseGroupsFilter = reactive({
     examType: 'PZ',
     examSubject: 'CJL'
@@ -308,15 +311,13 @@ const fetchAnswerCountImprovement = async () => { //FETCH answer count improveme
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-const fetchData = async () => {
+onMounted(async() => {
+    isLoading.value = true;
     await sleep(500);
-    await fetchAnswerCountImprovement();
     await fetchAnswerCount();
+    await fetchAnswerCountImprovement();
     await fetchAnsweredExerciseGroups();
-}
-
-onMounted(() => {
-    fetchData();
+    isLoading.value = false;
 })
 </script>
 
