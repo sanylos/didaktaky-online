@@ -35,7 +35,6 @@
                         <div class="fs-3 d-flex flex-row justify-content-between">
                             <div class="">0</div><i class="bi bi-caret-up-fill text-success"></i>
                         </div>
-                        <div id="spark1"></div>
                     </div>
                 </div>
 
@@ -58,7 +57,7 @@
                         <div v-if="bestExerciseGroup?.exercisegroup && bestExerciseGroup?.successRate"
                             class="fs-3 d-flex flex-row justify-content-between align-items-center">
                             <div class="">{{ bestExerciseGroup.exercisegroup }}</div>
-                            <div class="fs-6 text-success">({{ bestExerciseGroup.successRate.toFixed() }}%)</div>
+                            <div class="fs-6 text-secondary">(<span class="text-success">{{ bestExerciseGroup.successRate.toFixed() }}%</span>)</div>
                         </div>
                         <div v-else class="text-secondary text-center fst-italic mt-3">Žádná data</div>
                     </div>
