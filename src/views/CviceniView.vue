@@ -5,12 +5,7 @@
         </div>
         <div class="container rounded bg-dark p-3 shadow-lg m-1 w-auto">
 
-            <!--SPINNER LOADING-->
-            <div v-if="loading" class="d-flex justify-content-center flex-column align-items-center">
-                <div v-if="!errorMessage" class="spinner-border" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-            </div>
+            <Spinner :isLoading="loading"></Spinner>
 
             <!--ERROR MESSAGE DISPLAY-->
             <Alert :message="errorMessage" type="danger" />
@@ -33,6 +28,7 @@
 
 //TODO - fix v-html for exercise answers
 
+import Spinner from '@/components/Spinner.vue';
 import Alert from '@/components/Alert.vue';
 import { useUserStore } from '@/stores/user';
 import { supabase } from '@/supabase'
@@ -72,6 +68,7 @@ const handleNext = () => {
 }
 
 const getQuestionByPagination = async (pagination: number) => {
+    loading.value=true;
     try {
         const { data: userData, error } = await supabase
             .from('userAnswers')
@@ -94,6 +91,7 @@ const getQuestionByPagination = async (pagination: number) => {
     } catch (error) {
         console.log(error);
     }
+    loading.value=false;
 }
 
 const handleSubmit = () => {
@@ -184,13 +182,13 @@ const getQuestion = async () => {
             userStore.exerciseAnswer = Array(exercises.value.correct_answer.length).fill(""); //FILL ARRAY WITH EMPTY STRINGS TO MAINTAIN SAME ARRAY LENGTHS WITH DATABASE
 
             if (userStore.isLoggedIn) await saveQuestion();
-            loading.value = false;
         }
         console.log(exercises.value);
     } catch (error) {
         errorMessage.value = "Nenalezena žádná cvičení odpovídající zadaným filtrům"
         console.log(error);
     }
+    loading.value = false;
 }
 
 getQuestion();
