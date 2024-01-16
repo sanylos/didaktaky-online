@@ -7,7 +7,7 @@
             <div class="row my-2">
 
                 <div v-if="answerCount.total" class="col-xl-3 col-md-6 my-2">
-                    <div class="container p-3 bg-dark rounded-1 shadow">
+                    <div class="container p-3 bg-dark rounded-1 shadow h-100">
                         <div class=" mb-1 fs-6">
                             <i class="bi bi-send-plus"></i> Vyplněných cvičení
                         </div>
@@ -28,7 +28,7 @@
                 </div>
 
                 <div class="col-xl-3 col-md-6 my-2">
-                    <div class="container p-3 bg-dark rounded-1 shadow">
+                    <div class="container p-3 bg-dark rounded-1 shadow h-100">
                         <div class=" mb-1 fs-6">
                             <i class="bi bi-file-earmark-text-fill"></i> Vyplněných testů
                         </div>
@@ -39,13 +39,14 @@
                 </div>
 
                 <div class="col-xl-3 col-md-6 my-2">
-                    <div class="container p-3 bg-dark rounded-1 shadow">
+                    <div class="container p-3 bg-dark rounded-1 shadow h-100">
                         <div class=" mb-1 fs-6">
-                            <i class="bi bi-check2-square"></i> Nejúspěšnější typ cvičení
+                            <i class="bi bi-clipboard2-check-fill"></i> Úspěšnost
                         </div>
-                        <div class="fs-3 d-flex flex-row justify-content-between">
-                            <div class="">0</div><i class="bi bi-caret-up-fill text-success"></i>
+                        <div v-if="successRate" class="fs-6 d-flex flex-row justify-content-between">
+                            <div class="fs-3">{{ successRate.toFixed(1) }}<span class="ms-1 fs-6">%</span></div>
                         </div>
+                        <div v-else class="text-secondary text-center fst-italic mt-3">Žádná data</div>
                     </div>
                 </div>
 
@@ -57,7 +58,8 @@
                         <div v-if="bestExerciseGroup?.exercisegroup && bestExerciseGroup?.successRate"
                             class="fs-3 d-flex flex-row justify-content-between align-items-center">
                             <div class="">{{ bestExerciseGroup.exercisegroup }}</div>
-                            <div class="fs-6 text-secondary">(<span class="text-success">{{ bestExerciseGroup.successRate.toFixed() }}%</span>)</div>
+                            <div class="fs-6 text-secondary">(<span class="text-success">{{
+                                bestExerciseGroup.successRate.toFixed() }}%</span>)</div>
                         </div>
                         <div v-else class="text-secondary text-center fst-italic mt-3">Žádná data</div>
                     </div>
@@ -215,6 +217,14 @@ const exerciseGroupsArray = computed(() => {
     return { correct: correctGroup, incorrect: incorrectGroup, labels: displayedLabels }
 })
 
+const successRate = computed(() => {
+    let incorrectCount: number = 0;
+    let correctCount: number = 0;
+    exerciseGroupsArray.value.correct.forEach((value) => correctCount += +value);
+    exerciseGroupsArray.value.incorrect.forEach((value) => incorrectCount += +value);
+    return 100 * (correctCount / incorrectCount)
+})
+
 const getSuccessRateByLabel = (label: String) => {
     let wrongAnswerGroup = answerCount.value.exerciseGroups.find(group => group.exercisegroup === label && group.iscorrect == false);
     let rightAnswerGroup = answerCount.value.exerciseGroups.find(group => group.exercisegroup === label && group.iscorrect == true);
@@ -253,7 +263,7 @@ const fetchAnsweredExerciseGroups = async () => {
         })
             .eq('subject', exerciseGroupsFilter.examSubject)
             .eq('examtype', exerciseGroupsFilter.examType)
-            console.log(data)
+        console.log(data)
         if (error) console.log(error);
         if (data) answerCount.value.exerciseGroups = data;
     } catch (error) {
@@ -310,7 +320,7 @@ const fetchAnswerCountImprovement = async () => { //FETCH answer count improveme
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-onMounted(async() => {
+onMounted(async () => {
     isLoading.value = true;
     await sleep(500);
     await fetchAnswerCount();
