@@ -106,7 +106,6 @@ const fetchMoreData = async () => {
     else {
         answers.value.push(...data);
         pagination.value += 10;
-        console.log(answers.value)
     }
 }
 
