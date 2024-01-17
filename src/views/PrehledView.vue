@@ -126,10 +126,10 @@
                                         </tr>
                                         <tr>
                                             <td class="fw-bold" :class="{
-                                                'text-success': getSuccessRateByLabel(label) >= 50,
-                                                'text-danger': getSuccessRateByLabel(label) < 50,
+                                                'text-success': getSuccessRateByLabelIndex(index) >= 50,
+                                                'text-danger': getSuccessRateByLabelIndex(index) < 50,
                                             }" v-for="label, index in exerciseGroupsArray.labels" :key="index">{{
-    getSuccessRateByLabel(label).toFixed() }}%</td>
+    getSuccessRateByLabelIndex(index).toFixed() }}%</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -185,7 +185,7 @@ const exerciseGroupsArray = computed(() => {
 
     let correctGroup: Array<Number> = [];
     let incorrectGroup: Array<Number> = [];
-
+        
     let allLabels = answerCount.value.exerciseGroups.map(groupItem => groupItem.exercisegroup); //MAP all labels
     let uniqueLabels: Array<String> = [];
 
@@ -213,7 +213,7 @@ const exerciseGroupsArray = computed(() => {
         }
         return label;
     })
-
+    //console.log(displayedLabels)
     return { correct: correctGroup, incorrect: incorrectGroup, labels: displayedLabels }
 })
 
@@ -225,12 +225,12 @@ const successRate = computed(() => {
     return 100 * (correctCount / incorrectCount)
 })
 
-const getSuccessRateByLabel = (label: String) => {
-    let wrongAnswerGroup = answerCount.value.exerciseGroups.find(group => group.exercisegroup === label && group.iscorrect == false);
-    let rightAnswerGroup = answerCount.value.exerciseGroups.find(group => group.exercisegroup === label && group.iscorrect == true);
+const getSuccessRateByLabelIndex = (index: number) => {
+    let wrongAnswerGroup: number = +exerciseGroupsArray.value.incorrect[index];
+    let rightAnswerGroup: number = +exerciseGroupsArray.value.correct[index];
     if (!rightAnswerGroup) return 0;
     if (!wrongAnswerGroup) return 100;
-    return 100 / (wrongAnswerGroup.count + rightAnswerGroup.count) * rightAnswerGroup.count;
+    return (rightAnswerGroup / wrongAnswerGroup) * 100;
 }
 
 const bestExerciseGroup = computed(() => { //method for getting the exercise with most right answers ratio
@@ -252,14 +252,15 @@ const bestExerciseGroup = computed(() => { //method for getting the exercise wit
 
         })
 
+
         //SHORTEN text so it has better visibility
+        let bestExerciseGroup = currentlyBest.exercisegroup;
         if (currentlyBest.exercisegroup.length > 20) {
             let currentLabel = currentlyBest.exercisegroup.split(' ');
             let firstTwoWords = currentLabel[0] + " " + currentLabel[1];
-            currentlyBest.exercisegroup = firstTwoWords;
+            bestExerciseGroup = firstTwoWords;
         }
-
-        return { exercisegroup: currentlyBest.exercisegroup, successRate: currentlyBestSuccessRate };
+        return { exercisegroup: bestExerciseGroup, successRate: currentlyBestSuccessRate };
     }
 })
 
