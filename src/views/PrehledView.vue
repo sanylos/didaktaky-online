@@ -243,7 +243,7 @@ const bestExerciseGroup = computed(() => { //method for getting the exercise wit
                 //console.log(groupsWithSameType);
                 let group1 = groupsWithSameType[0];
                 let group2 = groupsWithSameType[1] ? groupsWithSameType[1] : { count: 0 }; //IF group2 does not exist, set count to 0
-                let successRate = (100 / (group1.count + group2.count)) * group1.count;
+                let successRate = (group1.count / group2.count) * 100;
                 if (successRate > currentlyBestSuccessRate) {
                     currentlyBestSuccessRate = successRate;
                     currentlyBest = group1;
@@ -251,6 +251,8 @@ const bestExerciseGroup = computed(() => { //method for getting the exercise wit
             }
 
         })
+
+        
 
         return { exercisegroup: currentlyBest.exercisegroup, successRate: currentlyBestSuccessRate };
     }
