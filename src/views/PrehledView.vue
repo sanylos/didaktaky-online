@@ -252,7 +252,12 @@ const bestExerciseGroup = computed(() => { //method for getting the exercise wit
 
         })
 
-        
+        //SHORTEN text so it has better visibility
+        if (currentlyBest.exercisegroup.length > 20) {
+            let currentLabel = currentlyBest.exercisegroup.split(' ');
+            let firstTwoWords = currentLabel[0] + " " + currentLabel[1];
+            currentlyBest.exercisegroup = firstTwoWords;
+        }
 
         return { exercisegroup: currentlyBest.exercisegroup, successRate: currentlyBestSuccessRate };
     }
