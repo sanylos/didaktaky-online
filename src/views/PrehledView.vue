@@ -326,11 +326,9 @@ const fetchAnswerCountImprovement = async () => { //FETCH answer count improveme
     if (lastTwoWeeksCount) answerCount.value.lastTwoWeeks = lastTwoWeeksCount;
 }
 
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
 onMounted(async () => {
     isLoading.value = true;
-    await sleep(500);
+    await userStore.initialize();
     await fetchAnswerCount();
     await fetchAnswerCountImprovement();
     await fetchAnsweredExerciseGroups();
