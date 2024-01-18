@@ -25,7 +25,7 @@
         <!--EXAM YEAR-->
         <div class="d-flex mb-3">
             <div class="mx-1" v-for="option in examOptions.examYears" :key="option">
-                <input type="checkbox" class="btn-check" name="examYear" :id="option" autocomplete="off" :value="option"
+                <input type="radio" class="btn-check" name="examYear" :id="option" autocomplete="off" :value="option"
                     v-model="selectedFilter.examYear">
                 <label class="btn btn-outline-light" :for="option">{{ option }}</label>
             </div>
@@ -34,7 +34,7 @@
         <!--EXAM VARIANT-->
         <div class="d-flex mb-3">
             <div class="mx-1" v-for="option in examOptions.examVariants" :key="option.id">
-                <input type="checkbox" class="btn-check" name="examVariant" :id="option.id" autocomplete="off"
+                <input type="radio" class="btn-check" name="examVariant" :id="option.id" autocomplete="off"
                     :value="option.id" v-model="selectedFilter.examVariant">
                 <label class="btn btn-outline-light" :for="option.id">{{ option.title }}</label>
             </div>
@@ -44,7 +44,9 @@
 
     </div>
     <div v-else>
-        <div v-for="number in exerciseCount" class="text-white">O</div>
+        <div class="d-flex bg-secondary">
+            <button v-for="number in exerciseCount" :key="number" class="text-white text-center">{{ number }}</button>
+        </div>
     </div>
 </template>
 
@@ -86,9 +88,13 @@ const generateTest = async () => {
         .eq('subject', selectedFilter.examSubject)
         .eq('variant', selectedFilter.examVariant)
     if (data) {
-        console.log(data);
-        testId = data[0].id;
-        isTest.value = true;
+        if (!data[0]) {
+            alert("Žádný test");
+        } else {
+            console.log(data);
+            testId = data[0].id;
+            isTest.value = true;
+        }
     }
     if (error) {
         console.log(error);
@@ -117,8 +123,8 @@ const examOptions = reactive({
 
 const getExerciseCountBySubject = (subject: string) => {
     let filteredSubject = examOptions.examSubjects.filter((item) => item.id === subject);
-    if(selectedFilter.examType == "PZ") return filteredSubject[0].exerciseCountPZ;
-    if(selectedFilter.examType == "MZ") return filteredSubject[0].exerciseCountMZ;
+    if (selectedFilter.examType == "PZ") return filteredSubject[0].exerciseCountPZ;
+    if (selectedFilter.examType == "MZ") return filteredSubject[0].exerciseCountMZ;
     return 0;
 }
 </script>
