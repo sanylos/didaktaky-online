@@ -79,7 +79,6 @@ const handleSubmit = () => {
 const generateTest = async () => {
     let testId = 0;
     exerciseCount.value = getExerciseCountBySubject(selectedFilter.examSubject);
-    console.log(exerciseCount);
     const { data, error } = await supabase
         .from('tests')
         .select('id')
@@ -93,12 +92,22 @@ const generateTest = async () => {
         } else {
             console.log(data);
             testId = data[0].id;
-            isTest.value = true;
         }
     }
     if (error) {
         console.log(error);
     }
+    let testExercises = [];
+    for(let i=1;i<=exerciseCount.value;i++){
+        const { data, error} = await supabase
+        .from('exercises')
+        .select('*')
+        .eq('test_id',testId)
+        .eq('number',i);
+        testExercises.push(data);
+    }
+    isTest.value = true;
+    console.log(testExercises);
 }
 
 const examOptions = reactive({
