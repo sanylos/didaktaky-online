@@ -12,9 +12,14 @@
 import { RouterLink, RouterView } from 'vue-router'
 import Navbar from '@/components/Navbar.vue';
 import { useUserStore } from './stores/user';
+import { onBeforeMount, onMounted } from 'vue';
 
 const userStore = useUserStore();
-userStore.initialize();
+
+onMounted(async () => {
+    await userStore.initialize();
+})
+
 </script>
 
 <style scoped>
