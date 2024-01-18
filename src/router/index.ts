@@ -4,6 +4,7 @@ import CviceniView from '../views/CviceniView.vue'
 import PrehledView from '@/views/PrehledView.vue'
 import AddExerciseView from '@/views/AddExerciseView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
+import TestView from '@/views/TestView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -27,6 +28,11 @@ const router = createRouter({
       path: '/cviceni',
       name: 'cviceni',
       component: CviceniView
+    },
+    {
+      path: '/test',
+      name: 'test',
+      component: TestView
     },
     {
       path: '/:pathMatch(.*)',
