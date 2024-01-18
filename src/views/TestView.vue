@@ -43,10 +43,11 @@
         <button class="btn btn-success" @click="handleSubmit">Začít <i class="bi bi-rocket-takeoff"></i></button>
 
     </div>
-    <div v-else>
+    <div v-else class="bg-dark text-secondary shadow-lg w-auto">
         <div class="d-flex bg-secondary">
-            <button v-for="number in exerciseCount" :key="number" class="text-white text-center">{{ number }}</button>
+            <button v-for="number in exerciseCount" :key="number" @click="currentExercise=number-1" class="text-white text-center">{{ number }}</button>
         </div>
+<Exercise :answered="false" :exercises="exercises[currentExercise][0]"></Exercise>
     </div>
 </template>
 
@@ -54,10 +55,12 @@
 import Alert from '@/components/Alert.vue';
 import { reactive, ref } from 'vue';
 import { supabase } from '@/supabase';
-import { FunctionsRelayError } from '@supabase/supabase-js';
+import Exercise from '@/components/Exercise.vue';
 const errorMessage = ref('');
 const isTest = ref(false)
 const exerciseCount = ref(0);
+const currentExercise = ref(0);
+const exercises = ref([]);
 
 const selectedFilter: { examType: string, examYear: string[], examVariant: string[], examSubject: string } = reactive({
     examType: "",
@@ -97,17 +100,17 @@ const generateTest = async () => {
     if (error) {
         console.log(error);
     }
-    let testExercises = [];
+
     for(let i=1;i<=exerciseCount.value;i++){
         const { data, error} = await supabase
         .from('exercises')
         .select('*')
         .eq('test_id',testId)
         .eq('number',i);
-        testExercises.push(data);
+        exercises.value.push(data);
     }
     isTest.value = true;
-    console.log(testExercises);
+    console.log(exercises.value);
 }
 
 const examOptions = reactive({
