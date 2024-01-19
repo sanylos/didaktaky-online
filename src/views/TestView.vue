@@ -45,9 +45,10 @@
     </div>
     <div v-else class="bg-dark text-secondary shadow-lg w-auto">
         <div class="d-flex bg-secondary">
-            <button v-for="number in exerciseCount" :key="number" @click="currentExercise=number-1" class="text-white text-center">{{ number }}</button>
+            <button v-for="number in exerciseCount" :key="number" @click="switchToExercise(number - 1)"
+                class="text-white text-center">{{ number }}</button>
         </div>
-<Exercise :answered="false" :exercises="exercises[currentExercise][0]"></Exercise>
+        <Exercise :answered="false" :exercises="exercises[currentExercise][0]"></Exercise>
     </div>
 </template>
 
@@ -56,11 +57,15 @@ import Alert from '@/components/Alert.vue';
 import { reactive, ref } from 'vue';
 import { supabase } from '@/supabase';
 import Exercise from '@/components/Exercise.vue';
+import { useUserStore } from '@/stores/user';
+
 const errorMessage = ref('');
 const isTest = ref(false)
-const exerciseCount = ref(0);
+const exerciseCount: any = ref(0);
 const currentExercise = ref(0);
-const exercises = ref([]);
+const exercises: any = ref([]);
+const testAnswers: any = ref(['']);
+const userStore = useUserStore();
 
 const selectedFilter: { examType: string, examYear: string[], examVariant: string[], examSubject: string } = reactive({
     examType: "",
@@ -68,6 +73,10 @@ const selectedFilter: { examType: string, examYear: string[], examVariant: strin
     examVariant: [],
     examSubject: "",
 });
+
+const switchToExercise = (exerciseNumber: number) => {
+    testAnswers.value[exerciseNumber] = userStore.exerciseAnswer;
+}
 
 const handleSubmit = () => {
     if (selectedFilter.examType == "") {
@@ -101,12 +110,12 @@ const generateTest = async () => {
         console.log(error);
     }
 
-    for(let i=1;i<=exerciseCount.value;i++){
-        const { data, error} = await supabase
-        .from('exercises')
-        .select('*')
-        .eq('test_id',testId)
-        .eq('number',i);
+    for (let i = 1; i <= exerciseCount.value; i++) {
+        const { data, error } = await supabase
+            .from('exercises')
+            .select('*')
+            .eq('test_id', testId)
+            .eq('number', i)
         exercises.value.push(data);
     }
     isTest.value = true;
