@@ -45,11 +45,13 @@
     </div>
     <div v-else class="bg-dark text-secondary shadow-lg w-auto">
         <div class="d-flex bg-secondary">
-            <button v-for="number in exerciseCount" :key="number" @click="switchToExercise(number - 1)"
+            <button v-for="number in exerciseCount" :key="number" @click="switchToExercise(exerciseNumber, number - 1)"
                 class="text-white text-center">{{ number }}</button>
         </div>
-        <Exercise :answered="false" :exercises="exercises[currentExercise][0]"></Exercise>
+        <Exercise v-if="exercises[exerciseNumber]" :answered="false" :exercises="exercises[exerciseNumber][0]"></Exercise>
+        <span v-else>chyba cviceni</span>
     </div>
+    <span v-if="exercises[exerciseNumber]" class="text-white">{{ exercises[exerciseNumber][0] }}</span>
 </template>
 
 <script lang="ts" setup>
@@ -62,9 +64,9 @@ import { useUserStore } from '@/stores/user';
 const errorMessage = ref('');
 const isTest = ref(false)
 const exerciseCount: any = ref(0);
-const currentExercise = ref(0);
+const exerciseNumber = ref(0);
 const exercises: any = ref([]);
-const testAnswers: any = ref(['']);
+const testAnswers: any = ref([""]);
 const userStore = useUserStore();
 
 const selectedFilter: { examType: string, examYear: string[], examVariant: string[], examSubject: string } = reactive({
@@ -74,8 +76,19 @@ const selectedFilter: { examType: string, examYear: string[], examVariant: strin
     examSubject: "",
 });
 
-const switchToExercise = (exerciseNumber: number) => {
-    testAnswers.value[exerciseNumber] = userStore.exerciseAnswer;
+const switchToExercise = (from: number, to: number) => {
+    console.log("from:" + from + ";to:" + to);
+    console.log(userStore.exerciseAnswer);
+    testAnswers.value[from] = userStore.exerciseAnswer;
+    console.log(testAnswers.value);
+    userStore.exerciseAnswer = testAnswers.value[to];
+
+    exerciseNumber.value = to;
+
+    //userStore.exerciseAnswer = [];
+    console.log(userStore.exerciseAnswer);
+    console.log(testAnswers.value);
+
 }
 
 const handleSubmit = () => {
@@ -86,6 +99,13 @@ const handleSubmit = () => {
     } else {
         generateTest();
     }
+}
+
+const initializeTestAnswerArray = () => {
+    for (let i = 1; i <= exerciseCount.value; i++) {
+        testAnswers.value[i - 1] = Array(exercises.value[i - 1][0].correct_answer.length).fill("");
+    }
+    console.log(testAnswers.value);
 }
 
 const generateTest = async () => {
@@ -119,6 +139,7 @@ const generateTest = async () => {
         exercises.value.push(data);
     }
     isTest.value = true;
+    initializeTestAnswerArray();
     console.log(exercises.value);
 }
 
@@ -148,6 +169,11 @@ const getExerciseCountBySubject = (subject: string) => {
     if (selectedFilter.examType == "MZ") return filteredSubject[0].exerciseCountMZ;
     return 0;
 }
+
 </script>
 
+
+function initializeTestAnswerArray() {
+  throw new Error('Function not implemented.');
+}
 <style></style>
