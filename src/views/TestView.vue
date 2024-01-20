@@ -40,7 +40,8 @@
             </div>
         </div>
 
-        <button class="btn btn-success" @click="handleSubmit">Začít <i class="bi bi-rocket-takeoff"></i></button>
+        <button class="btn btn-success" @click="handleSubmit" data-bs-toggle="modal"
+            data-bs-target="#testLoadingModal">Začít <i class="bi bi-rocket-takeoff"></i></button>
 
     </div>
     <div v-else class="bg-dark text-secondary shadow-lg w-auto">
@@ -48,18 +49,22 @@
             <button v-for="number in exerciseCount" :key="number" @click="switchToExercise(exerciseNumberIndex, number - 1)"
                 class="text-white text-center">{{ number }}</button>
         </div>
-        <Exercise v-if="exercises[exerciseNumberIndex]" :answered="false" :exercises="exercises[exerciseNumberIndex][0]"></Exercise>
+        <Exercise v-if="exercises[exerciseNumberIndex]" :answered="false" :exercises="exercises[exerciseNumberIndex][0]">
+        </Exercise>
         <span v-else>chyba cviceni</span>
     </div>
     <div v-if="isTest" class="mt-4 d-flex justify-content-between">
-        <button class="btn btn-primary" @click="switchToExercise(exerciseNumberIndex, exerciseNumberIndex - 1)" :disabled="exerciseNumberIndex < 1">⮜ Předchozí</button>
+        <button class="btn btn-primary" @click="switchToExercise(exerciseNumberIndex, exerciseNumberIndex - 1)"
+            :disabled="exerciseNumberIndex < 1">⮜ Předchozí</button>
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#checkTestModal">✍🏼Zkontrolovat</button>
-        <button class="btn btn-primary" @click="switchToExercise(exerciseNumberIndex, exerciseNumberIndex + 1)" :disabled="exerciseNumberIndex >= exerciseCount-1">Další ⮞</button>
+        <button class="btn btn-primary" @click="switchToExercise(exerciseNumberIndex, exerciseNumberIndex + 1)"
+            :disabled="exerciseNumberIndex >= exerciseCount - 1">Další ⮞</button>
     </div>
     <span v-if="exercises[exerciseNumberIndex]" class="text-white">{{ exercises[exerciseNumberIndex][0] }}</span>
 
     <!-- Check Test Modal -->
-    <div v-if="isTest" class="modal fade text-white" id="checkTestModal" tabindex="-1" aria-labelledby="checkTestModalLabel" aria-hidden="true">
+    <div v-if="isTest" class="modal fade text-white" id="checkTestModal" tabindex="-1" aria-labelledby="checkTestModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -67,11 +72,34 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Opravdu chceš ukončit toto testové zadání? Ukončením ztratíš možnost opravy svých odpovědí a bude ti zobrazeno hodnocení!
+                    Opravdu chceš ukončit toto testové zadání? Ukončením ztratíš možnost opravy svých odpovědí a bude ti
+                    zobrazeno hodnocení!
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Pokračovat v testu</button>
                     <button type="button" class="btn btn-success">Vyhodnotit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Test Loading Modal -->
+    <div class="modal fade text-white" id="testLoadingModal" data-bs-backdrop="static"
+        data-bs-keyboard="false" tabindex="-1" aria-labelledby="testLoadingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Test se připravuje</h1>
+                </div>
+                <div class="modal-body">
+
+                    <div class="progress" role="progressbar" aria-label="Success example" :aria-valuenow="loadedExerciseCount"
+                        aria-valuemin="0" :aria-valuemax="exerciseCount">
+                        <div class="progress-bar bg-success" :style="{width: ((loadedExerciseCount/exerciseCount)*100) + '%'}"></div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal" :disabled="!isTest">Začít</button>
                 </div>
             </div>
         </div>
@@ -92,6 +120,8 @@ const exerciseNumberIndex = ref(0);
 const exercises: any = ref([]);
 const testAnswers: any = ref([""]);
 const userStore = useUserStore();
+const loadedExerciseCount = ref(0);
+
 
 const selectedFilter: { examType: string, examYear: string[], examVariant: string[], examSubject: string } = reactive({
     examType: "",
@@ -161,6 +191,7 @@ const generateTest = async () => {
             .eq('test_id', testId)
             .eq('number', i)
         exercises.value.push(data);
+        loadedExerciseCount.value++;
     }
     isTest.value = true;
     initializeTestAnswerArray();
