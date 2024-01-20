@@ -43,15 +43,15 @@
             data-bs-target="#testLoadingModal">Začít <i class="bi bi-rocket-takeoff"></i></button>
     </div>
 
-    <div v-else class="bg-dark text-secondary shadow-lg w-auto">
+    <div v-else class="bg-dark shadow-lg w-auto">
 
         <div class="d-flex bg-secondary" style="overflow: auto">
             <button v-for="number in exerciseCount" :key="number" @click="switchToExercise(exerciseNumberIndex, number - 1)"
-                class="text-white text-center m-1 btn w-100"
+                class="text-white-50 text-center m-1 btn w-100"
                 :class="exerciseNumberIndex+1 == number ? 'btn-primary':'btn-dark'">{{ number }}</button>
         </div>
 
-        <Exercise v-if="exercises[exerciseNumberIndex]" :answered="false" :exercises="exercises[exerciseNumberIndex][0]" class="p-3">
+        <Exercise v-if="exercises[exerciseNumberIndex]" :answered="false" :exercises="exercises[exerciseNumberIndex][0]" class="p-3 text-white-50">
         </Exercise>
         <span v-else>chyba cviceni</span>
 
