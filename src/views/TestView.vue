@@ -58,20 +58,20 @@
     </div>
     <span v-if="exercises[exerciseNumber]" class="text-white">{{ exercises[exerciseNumber][0] }}</span>
 
-    <!-- Modal -->
+    <!-- Check Test Modal -->
     <div v-if="isTest" class="modal fade text-white" id="checkTestModal" tabindex="-1" aria-labelledby="checkTestModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Zkontrolovat test</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    Opravdu chceš ukončit toto testové zadání? Ukončením ztratíš možnost opravy svých odpovědí a bude ti zobrazeno hodnocení!
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Pokračovat v testu</button>
+                    <button type="button" class="btn btn-success">Vyhodnotit</button>
                 </div>
             </div>
         </div>
