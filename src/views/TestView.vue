@@ -99,7 +99,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" data-bs-dismiss="modal" :disabled="!isTest">Začít</button>
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal" :disabled="!isTest" @click="testStartDateTime = new Date()">Začít</button>
                 </div>
             </div>
         </div>
@@ -121,7 +121,7 @@ const exercises: any = ref([]);
 const testAnswers: any = ref([""]);
 const userStore = useUserStore();
 const loadedExerciseCount = ref(0);
-
+const testStartDateTime = ref(new Date());
 
 const selectedFilter: { examType: string, examYear: string[], examVariant: string[], examSubject: string } = reactive({
     examType: "",
