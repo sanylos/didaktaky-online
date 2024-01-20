@@ -39,19 +39,22 @@
                 <label class="btn btn-outline-light" :for="option.id">{{ option.title }}</label>
             </div>
         </div>
-
         <button class="btn btn-success" @click="handleSubmit" data-bs-toggle="modal"
             data-bs-target="#testLoadingModal">Začít <i class="bi bi-rocket-takeoff"></i></button>
-
     </div>
+
     <div v-else class="bg-dark text-secondary shadow-lg w-auto">
-        <div class="d-flex bg-secondary">
+
+        <div class="d-flex bg-secondary" style="overflow: auto">
             <button v-for="number in exerciseCount" :key="number" @click="switchToExercise(exerciseNumberIndex, number - 1)"
-                class="text-white text-center">{{ number }}</button>
+                class="text-white text-center m-1 btn w-100"
+                :class="exerciseNumberIndex+1 == number ? 'btn-primary':'btn-dark'">{{ number }}</button>
         </div>
+
         <Exercise v-if="exercises[exerciseNumberIndex]" :answered="false" :exercises="exercises[exerciseNumberIndex][0]">
         </Exercise>
         <span v-else>chyba cviceni</span>
+
     </div>
     <div v-if="isTest" class="mt-4 d-flex justify-content-between">
         <button class="btn btn-primary" @click="switchToExercise(exerciseNumberIndex, exerciseNumberIndex - 1)"
@@ -83,8 +86,8 @@
         </div>
     </div>
     <!-- Test Loading Modal -->
-    <div class="modal fade text-white" id="testLoadingModal" data-bs-backdrop="static"
-        data-bs-keyboard="false" tabindex="-1" aria-labelledby="testLoadingModalLabel" aria-hidden="true">
+    <div class="modal fade text-white" id="testLoadingModal" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="testLoadingModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -92,14 +95,16 @@
                 </div>
                 <div class="modal-body">
 
-                    <div class="progress" role="progressbar" aria-label="Success example" :aria-valuenow="loadedExerciseCount"
-                        aria-valuemin="0" :aria-valuemax="exerciseCount">
-                        <div class="progress-bar bg-success" :style="{width: ((loadedExerciseCount/exerciseCount)*100) + '%'}"></div>
+                    <div class="progress" role="progressbar" aria-label="Success example"
+                        :aria-valuenow="loadedExerciseCount" aria-valuemin="0" :aria-valuemax="exerciseCount">
+                        <div class="progress-bar bg-success"
+                            :style="{ width: ((loadedExerciseCount / exerciseCount) * 100) + '%' }"></div>
                     </div>
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" data-bs-dismiss="modal" :disabled="!isTest" @click="testStartDateTime = new Date()">Začít</button>
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal" :disabled="!isTest"
+                        @click="testStartDateTime = new Date()">Začít</button>
                 </div>
             </div>
         </div>
