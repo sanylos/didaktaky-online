@@ -43,26 +43,33 @@
             data-bs-target="#testLoadingModal">Začít <i class="bi bi-rocket-takeoff"></i></button>
     </div>
 
-    <div v-else class="bg-dark shadow-lg w-auto">
+    <div v-else class="m-3">
+        <div class="bg-dark shadow-lg w-auto rounded mb-1">
+            <div class="d-flex justify-content-between" style="overflow: auto">
+                <button v-for="number in exerciseCount" :key="number"
+                    @click="switchToExercise(exerciseNumberIndex, number - 1)" class="text-white-50 text-center m-1 btn"
+                    :class="exerciseNumberIndex + 1 == number ? 'btn-primary' : 'btn-dark'">{{ number }}</button>
+            </div>
+        </div>
+        <div class="bg-dark shadow-lg w-auto rounded">
 
-        <div class="d-flex bg-secondary justify-content-between" style="overflow: auto">
-            <button v-for="number in exerciseCount+2" :key="number" @click="switchToExercise(exerciseNumberIndex, number - 1)"
-                class="text-white-50 text-center m-1 btn"
-                :class="exerciseNumberIndex+1 == number ? 'btn-primary':'btn-dark'">{{ number }}</button>
+            <Exercise v-if="exercises[exerciseNumberIndex]" :answered="false" :exercises="exercises[exerciseNumberIndex][0]"
+                class="p-3 text-white-50">
+            </Exercise>
+            <span v-else>chyba cviceni</span>
+
+            <div class="p-2 d-flex justify-content-evenly">
+                <button class="btn btn-primary" @click="switchToExercise(exerciseNumberIndex, exerciseNumberIndex - 1)"
+                    :disabled="exerciseNumberIndex < 1">⮜ Předchozí</button>
+                <button class="btn btn-success" data-bs-toggle="modal"
+                    data-bs-target="#checkTestModal">✍🏼Zkontrolovat</button>
+                <button class="btn btn-primary" @click="switchToExercise(exerciseNumberIndex, exerciseNumberIndex + 1)"
+                    :disabled="exerciseNumberIndex >= exerciseCount - 1">Další ⮞</button>
+            </div>
         </div>
 
-        <Exercise v-if="exercises[exerciseNumberIndex]" :answered="false" :exercises="exercises[exerciseNumberIndex][0]" class="p-3 text-white-50">
-        </Exercise>
-        <span v-else>chyba cviceni</span>
+    </div>
 
-    </div>
-    <div v-if="isTest" class="mt-4 d-flex justify-content-between">
-        <button class="btn btn-primary" @click="switchToExercise(exerciseNumberIndex, exerciseNumberIndex - 1)"
-            :disabled="exerciseNumberIndex < 1">⮜ Předchozí</button>
-        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#checkTestModal">✍🏼Zkontrolovat</button>
-        <button class="btn btn-primary" @click="switchToExercise(exerciseNumberIndex, exerciseNumberIndex + 1)"
-            :disabled="exerciseNumberIndex >= exerciseCount - 1">Další ⮞</button>
-    </div>
     <span v-if="exercises[exerciseNumberIndex]" class="text-white">{{ exercises[exerciseNumberIndex][0] }}</span>
 
     <!-- Check Test Modal -->
