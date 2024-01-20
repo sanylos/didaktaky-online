@@ -45,18 +45,18 @@
     </div>
     <div v-else class="bg-dark text-secondary shadow-lg w-auto">
         <div class="d-flex bg-secondary">
-            <button v-for="number in exerciseCount" :key="number" @click="switchToExercise(exerciseNumber, number - 1)"
+            <button v-for="number in exerciseCount" :key="number" @click="switchToExercise(exerciseNumberIndex, number - 1)"
                 class="text-white text-center">{{ number }}</button>
         </div>
-        <Exercise v-if="exercises[exerciseNumber]" :answered="false" :exercises="exercises[exerciseNumber][0]"></Exercise>
+        <Exercise v-if="exercises[exerciseNumberIndex]" :answered="false" :exercises="exercises[exerciseNumberIndex][0]"></Exercise>
         <span v-else>chyba cviceni</span>
     </div>
     <div v-if="isTest" class="mt-4 d-flex justify-content-between">
-        <button class="btn btn-primary" @click="switchToExercise(exerciseNumber, exerciseNumber - 1)">⮜ Předchozí</button>
+        <button class="btn btn-primary" @click="switchToExercise(exerciseNumberIndex, exerciseNumberIndex - 1)" :disabled="exerciseNumberIndex < 1">⮜ Předchozí</button>
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#checkTestModal">✍🏼Zkontrolovat</button>
-        <button class="btn btn-primary" @click="switchToExercise(exerciseNumber, exerciseNumber + 1)">Další ⮞</button>
+        <button class="btn btn-primary" @click="switchToExercise(exerciseNumberIndex, exerciseNumberIndex + 1)" :disabled="exerciseNumberIndex >= exerciseCount-1">Další ⮞</button>
     </div>
-    <span v-if="exercises[exerciseNumber]" class="text-white">{{ exercises[exerciseNumber][0] }}</span>
+    <span v-if="exercises[exerciseNumberIndex]" class="text-white">{{ exercises[exerciseNumberIndex][0] }}</span>
 
     <!-- Check Test Modal -->
     <div v-if="isTest" class="modal fade text-white" id="checkTestModal" tabindex="-1" aria-labelledby="checkTestModalLabel" aria-hidden="true">
@@ -88,7 +88,7 @@ import { useUserStore } from '@/stores/user';
 const errorMessage = ref('');
 const isTest = ref(false)
 const exerciseCount: any = ref(0);
-const exerciseNumber = ref(0);
+const exerciseNumberIndex = ref(0);
 const exercises: any = ref([]);
 const testAnswers: any = ref([""]);
 const userStore = useUserStore();
@@ -107,7 +107,7 @@ const switchToExercise = (from: number, to: number) => {
     console.log(testAnswers.value);
     userStore.exerciseAnswer = testAnswers.value[to];
 
-    exerciseNumber.value = to;
+    exerciseNumberIndex.value = to;
 
     //userStore.exerciseAnswer = [];
     console.log(userStore.exerciseAnswer);
