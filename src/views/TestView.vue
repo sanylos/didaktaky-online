@@ -51,7 +51,31 @@
         <Exercise v-if="exercises[exerciseNumber]" :answered="false" :exercises="exercises[exerciseNumber][0]"></Exercise>
         <span v-else>chyba cviceni</span>
     </div>
+    <div v-if="isTest" class="mt-4 d-flex justify-content-between">
+        <button class="btn btn-primary" @click="switchToExercise(exerciseNumber, exerciseNumber - 1)">⮜ Předchozí</button>
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#checkTestModal">✍🏼Zkontrolovat</button>
+        <button class="btn btn-primary" @click="switchToExercise(exerciseNumber, exerciseNumber + 1)">Další ⮞</button>
+    </div>
     <span v-if="exercises[exerciseNumber]" class="text-white">{{ exercises[exerciseNumber][0] }}</span>
+
+    <!-- Modal -->
+    <div v-if="isTest" class="modal fade text-white" id="checkTestModal" tabindex="-1" aria-labelledby="checkTestModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script lang="ts" setup>
