@@ -45,9 +45,9 @@
 
     <div v-else class="bg-dark shadow-lg w-auto">
 
-        <div class="d-flex bg-secondary" style="overflow: auto">
-            <button v-for="number in exerciseCount" :key="number" @click="switchToExercise(exerciseNumberIndex, number - 1)"
-                class="text-white-50 text-center m-1 btn w-100"
+        <div class="d-flex bg-secondary justify-content-between" style="overflow: auto">
+            <button v-for="number in exerciseCount+2" :key="number" @click="switchToExercise(exerciseNumberIndex, number - 1)"
+                class="text-white-50 text-center m-1 btn"
                 :class="exerciseNumberIndex+1 == number ? 'btn-primary':'btn-dark'">{{ number }}</button>
         </div>
 
