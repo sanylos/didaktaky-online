@@ -51,7 +51,7 @@
                 :class="exerciseNumberIndex+1 == number ? 'btn-primary':'btn-dark'">{{ number }}</button>
         </div>
 
-        <Exercise v-if="exercises[exerciseNumberIndex]" :answered="false" :exercises="exercises[exerciseNumberIndex][0]">
+        <Exercise v-if="exercises[exerciseNumberIndex]" :answered="false" :exercises="exercises[exerciseNumberIndex][0]" class="p-3">
         </Exercise>
         <span v-else>chyba cviceni</span>
 
