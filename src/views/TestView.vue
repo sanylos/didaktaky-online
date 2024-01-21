@@ -77,16 +77,25 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Zkontrolovat test</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">{{ submittedExercises.length ? "Hodnocení":"Zkontrolovat test" }}</h1>
                 </div>
-                <div class="modal-body">
-                    Opravdu chceš ukončit toto testové zadání? Ukončením ztratíš možnost opravy svých odpovědí a bude ti
-                    zobrazeno hodnocení!
+                <div v-if="!submittedExercises.length">
+                    <div class="modal-body">
+                        Opravdu chceš ukončit toto testové zadání? Ukončením ztratíš možnost opravy svých odpovědí a bude ti
+                        zobrazeno hodnocení!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Pokračovat v testu</button>
+                        <button type="button" class="btn btn-success" @click="handleTestSubmit">Vyhodnotit</button>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Pokračovat v testu</button>
-                    <button type="button" class="btn btn-success" @click="handleTestSubmit">Vyhodnotit</button>
+                <div v-else>
+                    <div class="modal-body">
+                        {{ submittedExercises }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" @click="router.push('/test')">Odejít</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -118,6 +127,7 @@
 </template>
 
 <script lang="ts" setup>
+import router from '@/router';
 import Alert from '@/components/Alert.vue';
 import { reactive, ref } from 'vue';
 import { supabase } from '@/supabase';
@@ -170,9 +180,9 @@ const handleTestSubmit = async () => {
                 'isCorrect': isAnswerCorrect(i),
                 'answered_at': new Date(),
             }).select()
-            if(data) {
-                submittedExercises.value.push(data);
-            }
+        if (data) {
+            submittedExercises.value.push(data);
+        }
         if (error) console.log(error);
         else console.log('success index:' + i);
     }
