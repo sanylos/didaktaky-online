@@ -87,7 +87,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Pokračovat v testu</button>
-                    <button type="button" class="btn btn-success">Vyhodnotit</button>
+                    <button type="button" class="btn btn-success" @click="handleTestSubmit">Vyhodnotit</button>
                 </div>
             </div>
         </div>
@@ -156,6 +156,43 @@ const switchToExercise = (from: number, to: number) => {
     console.log(testAnswers.value);
 
 }
+
+const handleTestSubmit = async () => {
+    for (let i = 0; i < exerciseCount.value; i++) {
+        const { data, error } = await supabase
+            .from('userAnswers')
+            .insert({
+                'exercise_id': exercises.value[i][0].exercise_id,
+                'answer': testAnswers[i],
+                'examType': exercises.value[i][0].test_type,
+                'examSubject': exercises.value[i][0].test_subject,
+                'exerciseType': exercises.value[i][0].type,
+                'exerciseGroup': exercises.value[i][0].group,
+                'isCorrect': isAnswerCorrect(i),
+                'answered_at': new Date(),
+            })
+        if (error) console.log(error);
+        else console.log('success index:' + i);
+    }
+}
+
+const isAnswerCorrect = (index: number) => {
+    const userAnswer = testAnswers.value[index];
+    const correctAnswer = exercises.value[index][0].correct_answer;
+    console.log('User Answer:', userAnswer);
+    console.log('Correct Answer:', correctAnswer);
+
+    if (exercises.value[index].type === "Textová odpověď") {
+        if (Array.isArray(userAnswer) && Array.isArray(correctAnswer)) {
+            return correctAnswer.every((answer) => userAnswer.includes(answer));
+        }
+    } else {
+        return userAnswer.toString() === correctAnswer.toString();
+    }
+
+    return false;
+};
+
 
 const handleSubmit = () => {
     if (selectedFilter.examType == "") {
