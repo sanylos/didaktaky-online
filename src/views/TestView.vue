@@ -115,7 +115,6 @@
             </div>
         </div>
     </div>
-    <button @click="testMethod">test btn</button>
 </template>
 
 <script lang="ts" setup>
@@ -135,19 +134,6 @@ const userStore = useUserStore();
 const loadedExerciseCount = ref(0);
 const testStartDateTime = ref(new Date());
 
-const testMethod = async () => {
-    console.log("clicked");
-    const { data, error } = await supabase.rpc('getrandomexercisebyexercisenumber', {
-        in_years: ["2022"],
-        in_subjects: ["CJL"],
-        in_variants: ["1"],
-        in_types: ["PZ"],
-        in_number: 9,
-    })
-    console.log(data);
-    if (error) console.log(error);
-}
-
 const selectedFilter: { examType: string[], examYear: string[], examVariant: string[], examSubject: string[] } = reactive({
     examType: [],
     examYear: [],
@@ -164,7 +150,6 @@ const switchToExercise = (from: number, to: number) => {
 
     exerciseNumberIndex.value = to;
 
-    //userStore.exerciseAnswer = [];
     console.log(userStore.exerciseAnswer);
     console.log(testAnswers.value);
 
@@ -219,7 +204,6 @@ const initializeTestAnswerArray = () => {
 }
 
 const generateTest = async () => {
-    let testId = 0;
     exerciseCount.value = getExerciseCountBySubject(selectedFilter.examSubject[0]);
     const { data, error } = await supabase
         .from('tests')
@@ -228,24 +212,9 @@ const generateTest = async () => {
         .eq('type', selectedFilter.examType)
         .eq('subject', selectedFilter.examSubject)
         .eq('variant', selectedFilter.examVariant)
-    if (data) {
-        if (!data[0]) {
-            alert("Žádný test");
-        } else {
-            console.log(data);
-            testId = data[0].id;
-        }
-    }
-    if (error) {
-        console.log(error);
-    }
+    if (error) console.log(error);
 
     for (let i = 1; i <= exerciseCount.value; i++) {
-        /*const { data, error } = await supabase
-            .from('exercises')
-            .select('*')
-            .eq('test_id', testId)
-            .eq('number', i)*/
         const { data, error } = await supabase.rpc('getrandomexercisebyexercisenumber', {
             in_years: selectedFilter.examYear,
             in_subjects: selectedFilter.examSubject,
@@ -253,7 +222,6 @@ const generateTest = async () => {
             in_types: selectedFilter.examType,
             in_number: i,
         })
-        console.log(data);
         exercises.value.push(data);
         loadedExerciseCount.value++;
     }
@@ -284,15 +252,11 @@ const examOptions = reactive({
 
 const getExerciseCountBySubject = (subject: string) => {
     let filteredSubject = examOptions.examSubjects.filter((item) => item.id === subject);
-    if (selectedFilter.examType == "PZ") return filteredSubject[0].exerciseCountPZ;
-    if (selectedFilter.examType == "MZ") return filteredSubject[0].exerciseCountMZ;
+    if (selectedFilter.examType[0] == "PZ") return filteredSubject[0].exerciseCountPZ;
+    if (selectedFilter.examType[0] == "MZ") return filteredSubject[0].exerciseCountMZ;
     return 0;
 }
 
 </script>
 
-
-function initializeTestAnswerArray() {
-  throw new Error('Function not implemented.');
-}
 <style></style>
