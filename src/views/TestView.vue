@@ -133,6 +133,7 @@ const testAnswers: any = ref([""]);
 const userStore = useUserStore();
 const loadedExerciseCount = ref(0);
 const testStartDateTime = ref(new Date());
+const submittedExercises: any = ref([]);
 
 const selectedFilter: { examType: string[], examYear: string[], examVariant: string[], examSubject: string[] } = reactive({
     examType: [],
@@ -160,23 +161,27 @@ const handleTestSubmit = async () => {
         const { data, error } = await supabase
             .from('userAnswers')
             .insert({
-                'exercise_id': exercises.value[i][0].exercise_id,
-                'answer': testAnswers[i],
-                'examType': exercises.value[i][0].test_type,
-                'examSubject': exercises.value[i][0].test_subject,
-                'exerciseType': exercises.value[i][0].type,
-                'exerciseGroup': exercises.value[i][0].group,
+                'exercise_id': exercises.value[i].exercise_id,
+                'answer': testAnswers.value[i],
+                'examType': exercises.value[i].test_type,
+                'examSubject': exercises.value[i].test_subject,
+                'exerciseType': exercises.value[i].type,
+                'exerciseGroup': exercises.value[i].group,
                 'isCorrect': isAnswerCorrect(i),
                 'answered_at': new Date(),
-            })
+            }).select()
+            if(data) {
+                submittedExercises.value.push(data);
+            }
         if (error) console.log(error);
         else console.log('success index:' + i);
     }
+    console.log(submittedExercises.value);
 }
 
 const isAnswerCorrect = (index: number) => {
     const userAnswer = testAnswers.value[index];
-    const correctAnswer = exercises.value[index][0].correct_answer;
+    const correctAnswer = exercises.value[index].correct_answer;
     console.log('User Answer:', userAnswer);
     console.log('Correct Answer:', correctAnswer);
 
