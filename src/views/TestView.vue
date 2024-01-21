@@ -53,7 +53,7 @@
         </div>
         <div class="bg-dark shadow-lg w-auto rounded">
 
-            <Exercise v-if="exercises[exerciseNumberIndex]" :answered="false" :exercises="exercises[exerciseNumberIndex][0]"
+            <Exercise v-if="exercises[exerciseNumberIndex]" :answered="false" :exercises="exercises[exerciseNumberIndex]"
                 class="p-3 text-white-50">
             </Exercise>
             <span v-else>chyba cviceni</span>
@@ -135,7 +135,7 @@ const userStore = useUserStore();
 const loadedExerciseCount = ref(0);
 const testStartDateTime = ref(new Date());
 
-/*const testMethod = async () => {
+const testMethod = async () => {
     console.log("clicked");
     const { data, error } = await supabase.rpc('getrandomexercisebyexercisenumber', {
         in_years: ["2022"],
@@ -146,7 +146,7 @@ const testStartDateTime = ref(new Date());
     })
     console.log(data);
     if (error) console.log(error);
-}*/
+}
 
 const selectedFilter: { examType: string[], examYear: string[], examVariant: string[], examSubject: string[] } = reactive({
     examType: [],
@@ -213,14 +213,14 @@ const handleSubmit = () => {
 
 const initializeTestAnswerArray = () => {
     for (let i = 1; i <= exerciseCount.value; i++) {
-        testAnswers.value[i - 1] = Array(exercises.value[i - 1][0].correct_answer.length).fill("");
+        testAnswers.value[i - 1] = Array(exercises.value[i - 1].correct_answer.length).fill("");
     }
     console.log(testAnswers.value);
 }
 
 const generateTest = async () => {
     let testId = 0;
-    exerciseCount.value = getExerciseCountBySubject(selectedFilter.examSubject);
+    exerciseCount.value = getExerciseCountBySubject(selectedFilter.examSubject[0]);
     const { data, error } = await supabase
         .from('tests')
         .select('id')
@@ -241,17 +241,25 @@ const generateTest = async () => {
     }
 
     for (let i = 1; i <= exerciseCount.value; i++) {
-        const { data, error } = await supabase
+        /*const { data, error } = await supabase
             .from('exercises')
             .select('*')
             .eq('test_id', testId)
-            .eq('number', i)
+            .eq('number', i)*/
+        const { data, error } = await supabase.rpc('getrandomexercisebyexercisenumber', {
+            in_years: selectedFilter.examYear,
+            in_subjects: selectedFilter.examSubject,
+            in_variants: selectedFilter.examVariant,
+            in_types: selectedFilter.examType,
+            in_number: i,
+        })
+        console.log(data);
         exercises.value.push(data);
         loadedExerciseCount.value++;
     }
     isTest.value = true;
-    initializeTestAnswerArray();
     console.log(exercises.value);
+    initializeTestAnswerArray();
 }
 
 const examOptions = reactive({
