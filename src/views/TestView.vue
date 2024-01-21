@@ -8,7 +8,7 @@
         <div class="d-flex mb-3">
             <div class="mx-1" v-for="option in examOptions.examTypes" :key="option.id">
                 <input type="radio" class="btn-check" name="examOption" :id="option.id" autocomplete="off"
-                    :value="option.id" v-model="selectedFilter.examType">
+                    :value="option.id" v-model="selectedFilter.examType[0]">
                 <label class="btn btn-outline-light" :for="option.id">{{ option.title }}</label>
             </div>
         </div>
@@ -17,7 +17,7 @@
         <div class="d-flex mb-3">
             <div class="mx-1" v-for="option in examOptions.examSubjects" :key="option.id">
                 <input type="radio" class="btn-check" name="examSubject" :id="option.id" autocomplete="off"
-                    :value="option.id" v-model="selectedFilter.examSubject">
+                    :value="option.id" v-model="selectedFilter.examSubject[0]">
                 <label class="btn btn-outline-light" :for="option.id">{{ option.title }}</label>
             </div>
         </div>
@@ -26,7 +26,7 @@
         <div class="d-flex mb-3">
             <div class="mx-1" v-for="option in examOptions.examYears" :key="option">
                 <input type="radio" class="btn-check" name="examYear" :id="option" autocomplete="off" :value="option"
-                    v-model="selectedFilter.examYear">
+                    v-model="selectedFilter.examYear[0]">
                 <label class="btn btn-outline-light" :for="option">{{ option }}</label>
             </div>
         </div>
@@ -35,7 +35,7 @@
         <div class="d-flex mb-3">
             <div class="mx-1" v-for="option in examOptions.examVariants" :key="option.id">
                 <input type="radio" class="btn-check" name="examVariant" :id="option.id" autocomplete="off"
-                    :value="option.id" v-model="selectedFilter.examVariant">
+                    :value="option.id" v-model="selectedFilter.examVariant[0]">
                 <label class="btn btn-outline-light" :for="option.id">{{ option.title }}</label>
             </div>
         </div>
@@ -67,7 +67,6 @@
                     :disabled="exerciseNumberIndex >= exerciseCount - 1">Další ⮞</button>
             </div>
         </div>
-
     </div>
 
     <span v-if="exercises[exerciseNumberIndex]" class="text-white">{{ exercises[exerciseNumberIndex][0] }}</span>
@@ -116,6 +115,7 @@
             </div>
         </div>
     </div>
+    <button @click="testMethod">test btn</button>
 </template>
 
 <script lang="ts" setup>
@@ -135,11 +135,24 @@ const userStore = useUserStore();
 const loadedExerciseCount = ref(0);
 const testStartDateTime = ref(new Date());
 
-const selectedFilter: { examType: string, examYear: string[], examVariant: string[], examSubject: string } = reactive({
-    examType: "",
+/*const testMethod = async () => {
+    console.log("clicked");
+    const { data, error } = await supabase.rpc('getrandomexercisebyexercisenumber', {
+        in_years: ["2022"],
+        in_subjects: ["CJL"],
+        in_variants: ["1"],
+        in_types: ["PZ"],
+        in_number: 9,
+    })
+    console.log(data);
+    if (error) console.log(error);
+}*/
+
+const selectedFilter: { examType: string[], examYear: string[], examVariant: string[], examSubject: string[] } = reactive({
+    examType: [],
     examYear: [],
     examVariant: [],
-    examSubject: "",
+    examSubject: []
 });
 
 const switchToExercise = (from: number, to: number) => {
@@ -195,13 +208,7 @@ const isAnswerCorrect = (index: number) => {
 
 
 const handleSubmit = () => {
-    if (selectedFilter.examType == "") {
-        errorMessage.value = "Vyber si typ zkoušky"
-    } else if (selectedFilter.examSubject == "") {
-        errorMessage.value = "Vyber si předmět"
-    } else {
-        generateTest();
-    }
+    generateTest();
 }
 
 const initializeTestAnswerArray = () => {
