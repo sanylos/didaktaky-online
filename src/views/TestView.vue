@@ -153,6 +153,8 @@
             </div>
         </div>
     </div>
+    <button v-for="index in 30" :key="index" @click="console.log(getEarnedExercisePointsByIndex(index - 1))">test btn
+        {{ index }}</button>
 </template>
 
 <script lang="ts" setup>
@@ -222,6 +224,68 @@ const handleTestSubmit = async () => {
         else console.log('success index:' + i);
     }
     console.log(submittedExercises.value);
+}
+
+const getCountOfCorrectAnswersByIndex = (index: number) => {
+    const userAnswer = testAnswers.value[index];
+    const correctAnswer = exercises.value[index].correct_answer;
+    let correctCount = 0;
+    const exerciseType = exercises.value[index].type;
+    const answerArrayLength = correctAnswer.length;
+
+    for (let i = 0; i < answerArrayLength; i++) {
+        if (exerciseType === "Textová odpověď") {
+            if (userAnswer.includes(correctAnswer[i])) {
+                correctCount++;
+                console.log(correctAnswer[i]);
+            }
+        } else if (exerciseType === "Výběr mezi ANO/NE") {
+            if (userAnswer[i] === correctAnswer[i]) {
+                correctCount++;
+            }
+        }
+        else if (userAnswer[i].toString() === correctAnswer[i].toString()) {
+            correctCount++;
+        }
+    }
+    console.log('correctCount='+correctCount);
+    return correctCount;
+}
+
+const getEarnedExercisePointsByIndex = (index: number) => {
+    const userAnswer = testAnswers.value[index];
+    const correctAnswer = exercises.value[index].correct_answer;
+    const maxPoints = exercises.value[index].points;
+    const exerciseType = exercises.value[index].type;
+
+    console.log('index ' + index)
+    console.log(exerciseType);
+    console.log('userAnswer '); console.log(userAnswer);
+    console.log('correct answer ' + correctAnswer);
+    console.log('max ' + maxPoints);
+
+    if (exerciseType === "Textová odpověď") {
+        //0 z 4 = 0 - 4 = 4 + -4 = 0
+        //1 z 4 = 1 - 4 = 4 + -3 = 1
+        //2 z 4 = 2 - 4 = 4 + -2 = 2
+        //3 z 4 = 3 - 4 = 4 + -1 = 3
+        //4 z 4 = 4 - 4 = 4 + -0 = 4
+        let countOfIncorrectAnswers = getCountOfCorrectAnswersByIndex(index) - maxPoints;
+        console.log(maxPoints + countOfIncorrectAnswers);
+        console.log(countOfIncorrectAnswers);
+        return (maxPoints + countOfIncorrectAnswers)
+    } else if (exerciseType === "Výběr mezi ANO/NE") {
+        switch (getCountOfCorrectAnswersByIndex(index)) {
+            case 4: return maxPoints;
+            case 3: return 1;
+            default: return 0;
+        }
+    } else if (exerciseType === "Seřazení") {
+        if (getCountOfCorrectAnswersByIndex(index) == maxPoints) return maxPoints;
+    }
+    else {
+        return getCountOfCorrectAnswersByIndex(index); // returns points as number of correct answers
+    }
 }
 
 const isAnswerCorrect = (index: number) => {
