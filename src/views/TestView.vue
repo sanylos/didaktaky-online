@@ -281,7 +281,8 @@ const getEarnedExercisePointsByIndex = (index: number) => {
             default: return 0;
         }
     } else if (exerciseType === "Seřazení") {
-        if (getCountOfCorrectAnswersByIndex(index) == maxPoints) return maxPoints;
+        if (getCountOfCorrectAnswersByIndex(index)/2 == maxPoints) return maxPoints;
+        else return 0;
     }
     else {
         return getCountOfCorrectAnswersByIndex(index); // returns points as number of correct answers
