@@ -74,12 +74,14 @@
     <!-- Check Test Modal -->
     <div v-if="isTest" class="modal fade text-white" id="checkTestModal" tabindex="-1" aria-labelledby="checkTestModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">{{ submittedExercises.length ? "Hodnocení":"Zkontrolovat test" }}</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">{{ submittedExercises.length ?
+                        "Hodnocení" : "Zkontrolovat test" }}</h1>
                 </div>
-                <div v-if="!submittedExercises.length">
+
+                <div v-if="!(submittedExercises.length == exerciseCount)">
                     <div class="modal-body">
                         Opravdu chceš ukončit toto testové zadání? Ukončením ztratíš možnost opravy svých odpovědí a bude ti
                         zobrazeno hodnocení!
@@ -91,10 +93,37 @@
                 </div>
                 <div v-else>
                     <div class="modal-body">
-                        {{ submittedExercises }}
+                        <div class="container" style="overflow: auto">
+                            <div class=table-responsive>
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Zadání</th>
+                                            <th scope="col">Tvoje odpověď</th>
+                                            <th scope="col">Správná odpověď</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="exercise, index in submittedExercises" :key="index">
+                                            <td>{{ index + 1 }}</td>
+                                            <td>{{ exercises[index].title }}</td>
+                                            <td>{{ exercise.exerciseType === "Výběr z možností" ?
+                                                getAnswerLetterById(exercise.answer) : exercise.answer.toString() }}
+                                            </td>
+                                            <td>{{ exercise.exerciseType === "Výběr z možností" ?
+                                                getAnswerLetterById(exercises[index].correct_answer) :
+                                                exercises[index].correct_answer.toString() }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" @click="router.push('/test')">Odejít</button>
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal"
+                            @click="router.push('/test')">Odejít</button>
                     </div>
                 </div>
             </div>
@@ -152,6 +181,12 @@ const selectedFilter: { examType: string[], examYear: string[], examVariant: str
     examSubject: []
 });
 
+const getAnswerLetterById = (number: string) => {
+    let optionLetters = ['A', 'B', 'C', 'D'];
+
+    return optionLetters[parseInt(number)];
+}
+
 const switchToExercise = (from: number, to: number) => {
     console.log("from:" + from + ";to:" + to);
     console.log(userStore.exerciseAnswer);
@@ -179,7 +214,7 @@ const handleTestSubmit = async () => {
                 'exerciseGroup': exercises.value[i].group,
                 'isCorrect': isAnswerCorrect(i),
                 'answered_at': new Date(),
-            }).select()
+            }).select().single();
         if (data) {
             submittedExercises.value.push(data);
         }
@@ -236,7 +271,7 @@ const generateTest = async () => {
             in_variants: selectedFilter.examVariant,
             in_types: selectedFilter.examType,
             in_number: i,
-        })
+        }).single();
         exercises.value.push(data);
         loadedExerciseCount.value++;
     }
