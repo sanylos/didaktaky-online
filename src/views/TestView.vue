@@ -181,8 +181,8 @@ const selectedFilter: { examType: string[], examYear: string[], examVariant: str
 });
 
 const getAnswerCountByCorrectness = computed(() => {
-    const correctCount = submittedExercises.value.filter(exercise => exercise.isCorrect).length;
-    const incorrectCount = submittedExercises.value.filter(exercise => !exercise.isCorrect).length;
+    const correctCount = submittedExercises.value.filter((exercise: { isCorrect: boolean }) => exercise.isCorrect).length;
+    const incorrectCount = submittedExercises.value.filter((exercise: { isCorrect: boolean }) => !exercise.isCorrect).length;
 
     return { correct: correctCount, incorrect: incorrectCount }
 })
