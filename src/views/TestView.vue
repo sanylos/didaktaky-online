@@ -81,7 +81,7 @@
                         "Hodnocení" : "Zkontrolovat test" }}</h1>
                 </div>
 
-                <div v-if="!(submittedExercises.length == exerciseCount)">
+                <div v-if="!submittedExercises.length">
                     <div class="modal-body">
                         Opravdu chceš ukončit toto testové zadání? Ukončením ztratíš možnost opravy svých odpovědí a bude ti
                         zobrazeno hodnocení!
@@ -93,34 +93,28 @@
                 </div>
                 <div v-else>
                     <div class="modal-body">
-                        <div class="container" style="overflow: auto">
-                            <div class=table-responsive>
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">Zadání</th>
-                                            <th scope="col">Tvoje odpověď</th>
-                                            <th scope="col">Správná odpověď</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="exercise, index in submittedExercises" :key="index">
-                                            <td>{{ index + 1 }}</td>
-                                            <td>{{ exercises[index].title }}</td>
-                                            <td>{{ exercise.exerciseType === "Výběr z možností" ?
-                                                getAnswerLetterById(exercise.answer) : exercise.answer.toString() }}
-                                            </td>
-                                            <td>{{ exercise.exerciseType === "Výběr z možností" ?
-                                                getAnswerLetterById(exercises[index].correct_answer) :
-                                                exercises[index].correct_answer.toString() }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        <div class="container-fluid">
+                            <div class="text-white d-flex justify-content-between">
+                                <span>{{ ((getAnswerCountByCorrectness.correct / exerciseCount) * 100).toFixed(1) }}
+                                    %</span>
+                                <span>{{ ((getAnswerCountByCorrectness.incorrect / exerciseCount) * 100).toFixed(1) }}
+                                    %</span>
+                            </div>
+                            <div class="progress-stacked">
+                                <div class="progress" role="progressbar" aria-label="Segment one" aria-valuenow="15"
+                                    aria-valuemin="0" aria-valuemax="100"
+                                    :style="{ width: (getAnswerCountByCorrectness.correct / exerciseCount) * 100 + '%' }">
+                                    <div class="progress-bar bg-success"></div>
+                                </div>
+                                <div class="progress" role="progressbar" aria-label="Segment two" aria-valuenow="30"
+                                    aria-valuemin="0" aria-valuemax="100"
+                                    :style="{ width: (getAnswerCountByCorrectness.incorrect / exerciseCount) * 100 + '%' }">
+                                    <div class="progress-bar bg-danger"></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-success" data-bs-dismiss="modal"
                             @click="router.push('/test')">Odejít</button>
@@ -160,10 +154,11 @@
 <script lang="ts" setup>
 import router from '@/router';
 import Alert from '@/components/Alert.vue';
-import { reactive, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { supabase } from '@/supabase';
 import Exercise from '@/components/Exercise.vue';
 import { useUserStore } from '@/stores/user';
+import { isCryptoKey } from 'util/types';
 
 const errorMessage = ref('');
 const isTest = ref(false)
@@ -183,11 +178,12 @@ const selectedFilter: { examType: string[], examYear: string[], examVariant: str
     examSubject: []
 });
 
-const getAnswerLetterById = (number: string) => {
-    let optionLetters = ['A', 'B', 'C', 'D'];
+const getAnswerCountByCorrectness = computed(() => {
+    const correctCount = submittedExercises.value.filter(exercise => exercise.isCorrect).length;
+    const incorrectCount = submittedExercises.value.filter(exercise => !exercise.isCorrect).length;
 
-    return optionLetters[parseInt(number)];
-}
+    return { correct: correctCount, incorrect: incorrectCount }
+})
 
 const switchToExercise = (from: number, to: number) => {
     console.log("from:" + from + ";to:" + to);
@@ -248,7 +244,7 @@ const getCountOfCorrectAnswersByIndex = (index: number) => {
             correctCount++;
         }
     }
-    console.log('correctCount='+correctCount);
+    console.log('correctCount=' + correctCount);
     return correctCount;
 }
 
@@ -281,7 +277,7 @@ const getEarnedExercisePointsByIndex = (index: number) => {
             default: return 0;
         }
     } else if (exerciseType === "Seřazení") {
-        if (getCountOfCorrectAnswersByIndex(index)/2 == maxPoints) return maxPoints;
+        if (getCountOfCorrectAnswersByIndex(index) / 2 == maxPoints) return maxPoints;
         else return 0;
     }
     else {
