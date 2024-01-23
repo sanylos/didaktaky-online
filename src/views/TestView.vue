@@ -350,8 +350,8 @@ const examOptions = reactive({
     ],
     examSubjects: [
         { "id": "CJL", "title": "Český jazyk a literatura", "exerciseCountPZ": 30, "exerciseCountMZ": 32 },
-        { "id": "MAT", "title": "Matematika" },
-        { "id": "ANJ", "title": "Anglický jazyk" },
+        //{ "id": "MAT", "title": "Matematika" },
+        //{ "id": "ANJ", "title": "Anglický jazyk" },
     ],
     examYears: ["2023", "2022", "2021", "2020"],
     examVariants: [
