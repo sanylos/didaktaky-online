@@ -20,7 +20,9 @@
             </RouterLink>
           </li>
           <li class="nav-item mx-1">
-            <a class="nav-link disabled" aria-disabled="true"><i class="bi bi-gear"></i> Generování testů</a>
+            <RouterLink to="/test" class="nav-link">
+              <i class="bi bi-gear"></i> Generování testů
+            </RouterLink>
           </li>
         </ul>
 
@@ -28,12 +30,11 @@
           <a class="bg-dark rounded rounded-pill btn btn-secondary btn-outline-secondary text-white px-3 mx-1"
             href="https://www.buymeacoffee.com/sanyl"><i class="bi bi-cup-hot-fill"></i> PODPORA PROJEKTU</a>
 
-          <button v-if="!userStore.isLoggedIn" type="button" class="btn btn-light rounded-pill px-3 mx-1" data-bs-toggle="modal"
-            data-bs-target="#loginModal"><i class="bi bi-person-lock"></i> Přihlásit se</button>
+          <button v-if="!userStore.isLoggedIn" type="button" class="btn btn-light rounded-pill px-3 mx-1"
+            data-bs-toggle="modal" data-bs-target="#loginModal"><i class="bi bi-person-lock"></i> Přihlásit se</button>
 
           <div v-if="userStore.isLoggedIn" class="dropdown mx-1">
-            <button
-              class="text-white bg-dark rounded rounded-pill btn-secondary btn btn-outline-secondary px-3"
+            <button class="text-white bg-dark rounded rounded-pill btn-secondary btn btn-outline-secondary px-3"
               type="button" data-bs-toggle="dropdown" aria-expanded="false">
               <span><i class="bi bi-person-check"></i> {{ userStore.email }}</span>
             </button>
