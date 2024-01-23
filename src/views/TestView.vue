@@ -101,13 +101,15 @@
                                     %</span>
                             </div>
                             <div class="progress-stacked">
-                                <div class="progress" role="progressbar" aria-label="Segment one" aria-valuenow="15"
-                                    aria-valuemin="0" aria-valuemax="100"
+                                <div class="progress" role="progressbar" aria-label="Segment one"
+                                    :aria-valuenow="getAnswerCountByCorrectness.correct" aria-valuemin="0"
+                                    :aria-valuemax="exerciseCount"
                                     :style="{ width: (getAnswerCountByCorrectness.correct / exerciseCount) * 100 + '%' }">
                                     <div class="progress-bar bg-success"></div>
                                 </div>
-                                <div class="progress" role="progressbar" aria-label="Segment two" aria-valuenow="30"
-                                    aria-valuemin="0" aria-valuemax="100"
+                                <div class="progress" role="progressbar" aria-label="Segment two"
+                                    :aria-valuenow="getAnswerCountByCorrectness.incorrect" aria-valuemin="0"
+                                    :aria-valuemax="exerciseCount"
                                     :style="{ width: (getAnswerCountByCorrectness.incorrect / exerciseCount) * 100 + '%' }">
                                     <div class="progress-bar bg-danger"></div>
                                 </div>
@@ -117,7 +119,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-success" data-bs-dismiss="modal"
-                            @click="router.push('/test')">Odejít</button>
+                            @click="router.go(0)">Odejít</button>
                     </div>
                 </div>
             </div>
