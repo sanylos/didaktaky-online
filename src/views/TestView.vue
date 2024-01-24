@@ -171,7 +171,9 @@ const testAnswers: any = ref([""]);
 const userStore = useUserStore();
 const loadedExerciseCount = ref(0);
 const testStartDateTime = ref(new Date());
+const testEndDateTime = ref(new Date());
 const submittedExercises: any = ref([]);
+const userTestId = ref({});
 
 const selectedFilter: { examType: string[], examYear: string[], examVariant: string[], examSubject: string[] } = reactive({
     examType: [],
@@ -201,7 +203,41 @@ const switchToExercise = (from: number, to: number) => {
 
 }
 
+const insertTestToDB = async () => {
+    const { data, error } = await supabase
+        .from('userTests')
+        .insert({
+            'created_at': testStartDateTime.value,
+            'submitted_at': testEndDateTime.value,
+            'points': getEarnedPointsCount(),
+            'maxPoints': getMaxPointsCount(),
+            'type': exercises.value[0].test_type,
+            'subject': exercises.value[0].test_subject
+        }).select().single();
+    if (error) console.log(error);
+    else userTestId.value = data.id;
+}
+
+const getMaxPointsCount = () => {
+    let maxPoints = 0;
+    for (let i = 0; i < exerciseCount.value; i++) {
+        maxPoints = exercises.value[i].points;
+    }
+    return maxPoints;
+}
+
+const getEarnedPointsCount = () => {
+    let points = 0;
+    for (let i = 0; i < exerciseCount.value; i++) {
+        points += getEarnedExercisePointsByIndex(i);
+    }
+    return points;
+}
+
 const handleTestSubmit = async () => {
+    testEndDateTime.value = new Date();
+    await insertTestToDB();
+    console.log(userTestId.value);
     for (let i = 0; i < exerciseCount.value; i++) {
         const { data, error } = await supabase
             .from('userAnswers')
@@ -214,6 +250,7 @@ const handleTestSubmit = async () => {
                 'exerciseGroup': exercises.value[i].group,
                 'isCorrect': isAnswerCorrect(i),
                 'answered_at': new Date(),
+                'userTest_id': userTestId.value,
             }).select().single();
         if (data) {
             submittedExercises.value.push(data);
