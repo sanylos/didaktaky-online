@@ -180,20 +180,19 @@ import { computed, reactive, ref } from 'vue';
 import { supabase } from '@/supabase';
 import Exercise from '@/components/Exercise.vue';
 import { useUserStore } from '@/stores/user';
-import { isCryptoKey } from 'util/types';
 
 const errorMessage = ref('');
-const isTest = ref(false)
-const exerciseCount: any = ref(0);
-const exerciseNumberIndex = ref(0);
-const exercises: any = ref([]);
-const testAnswers: any = ref([""]);
+const isTest = ref(false); //Bool used to determine if test was loaded or not
+const exerciseCount: any = ref(0); //Number of exercises
+const exerciseNumberIndex = ref(0); //Current exercise index
+const exercises: any = ref([]); //All exercises
+const testAnswers: any = ref([""]); //Exercise answers
 const userStore = useUserStore();
-const loadedExerciseCount = ref(0);
-const testStartDateTime = ref(new Date());
-const testEndDateTime = ref(new Date());
-const submittedExercises: any = ref([]);
-const userTestId = ref({});
+const loadedExerciseCount = ref(0); //Exercise count used for loading
+const testStartDateTime = ref(new Date()); //Begin date of test
+const testEndDateTime = ref(new Date()); //End date of test
+const submittedExercises: any = ref([]); //Array of submitted exercises
+const userTestId = ref({}); //Test id
 
 const selectedFilter: { examType: string[], examYear: string[], examVariant: string[], examSubject: string[] } = reactive({
     examType: [],
@@ -202,28 +201,22 @@ const selectedFilter: { examType: string[], examYear: string[], examVariant: str
     examSubject: []
 });
 
-const getAnswerCountByCorrectness = computed(() => {
+const getAnswerCountByCorrectness = computed(() => { //Returns correct and incorrect answer count
     const correctCount = submittedExercises.value.filter((exercise: { isCorrect: boolean }) => exercise.isCorrect).length;
     const incorrectCount = submittedExercises.value.filter((exercise: { isCorrect: boolean }) => !exercise.isCorrect).length;
 
     return { correct: correctCount, incorrect: incorrectCount }
 })
 
-const switchToExercise = (from: number, to: number) => {
-    //console.log("from:" + from + ";to:" + to);
-    //console.log(userStore.exerciseAnswer);
+const switchToExercise = (from: number, to: number) => { //Handles switching between exercises
     testAnswers.value[from] = userStore.exerciseAnswer;
-    //console.log(testAnswers.value);
+ 
     userStore.exerciseAnswer = testAnswers.value[to];
 
     exerciseNumberIndex.value = to;
-
-    //console.log(userStore.exerciseAnswer);
-    //console.log(testAnswers.value);
-
 }
 
-const insertTestToDB = async () => {
+const insertTestToDB = async () => { //Inserts test to the database and also fetches the id of that test
     const { data, error } = await supabase
         .from('userTests')
         .insert({
@@ -238,7 +231,7 @@ const insertTestToDB = async () => {
     else userTestId.value = data.id;
 }
 
-const getMaxPointsCount = () => {
+const getMaxPointsCount = () => { //Returns maximum points available
     let maxPoints = 0;
     for (let i = 0; i < exerciseCount.value; i++) {
         maxPoints += exercises.value[i].points;
@@ -246,7 +239,7 @@ const getMaxPointsCount = () => {
     return maxPoints;
 }
 
-const getEarnedPointsCount = () => {
+const getEarnedPointsCount = () => { //Returns earned points
     let points = 0;
     for (let i = 0; i < exerciseCount.value; i++) {
         points += getEarnedExercisePointsByIndex(i);
@@ -255,9 +248,12 @@ const getEarnedPointsCount = () => {
 }
 
 const handleTestSubmit = async () => {
+    switchToExercise(exerciseNumberIndex.value, exerciseNumberIndex.value); //Saves and corrects the format of the last answer
+
     testEndDateTime.value = new Date();
+
     await insertTestToDB();
-    //console.log(userTestId.value);
+    
     for (let i = 0; i < exerciseCount.value; i++) {
         const { data, error } = await supabase
             .from('userAnswers')
@@ -276,9 +272,7 @@ const handleTestSubmit = async () => {
             submittedExercises.value.push(data);
         }
         if (error) console.log(error);
-        else console.log('success index:' + i);
     }
-    //console.log(submittedExercises.value);
 }
 
 const getCountOfCorrectAnswersByIndex = (index: number) => {
@@ -292,7 +286,6 @@ const getCountOfCorrectAnswersByIndex = (index: number) => {
         if (exerciseType === "Textová odpověď") {
             if (userAnswer.includes(correctAnswer[i])) {
                 correctCount++;
-                //console.log(correctAnswer[i]);
             }
         } else if (exerciseType === "Výběr mezi ANO/NE") {
             if (userAnswer[i] === correctAnswer[i]) {
@@ -303,7 +296,6 @@ const getCountOfCorrectAnswersByIndex = (index: number) => {
             correctCount++;
         }
     }
-    console.log('correctCount=' + correctCount);
     return correctCount;
 }
 
@@ -313,12 +305,6 @@ const getEarnedExercisePointsByIndex = (index: number) => {
     const maxPoints = exercises.value[index].points;
     const exerciseType = exercises.value[index].type;
 
-    /*console.log('index ' + index)
-    console.log(exerciseType);
-    console.log('userAnswer '); console.log(userAnswer);
-    console.log('correct answer ' + correctAnswer);
-    console.log('max ' + maxPoints);*/
-
     if (exerciseType === "Textová odpověď") {
         //0 z 4 = 0 - 4 = 4 + -4 = 0
         //1 z 4 = 1 - 4 = 4 + -3 = 1
@@ -326,8 +312,6 @@ const getEarnedExercisePointsByIndex = (index: number) => {
         //3 z 4 = 3 - 4 = 4 + -1 = 3
         //4 z 4 = 4 - 4 = 4 + -0 = 4
         let countOfIncorrectAnswers = getCountOfCorrectAnswersByIndex(index) - maxPoints;
-        //console.log(maxPoints + countOfIncorrectAnswers);
-        //console.log(countOfIncorrectAnswers);
         return (maxPoints + countOfIncorrectAnswers)
     } else if (exerciseType === "Výběr mezi ANO/NE") {
         switch (getCountOfCorrectAnswersByIndex(index)) {
@@ -347,8 +331,6 @@ const getEarnedExercisePointsByIndex = (index: number) => {
 const isAnswerCorrect = (index: number) => {
     const userAnswer = testAnswers.value[index];
     const correctAnswer = exercises.value[index].correct_answer;
-    //console.log('User Answer:', userAnswer);
-    //console.log('Correct Answer:', correctAnswer);
 
     if (exercises.value[index].type === "Textová odpověď") {
         if (Array.isArray(userAnswer) && Array.isArray(correctAnswer)) {
@@ -366,11 +348,10 @@ const handleSubmit = () => {
     generateTest();
 }
 
-const initializeTestAnswerArray = () => {
+const initializeTestAnswerArray = () => { //Array init to fill the testAnswers array with the correct count of empty strings
     for (let i = 1; i <= exerciseCount.value; i++) {
         testAnswers.value[i - 1] = Array(exercises.value[i - 1].correct_answer.length).fill("");
     }
-    //console.log(testAnswers.value);
 }
 
 const generateTest = async () => {
@@ -384,7 +365,7 @@ const generateTest = async () => {
         .eq('variant', selectedFilter.examVariant)
     if (error) console.log(error);
 
-    for (let i = 1; i <= exerciseCount.value; i++) {
+    for (let i = 1; i <= exerciseCount.value; i++) { //Fetches exercises
         const { data, error } = await supabase.rpc('getrandomexercisebyexercisenumber', {
             in_years: selectedFilter.examYear,
             in_subjects: selectedFilter.examSubject,
@@ -396,7 +377,7 @@ const generateTest = async () => {
         loadedExerciseCount.value++;
     }
     isTest.value = true;
-    //console.log(exercises.value);
+    
     initializeTestAnswerArray();
 }
 
@@ -420,7 +401,7 @@ const examOptions = reactive({
     ],
 })
 
-const getExerciseCountBySubject = (subject: string) => {
+const getExerciseCountBySubject = (subject: string) => { //Returns the count of exercise count base on the JSON values above
     let filteredSubject = examOptions.examSubjects.filter((item) => item.id === subject);
     if (selectedFilter.examType[0] == "PZ") return filteredSubject[0].exerciseCountPZ;
     if (selectedFilter.examType[0] == "MZ") return filteredSubject[0].exerciseCountMZ;
