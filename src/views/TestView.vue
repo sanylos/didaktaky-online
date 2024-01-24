@@ -154,6 +154,7 @@
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Test se připravuje</h1>
                 </div>
                 <div class="modal-body">
+                    <Alert :message="errorMessage" type="danger"></Alert>
 
                     <div class="progress" role="progressbar" aria-label="Success example"
                         :aria-valuenow="loadedExerciseCount" aria-valuemin="0" :aria-valuemax="exerciseCount">
@@ -163,14 +164,14 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" data-bs-dismiss="modal" :disabled="!isTest"
-                        @click="testStartDateTime = new Date()">Začít</button>
+                    <button v-if="!errorMessage" type="button" class="btn btn-success" data-bs-dismiss="modal"
+                        :disabled="!isTest" @click="testStartDateTime = new Date()">Začít</button>
+                    <button v-else type="button" class="btn btn-success" data-bs-dismiss="modal"
+                        @click="router.go(0)">Zkusit znovu</button>
                 </div>
             </div>
         </div>
     </div>
-    <button v-for="index in 30" :key="index" @click="console.log(getEarnedExercisePointsByIndex(index - 1))">test btn
-        {{ index }}</button>
 </template>
 
 <script lang="ts" setup>
@@ -210,7 +211,7 @@ const getAnswerCountByCorrectness = computed(() => { //Returns correct and incor
 
 const switchToExercise = (from: number, to: number) => { //Handles switching between exercises
     testAnswers.value[from] = userStore.exerciseAnswer;
- 
+
     userStore.exerciseAnswer = testAnswers.value[to];
 
     exerciseNumberIndex.value = to;
@@ -253,7 +254,7 @@ const handleTestSubmit = async () => {
     testEndDateTime.value = new Date();
 
     await insertTestToDB();
-    
+
     for (let i = 0; i < exerciseCount.value; i++) {
         const { data, error } = await supabase
             .from('userAnswers')
@@ -355,7 +356,9 @@ const initializeTestAnswerArray = () => { //Array init to fill the testAnswers a
 }
 
 const generateTest = async () => {
-    exerciseCount.value = getExerciseCountBySubject(selectedFilter.examSubject[0]);
+    if (selectedFilter.examSubject.length > 0) {
+        exerciseCount.value = getExerciseCountBySubject(selectedFilter.examSubject[0]);
+    }
     const { data, error } = await supabase
         .from('tests')
         .select('id')
@@ -363,7 +366,17 @@ const generateTest = async () => {
         .eq('type', selectedFilter.examType)
         .eq('subject', selectedFilter.examSubject)
         .eq('variant', selectedFilter.examVariant)
-    if (error) console.log(error);
+    if (error) {
+        console.log(error);
+        if (selectedFilter.examSubject.length < 1 || selectedFilter.examType.length < 1) {
+            errorMessage.value = "Test se nepodařilo vygenerovat, zkuste vybrat vhodné filtrovací možnosti!"
+            isTest.value = false;
+        }
+    }
+
+    interface ExerciseDBData {
+        number: number
+    }
 
     for (let i = 1; i <= exerciseCount.value; i++) { //Fetches exercises
         const { data, error } = await supabase.rpc('getrandomexercisebyexercisenumber', {
@@ -373,11 +386,21 @@ const generateTest = async () => {
             in_types: selectedFilter.examType,
             in_number: i,
         }).single();
-        exercises.value.push(data);
-        loadedExerciseCount.value++;
+        if (!(data as ExerciseDBData)?.number) {
+            errorMessage.value = "Tento test není připraven, můžeš zkusit jiný nebo nehcat vygenerovat náhodně!";
+            isTest.value = false;
+            return;
+        }
+        if (data) {
+            exercises.value.push(data);
+            loadedExerciseCount.value++;
+        }
+        if (error) {
+            console.log(error);
+        }
     }
     isTest.value = true;
-    
+
     initializeTestAnswerArray();
 }
 
