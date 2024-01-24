@@ -94,24 +94,44 @@
                 <div v-else>
                     <div class="modal-body">
                         <div class="container-fluid">
-                            <div class="text-white d-flex justify-content-between">
-                                <span>{{ ((getAnswerCountByCorrectness.correct / exerciseCount) * 100).toFixed(1) }}
-                                    %</span>
-                                <span>{{ ((getAnswerCountByCorrectness.incorrect / exerciseCount) * 100).toFixed(1) }}
-                                    %</span>
-                            </div>
-                            <div class="progress-stacked">
-                                <div class="progress" role="progressbar" aria-label="Segment one"
-                                    :aria-valuenow="getAnswerCountByCorrectness.correct" aria-valuemin="0"
-                                    :aria-valuemax="exerciseCount"
-                                    :style="{ width: (getAnswerCountByCorrectness.correct / exerciseCount) * 100 + '%' }">
-                                    <div class="progress-bar bg-success"></div>
+                            <div class="d-flex justify-content-center">
+                                <div class="text-end col">
+                                    <div class="me-1">Úspěšnost </div>
+                                    <div class="me-1">Získáno </div>
+                                    <div class="me-1">Maximum </div>
+                                    <div class="me-1">Správných </div>
+                                    <div class="me-1">Špatných </div>
                                 </div>
-                                <div class="progress" role="progressbar" aria-label="Segment two"
-                                    :aria-valuenow="getAnswerCountByCorrectness.incorrect" aria-valuemin="0"
-                                    :aria-valuemax="exerciseCount"
-                                    :style="{ width: (getAnswerCountByCorrectness.incorrect / exerciseCount) * 100 + '%' }">
-                                    <div class="progress-bar bg-danger"></div>
+                                <div class="text-start col">
+                                    <div>{{ (getEarnedPointsCount() / getMaxPointsCount()) * 100 }} %</div>
+                                    <div>{{ getEarnedPointsCount() }} bodů</div>
+                                    <div>{{ getMaxPointsCount() }} bodů</div>
+                                    <div>{{ getAnswerCountByCorrectness.correct }} odpovědí</div>
+                                    <div>{{ getAnswerCountByCorrectness.incorrect }} odpovědí</div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div>
+                                <div class="text-center">Poměr správně zodpovězených cvičení</div>
+                                <div class="text-white d-flex justify-content-between">
+                                    <span>{{ ((getAnswerCountByCorrectness.correct / exerciseCount) * 100).toFixed(1) }}
+                                        %</span>
+                                    <span>{{ ((getAnswerCountByCorrectness.incorrect / exerciseCount) * 100).toFixed(1) }}
+                                        %</span>
+                                </div>
+                                <div class="progress-stacked">
+                                    <div class="progress" role="progressbar" aria-label="Segment one"
+                                        :aria-valuenow="getAnswerCountByCorrectness.correct" aria-valuemin="0"
+                                        :aria-valuemax="exerciseCount"
+                                        :style="{ width: (getAnswerCountByCorrectness.correct / exerciseCount) * 100 + '%' }">
+                                        <div class="progress-bar bg-success"></div>
+                                    </div>
+                                    <div class="progress" role="progressbar" aria-label="Segment two"
+                                        :aria-valuenow="getAnswerCountByCorrectness.incorrect" aria-valuemin="0"
+                                        :aria-valuemax="exerciseCount"
+                                        :style="{ width: (getAnswerCountByCorrectness.incorrect / exerciseCount) * 100 + '%' }">
+                                        <div class="progress-bar bg-danger"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
