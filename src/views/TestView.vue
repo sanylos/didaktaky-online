@@ -190,16 +190,16 @@ const getAnswerCountByCorrectness = computed(() => {
 })
 
 const switchToExercise = (from: number, to: number) => {
-    console.log("from:" + from + ";to:" + to);
-    console.log(userStore.exerciseAnswer);
+    //console.log("from:" + from + ";to:" + to);
+    //console.log(userStore.exerciseAnswer);
     testAnswers.value[from] = userStore.exerciseAnswer;
-    console.log(testAnswers.value);
+    //console.log(testAnswers.value);
     userStore.exerciseAnswer = testAnswers.value[to];
 
     exerciseNumberIndex.value = to;
 
-    console.log(userStore.exerciseAnswer);
-    console.log(testAnswers.value);
+    //console.log(userStore.exerciseAnswer);
+    //console.log(testAnswers.value);
 
 }
 
@@ -221,7 +221,7 @@ const insertTestToDB = async () => {
 const getMaxPointsCount = () => {
     let maxPoints = 0;
     for (let i = 0; i < exerciseCount.value; i++) {
-        maxPoints = exercises.value[i].points;
+        maxPoints += exercises.value[i].points;
     }
     return maxPoints;
 }
@@ -237,7 +237,7 @@ const getEarnedPointsCount = () => {
 const handleTestSubmit = async () => {
     testEndDateTime.value = new Date();
     await insertTestToDB();
-    console.log(userTestId.value);
+    //console.log(userTestId.value);
     for (let i = 0; i < exerciseCount.value; i++) {
         const { data, error } = await supabase
             .from('userAnswers')
@@ -258,7 +258,7 @@ const handleTestSubmit = async () => {
         if (error) console.log(error);
         else console.log('success index:' + i);
     }
-    console.log(submittedExercises.value);
+    //console.log(submittedExercises.value);
 }
 
 const getCountOfCorrectAnswersByIndex = (index: number) => {
@@ -272,7 +272,7 @@ const getCountOfCorrectAnswersByIndex = (index: number) => {
         if (exerciseType === "Textová odpověď") {
             if (userAnswer.includes(correctAnswer[i])) {
                 correctCount++;
-                console.log(correctAnswer[i]);
+                //console.log(correctAnswer[i]);
             }
         } else if (exerciseType === "Výběr mezi ANO/NE") {
             if (userAnswer[i] === correctAnswer[i]) {
@@ -293,11 +293,11 @@ const getEarnedExercisePointsByIndex = (index: number) => {
     const maxPoints = exercises.value[index].points;
     const exerciseType = exercises.value[index].type;
 
-    console.log('index ' + index)
+    /*console.log('index ' + index)
     console.log(exerciseType);
     console.log('userAnswer '); console.log(userAnswer);
     console.log('correct answer ' + correctAnswer);
-    console.log('max ' + maxPoints);
+    console.log('max ' + maxPoints);*/
 
     if (exerciseType === "Textová odpověď") {
         //0 z 4 = 0 - 4 = 4 + -4 = 0
@@ -306,8 +306,8 @@ const getEarnedExercisePointsByIndex = (index: number) => {
         //3 z 4 = 3 - 4 = 4 + -1 = 3
         //4 z 4 = 4 - 4 = 4 + -0 = 4
         let countOfIncorrectAnswers = getCountOfCorrectAnswersByIndex(index) - maxPoints;
-        console.log(maxPoints + countOfIncorrectAnswers);
-        console.log(countOfIncorrectAnswers);
+        //console.log(maxPoints + countOfIncorrectAnswers);
+        //console.log(countOfIncorrectAnswers);
         return (maxPoints + countOfIncorrectAnswers)
     } else if (exerciseType === "Výběr mezi ANO/NE") {
         switch (getCountOfCorrectAnswersByIndex(index)) {
@@ -327,8 +327,8 @@ const getEarnedExercisePointsByIndex = (index: number) => {
 const isAnswerCorrect = (index: number) => {
     const userAnswer = testAnswers.value[index];
     const correctAnswer = exercises.value[index].correct_answer;
-    console.log('User Answer:', userAnswer);
-    console.log('Correct Answer:', correctAnswer);
+    //console.log('User Answer:', userAnswer);
+    //console.log('Correct Answer:', correctAnswer);
 
     if (exercises.value[index].type === "Textová odpověď") {
         if (Array.isArray(userAnswer) && Array.isArray(correctAnswer)) {
@@ -350,7 +350,7 @@ const initializeTestAnswerArray = () => {
     for (let i = 1; i <= exerciseCount.value; i++) {
         testAnswers.value[i - 1] = Array(exercises.value[i - 1].correct_answer.length).fill("");
     }
-    console.log(testAnswers.value);
+    //console.log(testAnswers.value);
 }
 
 const generateTest = async () => {
@@ -376,7 +376,7 @@ const generateTest = async () => {
         loadedExerciseCount.value++;
     }
     isTest.value = true;
-    console.log(exercises.value);
+    //console.log(exercises.value);
     initializeTestAnswerArray();
 }
 
