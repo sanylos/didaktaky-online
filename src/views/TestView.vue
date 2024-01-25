@@ -44,6 +44,7 @@
     </div>
 
     <div v-if="testState == 'running'" class="m-3">
+
         <div class="bg-dark shadow-lg w-auto rounded mb-1">
             <div class="d-flex justify-content-between" style="overflow: auto">
                 <button v-for="number in exerciseCount" :key="number"
@@ -53,6 +54,11 @@
         </div>
         <div class="bg-dark shadow-lg w-auto rounded">
 
+            <div class="text-white bg-danger container w-auto rounded-5" style="position:fixed; right: 1rem">
+                <span v-if="remainingTime.hours > 0">{{ remainingTime.hours }}h </span>
+                <span v-if="remainingTime.minutes > 0">{{ remainingTime.minutes }}m </span>
+                <span v-if="remainingTime.seconds > 0">{{ remainingTime.seconds }}s</span>
+            </div>
             <Exercise v-if="exercises[exerciseNumberIndex]" :answered="false" :exercises="exercises[exerciseNumberIndex]"
                 class="p-3 text-white-50">
             </Exercise>
@@ -113,7 +119,8 @@
             </div>
         </div>
         <div class="d-flex justify-content-center py-2">
-            <button type="button" class="btn btn-light mx-1" data-bs-dismiss="modal" @click="console.log('TODO')" disabled>Zobrazit celý test</button>
+            <button type="button" class="btn btn-light mx-1" data-bs-dismiss="modal" @click="console.log('TODO')"
+                disabled>Zobrazit celý test</button>
             <button type="button" class="btn btn-danger mx-1" data-bs-dismiss="modal" @click="router.go(0)">Odejít</button>
         </div>
     </div>
@@ -163,7 +170,7 @@
                 </div>
                 <div class="modal-footer">
                     <button v-if="!errorMessage" type="button" class="btn btn-success" data-bs-dismiss="modal"
-                        :disabled="!isTest" @click="testStartDateTime = new Date()">Začít</button>
+                        :disabled="!isTest" @click="testStartDateTime = new Date(); testState = 'running';">Začít</button>
                     <button v-else type="button" class="btn btn-success" data-bs-dismiss="modal"
                         @click="router.go(0)">Zavřít</button>
                 </div>
@@ -175,13 +182,13 @@
 <script lang="ts" setup>
 import router from '@/router';
 import Alert from '@/components/Alert.vue';
-import { computed, reactive, ref } from 'vue';
+import { computed, onUnmounted, reactive, ref } from 'vue';
 import { supabase } from '@/supabase';
 import Exercise from '@/components/Exercise.vue';
 import { useUserStore } from '@/stores/user';
 
 const errorMessage = ref('');
-const testState = ref('ended');
+const testState = ref('selection');
 const isTest = ref(false); //Bool used to determine if test was loaded or not
 const exerciseCount: any = ref(0); //Number of exercises
 const exerciseNumberIndex = ref(0); //Current exercise index
@@ -193,6 +200,7 @@ const testStartDateTime = ref(new Date()); //Begin date of test
 const testEndDateTime = ref(new Date()); //End date of test
 const submittedExercises: any = ref([]); //Array of submitted exercises
 const userTestId = ref({}); //Test id
+const remainingTime = reactive({ hours: 0, minutes: 0, seconds: 0 })
 
 const selectedFilter: { examType: string[], examYear: string[], examVariant: string[], examSubject: string[] } = reactive({
     examType: [],
@@ -207,6 +215,20 @@ const getAnswerCountByCorrectness = computed(() => { //Returns correct and incor
 
     return { correct: correctCount, incorrect: incorrectCount }
 })
+
+const calculateRemainingTime = () => {
+    const startDateTime = new Date(testStartDateTime.value);
+
+    const testDurationInMinutes = getTestDurationInMinutesBySubject(selectedFilter.examSubject[0]);
+
+    const endDateTime = new Date(startDateTime.getTime() + testDurationInMinutes * 60000);
+
+    const timeDifference = endDateTime.getTime() - new Date().getTime();
+
+    remainingTime.hours = Math.floor(timeDifference / (1000 * 60 * 60));
+    remainingTime.minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+    remainingTime.seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+}
 
 const switchToExercise = (from: number, to: number) => { //Handles switching between exercises
     testAnswers.value[from] = userStore.exerciseAnswer;
@@ -248,6 +270,7 @@ const getEarnedPointsCount = () => { //Returns earned points
 }
 
 const handleTestSubmit = async () => {
+    clearInterval(updateInterval);
     testState.value = 'ended';
     switchToExercise(exerciseNumberIndex.value, exerciseNumberIndex.value); //Saves and corrects the format of the last answer
 
@@ -355,6 +378,8 @@ const initializeTestAnswerArray = () => { //Array init to fill the testAnswers a
     }
 }
 
+let updateInterval = null;
+
 const generateTest = async () => {
     if (selectedFilter.examSubject.length > 0) {
         exerciseCount.value = getExerciseCountBySubject(selectedFilter.examSubject[0]);
@@ -401,9 +426,10 @@ const generateTest = async () => {
             return;
         }
     }
-    isTest.value = true;
-    testState.value = 'running';
+
     initializeTestAnswerArray();
+    isTest.value = true;
+    updateInterval = setInterval(calculateRemainingTime, 1000);
 }
 
 const examOptions = reactive({
@@ -412,7 +438,7 @@ const examOptions = reactive({
         { "id": "MZ", "title": "Maturita" },
     ],
     examSubjects: [
-        { "id": "CJL", "title": "Český jazyk a literatura", "exerciseCountPZ": 30, "exerciseCountMZ": 32 },
+        { "id": "CJL", "title": "Český jazyk a literatura", "exerciseCountPZ": 30, "exerciseCountMZ": 32, "timePZ": 60, "timeMZ": 85 },
         //{ "id": "MAT", "title": "Matematika" },
         //{ "id": "ANJ", "title": "Anglický jazyk" },
     ],
@@ -433,6 +459,16 @@ const getExerciseCountBySubject = (subject: string) => { //Returns the count of 
     return 0;
 }
 
+const getTestDurationInMinutesBySubject = (subject: string) => { //Returns the count of exercise count base on the JSON values above
+    let filteredSubject = examOptions.examSubjects.filter((item) => item.id === subject);
+    if (selectedFilter.examType[0] == "PZ") return filteredSubject[0].timePZ;
+    if (selectedFilter.examType[0] == "MZ") return filteredSubject[0].timeMZ;
+    return 0;
+}
+
+onUnmounted(() => {
+    clearInterval(updateInterval);
+});
 </script>
 
 <style></style>
