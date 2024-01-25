@@ -143,7 +143,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Pokračovat v testu</button>
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal"
                             @click="handleTestSubmit">Vyhodnotit</button>
                     </div>
                 </div>
@@ -232,11 +232,14 @@ const calculateRemainingTime = () => { //Calculates remaining time
 }
 
 const switchToExercise = (from: number, to: number) => { //Handles switching between exercises
-    testAnswers.value[from] = userStore.exerciseAnswer;
+    if (userStore.exerciseAnswer.length > 0) {
+        testAnswers.value[from] = userStore.exerciseAnswer;
+    } else testAnswers.value[from][0] = "";
 
     userStore.exerciseAnswer = testAnswers.value[to];
 
     exerciseNumberIndex.value = to;
+    console.log(testAnswers.value);
 }
 
 const insertTestToDB = async () => { //Inserts test to the database and also fetches the id of that test
