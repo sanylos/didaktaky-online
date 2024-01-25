@@ -69,7 +69,7 @@
         </div>
     </div>
 
-    <div v-if="testState == 'ended'">
+    <div v-if="testState == 'ended'" class="text-white container bg-dark rounded-3 shadow-lg my-2">
         <div class="container-fluid">
             <div class="d-flex justify-content-center">
                 <div class="text-end col">
@@ -112,7 +112,10 @@
                 </div>
             </div>
         </div>
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="router.go(0)">Odejít</button>
+        <div class="d-flex justify-content-center py-2">
+            <button type="button" class="btn btn-light mx-1" data-bs-dismiss="modal" @click="console.log('TODO')" disabled>Zobrazit celý test</button>
+            <button type="button" class="btn btn-danger mx-1" data-bs-dismiss="modal" @click="router.go(0)">Odejít</button>
+        </div>
     </div>
 
     <span v-if="exercises[exerciseNumberIndex]" class="text-white">{{ exercises[exerciseNumberIndex][0] }}</span>
@@ -133,7 +136,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Pokračovat v testu</button>
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" @click="handleTestSubmit">Vyhodnotit</button>
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                            @click="handleTestSubmit">Vyhodnotit</button>
                     </div>
                 </div>
             </div>
@@ -177,7 +181,7 @@ import Exercise from '@/components/Exercise.vue';
 import { useUserStore } from '@/stores/user';
 
 const errorMessage = ref('');
-const testState = ref('selection');
+const testState = ref('ended');
 const isTest = ref(false); //Bool used to determine if test was loaded or not
 const exerciseCount: any = ref(0); //Number of exercises
 const exerciseNumberIndex = ref(0); //Current exercise index
