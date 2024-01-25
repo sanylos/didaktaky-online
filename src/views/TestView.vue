@@ -274,7 +274,7 @@ const getEarnedPointsCount = () => { //Returns earned points
 }
 
 const handleTestSubmit = async () => {
-    clearInterval(updateInterval);
+    clearInterval(updateInterval as any);
     testState.value = 'ended';
     switchToExercise(exerciseNumberIndex.value, exerciseNumberIndex.value); //Saves and corrects the format of the last answer
 
@@ -382,7 +382,7 @@ const initializeTestAnswerArray = () => { //Array init to fill the testAnswers a
     }
 }
 
-let updateInterval = null;
+let updateInterval: NodeJS.Timer | null = null;
 
 const generateTest = async () => {
     if (selectedFilter.examSubject.length > 0) {
@@ -471,7 +471,7 @@ const getTestDurationInMinutesBySubject = (subject: string) => { //Returns the c
 }
 
 onUnmounted(() => {
-    clearInterval(updateInterval);
+    clearInterval(updateInterval as any);
 });
 </script>
 
