@@ -216,7 +216,7 @@ const getAnswerCountByCorrectness = computed(() => { //Returns correct and incor
     return { correct: correctCount, incorrect: incorrectCount }
 })
 
-const calculateRemainingTime = () => {
+const calculateRemainingTime = () => { //Calculates remaining time
     const startDateTime = new Date(testStartDateTime.value);
 
     const testDurationInMinutes = getTestDurationInMinutesBySubject(selectedFilter.examSubject[0]);
@@ -224,6 +224,7 @@ const calculateRemainingTime = () => {
     const endDateTime = new Date(startDateTime.getTime() + testDurationInMinutes * 60000);
 
     const timeDifference = endDateTime.getTime() - new Date().getTime();
+    if (timeDifference <= 0) handleTestSubmit(); //Ends test if time runs out
 
     remainingTime.hours = Math.floor(timeDifference / (1000 * 60 * 60));
     remainingTime.minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
