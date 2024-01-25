@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!isTest"
+    <div v-if="testState === 'selection'"
         class="container rounded d-flex flex-column justify-content-center align-items-center mt-2 bg-dark p-3">
 
         <Alert type="danger" :message="errorMessage"></Alert>
@@ -43,7 +43,7 @@
             data-bs-target="#testLoadingModal">Začít <i class="bi bi-rocket-takeoff"></i></button>
     </div>
 
-    <div v-else class="m-3">
+    <div v-if="testState == 'running'" class="m-3">
         <div class="bg-dark shadow-lg w-auto rounded mb-1">
             <div class="d-flex justify-content-between" style="overflow: auto">
                 <button v-for="number in exerciseCount" :key="number"
@@ -69,6 +69,52 @@
         </div>
     </div>
 
+    <div v-if="testState == 'ended'">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-center">
+                <div class="text-end col">
+                    <div class="me-1">Úspěšnost </div>
+                    <div class="me-1">Získáno </div>
+                    <div class="me-1">Maximum </div>
+                    <div class="me-1">Správných </div>
+                    <div class="me-1">Špatných </div>
+                </div>
+                <div class="text-start col">
+                    <div>{{ (getEarnedPointsCount() / getMaxPointsCount()) * 100 }} %</div>
+                    <div>{{ getEarnedPointsCount() }} bodů</div>
+                    <div>{{ getMaxPointsCount() }} bodů</div>
+                    <div>{{ getAnswerCountByCorrectness.correct }} odpovědí</div>
+                    <div>{{ getAnswerCountByCorrectness.incorrect }} odpovědí</div>
+                </div>
+            </div>
+            <hr>
+            <div>
+                <div class="text-center">Poměr správně zodpovězených cvičení</div>
+                <div class="text-white d-flex justify-content-between">
+                    <span>{{ ((getAnswerCountByCorrectness.correct / exerciseCount) * 100).toFixed(1) }}
+                        %</span>
+                    <span>{{ ((getAnswerCountByCorrectness.incorrect / exerciseCount) * 100).toFixed(1) }}
+                        %</span>
+                </div>
+                <div class="progress-stacked">
+                    <div class="progress" role="progressbar" aria-label="Segment one"
+                        :aria-valuenow="getAnswerCountByCorrectness.correct" aria-valuemin="0"
+                        :aria-valuemax="exerciseCount"
+                        :style="{ width: (getAnswerCountByCorrectness.correct / exerciseCount) * 100 + '%' }">
+                        <div class="progress-bar bg-success"></div>
+                    </div>
+                    <div class="progress" role="progressbar" aria-label="Segment two"
+                        :aria-valuenow="getAnswerCountByCorrectness.incorrect" aria-valuemin="0"
+                        :aria-valuemax="exerciseCount"
+                        :style="{ width: (getAnswerCountByCorrectness.incorrect / exerciseCount) * 100 + '%' }">
+                        <div class="progress-bar bg-danger"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="router.go(0)">Odejít</button>
+    </div>
+
     <span v-if="exercises[exerciseNumberIndex]" class="text-white">{{ exercises[exerciseNumberIndex][0] }}</span>
 
     <!-- Check Test Modal -->
@@ -77,69 +123,17 @@
         <div class="modal-dialog modal-xl modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">{{ submittedExercises.length ?
-                        "Hodnocení" : "Zkontrolovat test" }}</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Zkontrolovat test</h1>
                 </div>
 
-                <div v-if="!submittedExercises.length">
+                <div>
                     <div class="modal-body">
                         Opravdu chceš ukončit toto testové zadání? Ukončením ztratíš možnost opravy svých odpovědí a bude ti
                         zobrazeno hodnocení!
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Pokračovat v testu</button>
-                        <button type="button" class="btn btn-success" @click="handleTestSubmit">Vyhodnotit</button>
-                    </div>
-                </div>
-                <div v-else>
-                    <div class="modal-body">
-                        <div class="container-fluid">
-                            <div class="d-flex justify-content-center">
-                                <div class="text-end col">
-                                    <div class="me-1">Úspěšnost </div>
-                                    <div class="me-1">Získáno </div>
-                                    <div class="me-1">Maximum </div>
-                                    <div class="me-1">Správných </div>
-                                    <div class="me-1">Špatných </div>
-                                </div>
-                                <div class="text-start col">
-                                    <div>{{ (getEarnedPointsCount() / getMaxPointsCount()) * 100 }} %</div>
-                                    <div>{{ getEarnedPointsCount() }} bodů</div>
-                                    <div>{{ getMaxPointsCount() }} bodů</div>
-                                    <div>{{ getAnswerCountByCorrectness.correct }} odpovědí</div>
-                                    <div>{{ getAnswerCountByCorrectness.incorrect }} odpovědí</div>
-                                </div>
-                            </div>
-                            <hr>
-                            <div>
-                                <div class="text-center">Poměr správně zodpovězených cvičení</div>
-                                <div class="text-white d-flex justify-content-between">
-                                    <span>{{ ((getAnswerCountByCorrectness.correct / exerciseCount) * 100).toFixed(1) }}
-                                        %</span>
-                                    <span>{{ ((getAnswerCountByCorrectness.incorrect / exerciseCount) * 100).toFixed(1) }}
-                                        %</span>
-                                </div>
-                                <div class="progress-stacked">
-                                    <div class="progress" role="progressbar" aria-label="Segment one"
-                                        :aria-valuenow="getAnswerCountByCorrectness.correct" aria-valuemin="0"
-                                        :aria-valuemax="exerciseCount"
-                                        :style="{ width: (getAnswerCountByCorrectness.correct / exerciseCount) * 100 + '%' }">
-                                        <div class="progress-bar bg-success"></div>
-                                    </div>
-                                    <div class="progress" role="progressbar" aria-label="Segment two"
-                                        :aria-valuenow="getAnswerCountByCorrectness.incorrect" aria-valuemin="0"
-                                        :aria-valuemax="exerciseCount"
-                                        :style="{ width: (getAnswerCountByCorrectness.incorrect / exerciseCount) * 100 + '%' }">
-                                        <div class="progress-bar bg-danger"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-success" data-bs-dismiss="modal"
-                            @click="router.go(0)">Odejít</button>
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" @click="handleTestSubmit">Vyhodnotit</button>
                     </div>
                 </div>
             </div>
@@ -167,7 +161,7 @@
                     <button v-if="!errorMessage" type="button" class="btn btn-success" data-bs-dismiss="modal"
                         :disabled="!isTest" @click="testStartDateTime = new Date()">Začít</button>
                     <button v-else type="button" class="btn btn-success" data-bs-dismiss="modal"
-                        @click="router.go(0)">Zkusit znovu</button>
+                        @click="router.go(0)">Zavřít</button>
                 </div>
             </div>
         </div>
@@ -183,6 +177,7 @@ import Exercise from '@/components/Exercise.vue';
 import { useUserStore } from '@/stores/user';
 
 const errorMessage = ref('');
+const testState = ref('selection');
 const isTest = ref(false); //Bool used to determine if test was loaded or not
 const exerciseCount: any = ref(0); //Number of exercises
 const exerciseNumberIndex = ref(0); //Current exercise index
@@ -249,6 +244,7 @@ const getEarnedPointsCount = () => { //Returns earned points
 }
 
 const handleTestSubmit = async () => {
+    testState.value = 'ended';
     switchToExercise(exerciseNumberIndex.value, exerciseNumberIndex.value); //Saves and corrects the format of the last answer
 
     testEndDateTime.value = new Date();
@@ -372,6 +368,7 @@ const generateTest = async () => {
             errorMessage.value = "Test se nepodařilo vygenerovat, zkuste vybrat vhodné filtrovací možnosti!"
             isTest.value = false;
         }
+        return;
     }
 
     interface ExerciseDBData {
@@ -397,10 +394,11 @@ const generateTest = async () => {
         }
         if (error) {
             console.log(error);
+            return;
         }
     }
     isTest.value = true;
-
+    testState.value = 'running';
     initializeTestAnswerArray();
 }
 
