@@ -2,8 +2,6 @@
     <div v-if="testState === 'selection'"
         class="container rounded d-flex flex-column justify-content-center align-items-center mt-2 bg-dark p-3">
 
-        <Alert type="danger" :message="errorMessage"></Alert>
-
         <!--EXAM TYPE-->
         <div class="d-flex mb-3">
             <div class="mx-1" v-for="option in examOptions.examTypes" :key="option.id">
