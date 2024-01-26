@@ -93,12 +93,12 @@
                     <div>{{ getMaxPointsCount() }} bodů</div>
                     <div>{{ getAnswerCountByCorrectness.correct }} odpovědí</div>
                     <div>{{ getAnswerCountByCorrectness.incorrect }} odpovědí</div>
+                    <div>{{ getTestDurationInMinutesBySubject(selectedFilter.examSubject[0]) }}m</div>
                     <div>
                         <span v-if="getTimeDurationOfTest().hours > 0">{{ getTimeDurationOfTest().hours }}h</span>
                         <span v-if="getTimeDurationOfTest().minutes > 0">{{ getTimeDurationOfTest().minutes }}m </span>
                         <span v-if="getTimeDurationOfTest().seconds > 0"> {{ getTimeDurationOfTest().seconds }}s</span>
                     </div>
-                    <div>{{ getTestDurationInMinutesBySubject(selectedFilter.examType[0]) }}m</div>
                 </div>
             </div>
             <hr>
@@ -269,7 +269,8 @@ const insertTestToDB = async () => { //Inserts test to the database and also fet
             'points': getEarnedPointsCount(),
             'maxPoints': getMaxPointsCount(),
             'type': exercises.value[0].test_type,
-            'subject': exercises.value[0].test_subject
+            'subject': exercises.value[0].test_subject,
+            'user_id': userStore.id
         }).select().single();
     if (error) console.log(error);
     else userTestId.value = data.id;
