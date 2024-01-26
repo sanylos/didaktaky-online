@@ -293,7 +293,6 @@ const handleTestSubmit = async () => {
                 'exerciseType': exercises.value[i].type,
                 'exerciseGroup': exercises.value[i].group,
                 'isCorrect': isAnswerCorrect(i),
-                'answered_at': new Date(),
                 'userTest_id': userTestId.value,
             }).select().single();
         if (data) {
