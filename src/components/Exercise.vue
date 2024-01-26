@@ -4,13 +4,11 @@
         <div class="d-flex flex-column justify-content-center align-items-center">
             <div v-if="exercises.text1imgPath" class="col mb-1">
                 <span class="row fw-bold">TEXT 1</span>
-                <img class="exercise-text-image" :src="'/exercise_texts/' + exercises.text1imgPath + '.png'">
-                <!--PATH WORKING ONLY IN PRODUCTION-->
+                <img class="exercise-text-image" :src="'https://oggvmfflkusznxpohazs.supabase.co/storage/v1/object/public/exercise-texts/'+exercises.text1imgPath+'.png'">
             </div>
             <div v-if="exercises.text2imgPath" class="col mb-1">
                 <span class="row fw-bold">TEXT 2</span>
-                <img class="exercise-text-image" :src="'/exercise_texts/' + exercises.text2imgPath + '.png'">
-                <!--PATH WORKING ONLY IN PRODUCTION-->
+                <img class="exercise-text-image" :src="'https://oggvmfflkusznxpohazs.supabase.co/storage/v1/object/public/exercise-texts/'+exercises.text2imgPath+'.png'">
             </div>
         </div>
 
