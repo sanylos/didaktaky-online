@@ -84,6 +84,8 @@
                     <div class="me-1">Maximum </div>
                     <div class="me-1">Správných </div>
                     <div class="me-1">Špatných </div>
+                    <div class="me-1">Dostupný čas </div>
+                    <div class="me-1">Čas </div>
                 </div>
                 <div class="text-start col">
                     <div>{{ (getEarnedPointsCount() / getMaxPointsCount()) * 100 }} %</div>
@@ -91,6 +93,12 @@
                     <div>{{ getMaxPointsCount() }} bodů</div>
                     <div>{{ getAnswerCountByCorrectness.correct }} odpovědí</div>
                     <div>{{ getAnswerCountByCorrectness.incorrect }} odpovědí</div>
+                    <div>
+                        <span v-if="getTimeDurationOfTest().hours > 0">{{ getTimeDurationOfTest().hours }}h</span>
+                        <span v-if="getTimeDurationOfTest().minutes > 0">{{ getTimeDurationOfTest().minutes }}m </span>
+                        <span v-if="getTimeDurationOfTest().seconds > 0"> {{ getTimeDurationOfTest().seconds }}s</span>
+                    </div>
+                    <div>{{ getTestDurationInMinutesBySubject(selectedFilter.examType[0]) }}m</div>
                 </div>
             </div>
             <hr>
@@ -229,6 +237,16 @@ const calculateRemainingTime = () => { //Calculates remaining time
     remainingTime.hours = Math.floor(timeDifference / (1000 * 60 * 60));
     remainingTime.minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
     remainingTime.seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+}
+
+const getTimeDurationOfTest = () => {
+    const start = new Date(testStartDateTime.value).getTime();
+    const end = new Date(testEndDateTime.value).getTime();
+    const timeDifference = end - start;
+    const hours = Math.floor(timeDifference / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+    return { hours, minutes, seconds };
 }
 
 const switchToExercise = (from: number, to: number) => { //Handles switching between exercises
