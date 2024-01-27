@@ -146,13 +146,14 @@
 
                 <div>
                     <div class="modal-body">
+                        <Alert v-if="!userStore.isLoggedIn" message="V průběhu testu jsi byl odhlášen. Pro vyhodnocení testu se musíš přihlásit!" type="info"></Alert>
                         Opravdu chceš ukončit toto testové zadání? Ukončením ztratíš možnost opravy svých odpovědí a bude ti
                         zobrazeno hodnocení!
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Pokračovat v testu</button>
                         <button type="button" class="btn btn-success" data-bs-dismiss="modal"
-                            @click="handleTestSubmit">Vyhodnotit</button>
+                            @click="handleTestSubmit" :disabled="!userStore.isLoggedIn">Vyhodnotit</button>
                     </div>
                 </div>
             </div>
