@@ -7,7 +7,7 @@
             <div class="row my-2">
 
                 <div v-if="answerCount.total" class="col-xl-3 col-md-6 my-2">
-                    <div class="container p-3 bg-dark rounded-1 shadow h-100">
+                    <div class="container p-3 bg-secondary-subtle rounded-1 h-100">
                         <div class=" mb-1 fs-6">
                             <i class="bi bi-send-plus"></i> Vyplněných cvičení
                         </div>
@@ -28,7 +28,7 @@
                 </div>
 
                 <div class="col-xl-3 col-md-6 my-2">
-                    <div class="container p-3 bg-dark rounded-1 shadow h-100">
+                    <div class="container p-3 bg-secondary-subtle rounded-1 h-100">
                         <div class=" mb-1 fs-6">
                             <i class="bi bi-file-earmark-text-fill"></i> Vyplněných testů
                         </div>
@@ -39,7 +39,7 @@
                 </div>
 
                 <div class="col-xl-3 col-md-6 my-2">
-                    <div class="container p-3 bg-dark rounded-1 shadow h-100">
+                    <div class="container p-3 bg-secondary-subtle rounded-1 h-100">
                         <div class=" mb-1 fs-6">
                             <i class="bi bi-clipboard2-check-fill"></i> Úspěšnost
                         </div>
@@ -51,7 +51,7 @@
                 </div>
 
                 <div class="col-xl-3 col-md-6 my-2">
-                    <div class="container p-3 bg-dark rounded-1 shadow h-100">
+                    <div class="container p-3 bg-secondary-subtle rounded-1 h-100">
                         <div class=" mb-1 fs-6">
                             <i class="bi bi-check2-circle"></i> Nejúspěšnější skupina cvičení
                         </div>
@@ -67,7 +67,7 @@
             </div>
 
             <div>
-                <div class="container p-3 bg-dark rounded-1 shadow">
+                <div class="container p-3 bg-secondary-subtle rounded-1">
                     <div class="mb-1 fs-6 d-flex justify-content-between">
                         <div><i class="bi bi-list-stars me-1"></i>Skupiny cvičení</div>
                         <div class="d-flex">
@@ -76,7 +76,7 @@
                                 autocomplete="off" checked>
                             <label class="btn btn-sm me-1" :class="{
                                 'btn-outline-light': exerciseGroupsFilter.examType.includes('PZ'),
-                                'btn-secondary': !exerciseGroupsFilter.examType.includes('PZ')
+                                'btn-dark': !exerciseGroupsFilter.examType.includes('PZ')
                             }" for="option1">PZ</label>
 
                             <input type="radio" value="MZ" @change="fetchAnsweredExerciseGroups"
@@ -84,7 +84,7 @@
                                 autocomplete="off">
                             <label class="btn btn-sm me-1" :class="{
                                 'btn-outline-light': exerciseGroupsFilter.examType.includes('MZ'),
-                                'btn-secondary': !exerciseGroupsFilter.examType.includes('MZ')
+                                'btn-dark': !exerciseGroupsFilter.examType.includes('MZ')
                             }" for="option2">MZ</label>
 
                             <div class="me-1">|</div>
@@ -94,7 +94,7 @@
                                 id="option3" autocomplete="off" checked>
                             <label class="btn btn-sm me-1" :class="{
                                 'btn-outline-light': exerciseGroupsFilter.examSubject.includes('CJL'),
-                                'btn-secondary': !exerciseGroupsFilter.examSubject.includes('CJL')
+                                'btn-dark': !exerciseGroupsFilter.examSubject.includes('CJL')
                             }" for="option3">CJL</label>
 
                             <input type="radio" value="MAT" @change="fetchAnsweredExerciseGroups"
@@ -102,15 +102,15 @@
                                 id="option4" autocomplete="off">
                             <label class="btn btn-sm me-1" :class="{
                                 'btn-outline-light': exerciseGroupsFilter.examSubject.includes('MAT'),
-                                'btn-secondary': !exerciseGroupsFilter.examSubject.includes('MAT')
+                                'btn-dark': !exerciseGroupsFilter.examSubject.includes('MAT')
                             }" for="option4">MAT</label>
 
                             <input type="radio" value="ANJ" @change="fetchAnsweredExerciseGroups"
                                 v-model="exerciseGroupsFilter.examSubject" class="btn-check" name="subjectOptions"
                                 id="option5" autocomplete="off">
-                            <label class="btn btn-sm me-1" :class="{
+                            <label class="btn btn-sm" :class="{
                                 'btn-outline-light': exerciseGroupsFilter.examSubject.includes('ANJ'),
-                                'btn-secondary': !exerciseGroupsFilter.examSubject.includes('ANJ')
+                                'btn-dark': !exerciseGroupsFilter.examSubject.includes('ANJ')
                             }" for="option5">ANJ</label>
                         </div>
                     </div>
@@ -123,24 +123,26 @@
                         </div>
                         <div class="container" style="overflow: auto">
                             <div class="table-responsive">
-                                <table class="table table-dark table-hover" style="font-size: 14px;">
+                                <table class="table" style="font-size: 14px;">
                                     <thead class="text-center">
                                         <tr>
-                                            <th v-for="label, index in exerciseGroupsArray.labels" :key="index" scope="col">
+                                            <th v-for="label, index in exerciseGroupsArray.labels" :key="index" scope="col"
+                                                class="bg-secondary-subtle">
                                                 {{
                                                     label }}</th>
                                         </tr>
                                     </thead>
                                     <tbody class="text-center">
                                         <tr>
-                                            <td v-for="label, index in exerciseGroupsArray.labels" :key="index">
+                                            <td v-for="label, index in exerciseGroupsArray.labels" :key="index"
+                                                class="bg-secondary-subtle">
                                                 <span class="text-success">{{ exerciseGroupsArray.correct[index] }}</span>
                                                 <span class="text-secondary fw-bold"> / </span>
                                                 <span class="text-danger">{{ exerciseGroupsArray.incorrect[index] }}</span>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="fw-bold" :class="{
+                                            <td class="fw-bold bg-secondary-subtle" :class="{
                                                 'text-success': getSuccessRateByLabelIndex(index) >= 50,
                                                 'text-danger': getSuccessRateByLabelIndex(index) < 50,
                                             }" v-for="label, index in exerciseGroupsArray.labels" :key="index">{{
@@ -157,7 +159,7 @@
 
             </div>
 
-            <div class="mt-3 container rounded-1 bg-dark">
+            <div class="mt-3 container rounded-1 bg-secondary-subtle">
                 <HistoryTable></HistoryTable>
             </div>
         </div>
