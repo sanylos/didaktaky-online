@@ -52,7 +52,7 @@
         </div>
         <div class="bg-dark shadow-lg w-auto rounded">
 
-            <div class="text-white bg-danger container w-auto rounded-5" style="position:fixed; right: 1rem">
+            <div class="text-white bg-danger rounded-5 text-end w-auto container" style="position:absolute; right: 1rem;">
                 <span v-if="remainingTime.hours > 0">{{ remainingTime.hours }}h </span>
                 <span v-if="remainingTime.minutes > 0">{{ remainingTime.minutes }}m </span>
                 <span v-if="remainingTime.seconds > 0">{{ remainingTime.seconds }}s</span>
