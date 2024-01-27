@@ -21,9 +21,9 @@ export const useUserStore = defineStore({
   actions: {
     resetUserFilters() {
       this.exerciseFilters.examType = ["PZ"];
-      this.exerciseFilters.examYears = ["2020","2021","2022","2023"];
-      this.exerciseFilters.examVariants = ["1","2","3","4","5","6"];
-      this.exerciseFilters.examSubjects = ["CJL","MAT","ANJ"];
+      this.exerciseFilters.examYears = ["2020", "2021", "2022", "2023"];
+      this.exerciseFilters.examVariants = ["1", "2", "3", "4", "5", "6"];
+      this.exerciseFilters.examSubjects = ["CJL", "MAT", "ANJ"];
     },
     resetUserData() {
       this.isLoggedIn = false;
@@ -31,13 +31,20 @@ export const useUserStore = defineStore({
       this.email = null;
     },
     async initialize() {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        this.email = user.email;
-        this.isLoggedIn = true;
-        this.id = user.id;
-      } else {
-        this.resetUserData();
+      try {
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (user) {
+          this.email = user.email;
+          this.isLoggedIn = true;
+          this.id = user.id;
+        } else {
+          this.resetUserData();
+        }
+        if (error) {
+          console.log("Chyba autentizace");
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
     async signOut() {
