@@ -160,7 +160,7 @@
             </div>
 
             <div class="mt-3 container rounded-1 bg-secondary-subtle">
-                <HistoryTable></HistoryTable>
+                <ExerciseHistoryTable></ExerciseHistoryTable>
             </div>
         </div>
     </div>
@@ -169,7 +169,7 @@
 <script setup lang="ts">
 import Spinner from '@/components/Spinner.vue';
 import Alert from '@/components/Alert.vue';
-import HistoryTable from '@/components/Overview/HistoryTable.vue'
+import ExerciseHistoryTable from '@/components/Overview/ExerciseHistoryTable.vue'
 import { useUserStore } from '@/stores/user';
 import { supabase } from '@/supabase';
 import { onMounted, onUpdated, onBeforeMount, ref, onBeforeUpdate, onServerPrefetch, onActivated, computed, reactive, watch } from 'vue';
