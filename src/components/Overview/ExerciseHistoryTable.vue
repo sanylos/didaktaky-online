@@ -1,19 +1,19 @@
 <template>
     <div class="mx-1 my-3 fs-6 d-flex justify-content-between">
-        <div><i class="bi bi-clock-history"></i> Historie</div>
+        <div><i class="bi bi-clock-history"></i> Historie cvičení</div>
         <div class="d-flex">
-            <input type="checkbox" value="PZ" v-model="filter.examType" class="btn-check" id="option10" autocomplete="off"
+            <input type="checkbox" value="PZ" v-model="filter.examType" class="btn-check" id="option14" autocomplete="off"
                 checked>
             <label class="btn btn-sm me-1" :class="{
                 'btn-outline-light': filter.examType.includes('PZ'),
                 'btn-dark': !filter.examType.includes('PZ')
-            }" for="option10">PZ</label>
+            }" for="option14">PZ</label>
 
-            <input type="checkbox" value="MZ" v-model="filter.examType" class="btn-check" id="option20" autocomplete="off">
+            <input type="checkbox" value="MZ" v-model="filter.examType" class="btn-check" id="option15" autocomplete="off">
             <label class="btn btn-sm me-1" :class="{
                 'btn-outline-light': filter.examType.includes('MZ'),
                 'btn-dark': !filter.examType.includes('MZ')
-            }" for="option20">MZ</label>
+            }" for="option15">MZ</label>
 
             <div class="me-1">|</div>
 
