@@ -2,6 +2,8 @@
     <div v-if="testState === 'selection'"
         class="container rounded d-flex flex-column justify-content-center align-items-center mt-2 bg-dark p-3">
 
+        <Alert v-if="!userStore.isLoggedIn" message="Pro vygenerování testu se musíš přihlásit!" type="info"></Alert>
+
         <!--EXAM TYPE-->
         <div class="d-flex mb-3">
             <div class="mx-1" v-for="option in examOptions.examTypes" :key="option.id">
@@ -38,7 +40,7 @@
             </div>
         </div>
         <button class="btn btn-success" @click="handleSubmit" data-bs-toggle="modal"
-            data-bs-target="#testLoadingModal">Začít <i class="bi bi-rocket-takeoff"></i></button>
+            data-bs-target="#testLoadingModal" :disabled="!userStore.isLoggedIn">Začít <i class="bi bi-rocket-takeoff"></i></button>
     </div>
 
     <div v-if="testState == 'running'" class="m-3">
