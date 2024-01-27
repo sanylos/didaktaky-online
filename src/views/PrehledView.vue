@@ -162,11 +162,15 @@
             <div class="mt-3 container rounded-1 bg-secondary-subtle">
                 <ExerciseHistoryTable></ExerciseHistoryTable>
             </div>
+            <div class="mt-3 container rounded-1 bg-secondary-subtle">
+                <TestHistoryTable></TestHistoryTable>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import TestHistoryTable from '@/components/Overview/TestHistoryTable.vue';
 import Spinner from '@/components/Spinner.vue';
 import Alert from '@/components/Alert.vue';
 import ExerciseHistoryTable from '@/components/Overview/ExerciseHistoryTable.vue'
