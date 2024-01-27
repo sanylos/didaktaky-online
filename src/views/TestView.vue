@@ -88,7 +88,7 @@
                     <div class="me-1">Čas </div>
                 </div>
                 <div class="text-start col">
-                    <div>{{ (getEarnedPointsCount() / getMaxPointsCount()) * 100 }} %</div>
+                    <div>{{ ((getEarnedPointsCount() / getMaxPointsCount()) * 100).toFixed(1) }} %</div>
                     <div>{{ getEarnedPointsCount() }} bodů</div>
                     <div>{{ getMaxPointsCount() }} bodů</div>
                     <div>{{ getAnswerCountByCorrectness.correct }} odpovědí</div>
