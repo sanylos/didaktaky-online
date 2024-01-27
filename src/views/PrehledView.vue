@@ -74,29 +74,44 @@
                             <input type="radio" value="PZ" @change="fetchAnsweredExerciseGroups"
                                 v-model="exerciseGroupsFilter.examType" class="btn-check" name="examOptions" id="option1"
                                 autocomplete="off" checked>
-                            <label class="btn btn-sm" for="option1">PZ</label>
+                            <label class="btn btn-sm me-1" :class="{
+                                'btn-outline-light': exerciseGroupsFilter.examType.includes('PZ'),
+                                'btn-secondary': !exerciseGroupsFilter.examType.includes('PZ')
+                            }" for="option1">PZ</label>
 
                             <input type="radio" value="MZ" @change="fetchAnsweredExerciseGroups"
                                 v-model="exerciseGroupsFilter.examType" class="btn-check" name="examOptions" id="option2"
                                 autocomplete="off">
-                            <label class="btn btn-sm" for="option2">MZ</label>
+                            <label class="btn btn-sm me-1" :class="{
+                                'btn-outline-light': exerciseGroupsFilter.examType.includes('MZ'),
+                                'btn-secondary': !exerciseGroupsFilter.examType.includes('MZ')
+                            }" for="option2">MZ</label>
 
-                            <div>|</div>
+                            <div class="me-1">|</div>
 
                             <input type="radio" value="CJL" @change="fetchAnsweredExerciseGroups"
                                 v-model="exerciseGroupsFilter.examSubject" class="btn-check" name="subjectOptions"
                                 id="option3" autocomplete="off" checked>
-                            <label class="btn btn-sm" for="option3">CJL</label>
+                            <label class="btn btn-sm me-1" :class="{
+                                'btn-outline-light': exerciseGroupsFilter.examSubject.includes('CJL'),
+                                'btn-secondary': !exerciseGroupsFilter.examSubject.includes('CJL')
+                            }" for="option3">CJL</label>
 
                             <input type="radio" value="MAT" @change="fetchAnsweredExerciseGroups"
                                 v-model="exerciseGroupsFilter.examSubject" class="btn-check" name="subjectOptions"
                                 id="option4" autocomplete="off">
-                            <label class="btn btn-sm" for="option4">MAT</label>
+                            <label class="btn btn-sm me-1" :class="{
+                                'btn-outline-light': exerciseGroupsFilter.examSubject.includes('MAT'),
+                                'btn-secondary': !exerciseGroupsFilter.examSubject.includes('MAT')
+                            }" for="option4">MAT</label>
 
                             <input type="radio" value="ANJ" @change="fetchAnsweredExerciseGroups"
                                 v-model="exerciseGroupsFilter.examSubject" class="btn-check" name="subjectOptions"
                                 id="option5" autocomplete="off">
-                            <label class="btn btn-sm" for="option5">ANJ</label>
+                            <label class="btn btn-sm me-1" :class="{
+                                'btn-outline-light': exerciseGroupsFilter.examSubject.includes('ANJ'),
+                                'btn-secondary': !exerciseGroupsFilter.examSubject.includes('ANJ')
+                            }" for="option5">ANJ</label>
                         </div>
                     </div>
 
@@ -185,7 +200,7 @@ const exerciseGroupsArray = computed(() => {
 
     let correctGroup: Array<Number> = [];
     let incorrectGroup: Array<Number> = [];
-        
+
     let allLabels = answerCount.value.exerciseGroups.map(groupItem => groupItem.exercisegroup); //MAP all labels
     let uniqueLabels: Array<String> = [];
 
