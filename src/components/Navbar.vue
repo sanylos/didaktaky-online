@@ -10,7 +10,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto">
           <li class="nav-item mx-1">
-            <RouterLink to="/" class="nav-link">
+            <RouterLink to="/cviceni" class="nav-link">
               <i class="bi bi-shuffle"></i> Náhodné cvičení
             </RouterLink>
           </li>
