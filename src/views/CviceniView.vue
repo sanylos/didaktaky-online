@@ -1,10 +1,7 @@
 <template>
     <div class="main-page text-white-50">
-        <div class="page-title">
-            Náhodné cvičení
-        </div>
         <div v-if="exerciseState == 'selection'"
-            class="container rounded d-flex flex-column justify-content-center align-items-center mt-2 bg-secondary-subtle p-3">
+            class="container rounded d-flex flex-column justify-content-center align-items-center mt-2 p-3">
 
             <!--EXAM TYPE-->
             <div class="d-flex mb-3">
@@ -46,7 +43,7 @@
                     class="bi bi-rocket-takeoff"></i></button>
 
         </div>
-        <div v-if="exerciseState == 'selected'" class="container rounded bg-dark p-3 shadow-lg m-1 w-auto">
+        <div v-if="exerciseState == 'selected'" class="container rounded bg-dark p-3 bg-secondary-subtle shadow m-1 w-auto">
 
             <Spinner :isLoading="loading"></Spinner>
 
@@ -58,10 +55,10 @@
             </div>
 
             <div class="mt-4 d-flex justify-content-between">
-                <button :disabled="!answered" class="btn btn-primary" @click="handlePrevious">⮜ Předchozí</button>
-                <button v-if="!answered" :disabled="!exercises.type" class="btn btn-success"
+                <button :disabled="!answered" class="btn btn-primary mx-1" @click="handlePrevious">⮜ Předchozí</button>
+                <button v-if="!answered" :disabled="!exercises.type" class="btn btn-success mx-1"
                     @click="handleSubmit">✍🏼Zkontrolovat</button>
-                <button v-if="answered" class="btn btn-primary" @click="handleNext">Další ⮞</button>
+                <button v-if="answered" class="btn btn-primary mx-1" @click="handleNext">Další ⮞</button>
             </div>
 
         </div>
