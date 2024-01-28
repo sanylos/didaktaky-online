@@ -54,11 +54,14 @@
                 <Exercise :answered="answered" :exercises="exercises"></Exercise>
             </div>
 
-            <div class="mt-4 d-flex justify-content-between">
-                <button :disabled="!answered" class="btn btn-primary mx-1" @click="handlePrevious">⮜ Předchozí</button>
-                <button v-if="!answered" :disabled="!exercises.type" class="btn btn-success mx-1"
+            <div class="mt-4 d-flex justify-content-between" v-if="exercises.exercise_id">
+                <button :disabled="!answered" class="btn btn-primary" @click="handlePrevious">⮜ Předchozí</button>
+                <button v-if="!answered" :disabled="!exercises.type" class="btn btn-success"
                     @click="handleSubmit">✍🏼Zkontrolovat</button>
-                <button v-if="answered" class="btn btn-primary mx-1" @click="handleNext">Další ⮞</button>
+                <button v-if="answered" class="btn btn-primary" @click="handleNext">Další ⮞</button>
+            </div>
+            <div v-else class="d-flex justify-content-center">
+                <button class="btn btn-secondary w-100" @click="exerciseState = 'selection'">Zpět na filtrování</button>
             </div>
 
         </div>
