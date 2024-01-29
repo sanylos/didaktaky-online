@@ -1,9 +1,13 @@
 <template>
   <div class="d-flex flex-row main align-items-center">
     <div class="rainbow_text_animated fs-1">
-      <div class="d-flex flex-column align-items-center main-title" style="width:100vw">
+      <div class="d-flex flex-column main-title" style="width:100vw">
         <span class="fw-bold">Moderní a efektivní příprava</span>
         <span>na přijímací zkoušky a maturitu</span>
+        <div class="d-flex flex-row justify-content-start">
+          <button class="btn btn-dark bg-secondary-subtle shadow-lg rounded-5 my-3 mx-1 p-2">Začít procvičovat</button>
+          <button class="btn btn-dark bg-secondary-subtle shadow-lg rounded-5 my-3 mx-1 p-2 w-auto px-3"><i class="bi bi-chevron-down"></i></button>
+        </div>
       </div>
     </div>
     <div class="phone-mockup">
@@ -19,7 +23,7 @@ import router from "@/router";
 
 </script>
 
-<style>
+<style lang="scss">
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
 .main {
@@ -33,7 +37,20 @@ import router from "@/router";
 }
 
 .main-title {
-  z-index: 1;
+  * {
+    z-index: 1;
+  }
+  span, div {
+    margin-left: 5rem;
+    margin-right: 5rem;
+  }
+  .btn {
+    width: 13rem;
+    margin-right: 1rem;
+    &:hover {
+      color: darken($color: gray, $amount: 0);
+    }
+  }
 }
 
 .phone-mockup {
@@ -48,6 +65,17 @@ import router from "@/router";
   width: 100%;
   height: 100%;
   background-image: url('@/assets/prijimacky-online-phone-mockup.png');
+}
+
+@media only screen and (max-width: 600px) {
+  .phone-mockup {
+    visibility: hidden;
+  }
+
+  .main-title {
+    align-items: center;
+    margin: 0;
+  }
 }
 
 /*.rainbow_text_animated {
