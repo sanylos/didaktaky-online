@@ -1,12 +1,13 @@
 <template>
-  <div class="d-flex flex-row main">
-    <div class="rainbow_text_animated text-center fs-1">
-      <div class="d-flex flex-column">
+  <div class="d-flex flex-row main align-items-center">
+    <div class="rainbow_text_animated fs-1">
+      <div class="d-flex flex-column align-items-center main-title" style="width:100vw">
         <span class="fw-bold">Moderní a efektivní příprava</span>
         <span>na přijímací zkoušky a maturitu</span>
       </div>
     </div>
-    <div class="text-white">cs</div>
+    <div class="phone-mockup">
+    </div>
   </div>
 </template>
 
@@ -22,11 +23,31 @@ import router from "@/router";
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
 .main {
+  position: relative;
+  z-index: 0;
   background: linear-gradient(to right, #6e17fa 0%, #8c39ff 33%, #6C33A3 66%, #812390 100%);
   width: 100vw;
   height: 100vh;
   animation: rainbow_animation 6s ease-in-out infinite;
   background-size: 400% 100%;
+}
+
+.main-title {
+  z-index: 1;
+}
+
+.phone-mockup {
+  position: absolute;
+  z-index: 0;
+  width: 100%;
+  height: 50%;
+  top: 0px;
+  left: 45%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  background-image: url('@/assets/prijimacky-online-phone-mockup.png');
 }
 
 /*.rainbow_text_animated {
