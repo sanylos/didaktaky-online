@@ -6,7 +6,7 @@
         <span>na přijímací zkoušky a maturitu</span>
         <div class="d-flex flex-row justify-content-start">
           <button class="btn btn-dark bg-secondary-subtle shadow-lg rounded-5 my-3 mx-1 p-2">Začít procvičovat</button>
-          <button class="btn btn-dark bg-secondary-subtle shadow-lg rounded-5 my-3 mx-1 p-2 w-auto px-3"><i class="bi bi-chevron-down"></i></button>
+          <button class="btn btn-dark bg-secondary-subtle shadow-lg rounded-5 my-3 mx-1 p-2 w-auto px-3" @click="scrollPageDown()"><i class="bi bi-chevron-down"></i></button>
         </div>
       </div>
     </div>
@@ -19,7 +19,12 @@
 import { computed, reactive, ref } from "vue";
 import { useUserStore } from "@/stores/user"
 import router from "@/router";
-
+const scrollPageDown = () => {
+  window.scrollTo({
+    top: 5000,
+    behavior: 'smooth',
+  });
+}
 
 </script>
 
