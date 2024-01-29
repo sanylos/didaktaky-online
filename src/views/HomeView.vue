@@ -1,16 +1,27 @@
 <template>
   <div class="d-flex flex-row main align-items-center">
-    <div class="rainbow_text_animated fs-1">
-      <div class="d-flex flex-column main-title" style="width:100vw">
-        <span class="fw-bold">Moderní a efektivní příprava</span>
-        <span>na přijímací zkoušky a maturitu</span>
-        <div class="d-flex flex-row justify-content-start">
-          <button class="btn btn-dark bg-secondary-subtle shadow-lg rounded-5 my-3 mx-1 p-2">Začít procvičovat</button>
-          <button class="btn btn-dark bg-secondary-subtle shadow-lg rounded-5 my-3 mx-1 p-2 w-auto px-3" @click="scrollPageDown()"><i class="bi bi-chevron-down"></i></button>
+
+    <div class="firstPart d-flex flex-column" style="height: 100vh; position:absolute; top:0px">
+
+      <div class="rainbow_text_animated fs-1">
+        <div class="d-flex flex-column main-title" style="width:100vw">
+
+          <span class="fw-bold">Moderní a efektivní příprava</span>
+          <span>na přijímací zkoušky a maturitu</span>
+
+          <div class="d-flex flex-row justify-content-start">
+            <button class="btn btn-dark bg-secondary-subtle shadow-lg rounded-5 my-3 mx-1 p-2">Začít procvičovat</button>
+            <button class="btn btn-dark bg-secondary-subtle shadow-lg rounded-5 my-3 mx-1 p-2 w-auto px-3"
+              @click="scrollPageDown()"><i class="bi bi-chevron-down"></i></button>
+
+          </div>
         </div>
+
       </div>
-    </div>
-    <div class="phone-mockup">
+
+      <div class="phone-mockup">
+      </div>
+
     </div>
   </div>
 </template>
@@ -36,22 +47,32 @@ const scrollPageDown = () => {
   z-index: 0;
   background: linear-gradient(to right, #6e17fa 0%, #8c39ff 33%, #6C33A3 66%, #812390 100%);
   width: 100vw;
-  height: 100vh;
+  height: 200vh;
   animation: rainbow_animation 6s ease-in-out infinite;
   background-size: 400% 100%;
 }
 
+.firstPart {
+  justify-content: center;
+}
+
 .main-title {
+  justify-content: center;
+  align-items: start;
   * {
     z-index: 1;
   }
-  span, div {
+
+  span,
+  div {
     margin-left: 5rem;
     margin-right: 5rem;
   }
+
   .btn {
     width: 13rem;
     margin-right: 1rem;
+
     &:hover {
       color: darken($color: gray, $amount: 0);
     }
