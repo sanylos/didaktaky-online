@@ -142,7 +142,13 @@ const scrollPageDown = () => {
   }
 
   .main-title {
-    align-items: center;
+
+    span,
+    div {
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+    }
+
     margin: 0;
   }
 }
@@ -167,4 +173,5 @@ const scrollPageDown = () => {
   50% {
     background-position: 100% 0;
   }
-}</style>
+}
+</style>
