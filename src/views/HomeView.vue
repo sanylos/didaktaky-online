@@ -29,7 +29,7 @@
         <div class="row">
 
           <div class="col-sm-4 mb-3 mb-sm-0">
-            <div class="card bg-secondary-subtle shadow-lg border-23border-dark">
+            <div class="card bg-secondary-subtle shadow-lg border-23 border-dark rounded-4">
               <div class="card-body">
                 <i class="bi bi-hdd-fill fs-1"></i>
                 <p class="card-text">Aplikace Didaktaky-online obsahuje rozsáhlou databázi didaktických testů z
@@ -40,7 +40,7 @@
             </div>
           </div>
           <div class="col-sm-4 mb-3 mb-sm-0">
-            <div class="card bg-secondary-subtle shadow-lg border-23border-dark">
+            <div class="card bg-secondary-subtle shadow-lg border-23 border-dark rounded-4">
               <div class="card-body">
                 <i class="bi bi-file-earmark-text-fill fs-1"></i>
                 <p class="card-text">Naše cvičení jsou navržena tak, aby simulovala reálné zkouškové podmínky. Budou vás
@@ -53,7 +53,7 @@
             </div>
           </div>
           <div class="col-sm-4 mb-3 mb-sm-0">
-            <div class="card bg-secondary-subtle shadow-lg border-23border-dark">
+            <div class="card bg-secondary-subtle shadow-lg border-23 border-dark rounded-4">
               <div class="card-body">
                 <i class="bi bi-speedometer2 fs-1"></i>
                 <p class="card-text">Didaktaky-Online vám nabízí přehled vašich pokroků, který vám pomůže zůstat na
@@ -93,7 +93,7 @@ const scrollPageDown = () => {
   z-index: 0;
   background: linear-gradient(to right, #6e17fa 0%, #8c39ff 33%, #6C33A3 66%, #812390 100%);
   width: 100vw;
-  height: 200vh;
+  height: 1000vh;
   animation: rainbow_animation 6s ease-in-out infinite;
   background-size: 400% 100%;
 }
