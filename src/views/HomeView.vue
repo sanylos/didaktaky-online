@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex flex-row main align-items-center">
 
-    <div class="firstPart d-flex flex-column" style="height: 100vh; position:absolute; top:0px">
+    <div class="firstPart d-flex flex-column justify-content-center" style="height: 100vh; position:absolute; top:0px">
 
       <div class="rainbow_text_animated fs-1">
         <div class="d-flex flex-column main-title" style="width:100vw">
@@ -21,6 +21,52 @@
 
       <div class="phone-mockup">
       </div>
+
+    </div>
+
+    <div class="secondPart" style="height: 100vh; position:absolute; top: 100vh">
+      <div class="text-center mx-2">
+        <div class="row">
+
+          <div class="col-sm-4 mb-3 mb-sm-0">
+            <div class="card bg-secondary-subtle shadow-lg border-23border-dark">
+              <div class="card-body">
+                <i class="bi bi-hdd-fill fs-1"></i>
+                <p class="card-text">Aplikace Didaktaky-online obsahuje rozsáhlou databázi didaktických testů z
+                  předchozích let, které jsou zaměřeny na přijímací zkoušky a maturitu. Testy jsou rozděleny podle
+                  předmětů a obtížnosti, takže si můžete vybrat ty, které jsou pro vás nejvhodnější.</p>
+                <a @click="router.push('/test')" class="btn btn-dark">Zkusit test</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4 mb-3 mb-sm-0">
+            <div class="card bg-secondary-subtle shadow-lg border-23border-dark">
+              <div class="card-body">
+                <i class="bi bi-hdd-fill fs-1"></i>
+                <p class="card-text">Naše cvičení jsou navržena tak, aby simulovala reálné zkouškové podmínky. Budou vás
+                  testovat na vaše znalosti a dovednosti, a to způsobem, který je realistický a náročný. Cvičení jsou také
+                  přizpůsobena vašemu individuálnímu vzdělávacímu stylu. Můžete si vybrat cvičení, která jsou zaměřena na
+                  konkrétní oblasti, které potřebujete zlepšit. Cvičení Didaktaky-Online vám pomohou dosáhnout akademické
+                  excelence. Připravte se na zkoušky s námi a získejte jistotu, kterou potřebujete k úspěchu.</p>
+                <a @click="router.push('/cviceni')" class="btn btn-dark">Začít procvičovat</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4 mb-3 mb-sm-0">
+            <div class="card bg-secondary-subtle shadow-lg border-23border-dark">
+              <div class="card-body">
+                <i class="bi bi-speedometer2 fs-1"></i>
+                <p class="card-text">Didaktaky-Online vám nabízí přehled vašich pokroků, který vám pomůže zůstat na
+                  správné cestě k úspěchu na zkouškách. Přehled vám poskytuje informace o tom, jak si vedete v
+                  jednotlivých oblastech, a pomáhá vám identifikovat oblasti, které potřebujete zlepšit.</p>
+                <a @click="router.push('/prehled')" class="btn btn-dark">Zobrazit přehled</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
 
     </div>
   </div>
@@ -52,13 +98,10 @@ const scrollPageDown = () => {
   background-size: 400% 100%;
 }
 
-.firstPart {
-  justify-content: center;
-}
-
 .main-title {
   justify-content: center;
   align-items: start;
+
   * {
     z-index: 1;
   }
@@ -124,5 +167,4 @@ const scrollPageDown = () => {
   50% {
     background-position: 100% 0;
   }
-}
-</style>
+}</style>
