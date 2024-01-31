@@ -4,7 +4,7 @@
     <div class="firstPart d-flex flex-column justify-content-center" style="height: 100vh; position:absolute; top:0px">
 
       <div class="rainbow_text_animated fs-1">
-        <div class="d-flex flex-column main-title" style="width:100vw">
+        <div class="d-flex flex-column main-title mb-5" style="width:100vw">
 
           <span class="fw-bold">Moderní a efektivní příprava</span>
           <span>na přijímací zkoušky a maturitu</span>
