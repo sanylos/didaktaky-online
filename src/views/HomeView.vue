@@ -10,7 +10,7 @@
           <span>na přijímací zkoušky a maturitu</span>
 
           <div class="d-flex flex-row justify-content-start">
-            <button class="btn btn-dark bg-secondary-subtle shadow-lg rounded-5 my-3 mx-1 p-2">Začít procvičovat</button>
+            <button class="btn btn-dark bg-secondary-subtle shadow-lg rounded-5 my-3 mx-1 p-2" @click="router.push('/cviceni')">Začít procvičovat</button>
             <button class="btn btn-dark bg-secondary-subtle shadow-lg rounded-5 my-3 mx-1 p-2 w-auto px-3"
               @click="scrollPageDown()"><i class="bi bi-chevron-down"></i></button>
 
