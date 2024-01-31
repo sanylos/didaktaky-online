@@ -42,7 +42,7 @@
           <div class="col-sm-4 mb-3 mb-sm-0">
             <div class="card bg-secondary-subtle shadow-lg border-23border-dark">
               <div class="card-body">
-                <i class="bi bi-hdd-fill fs-1"></i>
+                <i class="bi bi-file-earmark-text-fill fs-1"></i>
                 <p class="card-text">Naše cvičení jsou navržena tak, aby simulovala reálné zkouškové podmínky. Budou vás
                   testovat na vaše znalosti a dovednosti, a to způsobem, který je realistický a náročný. Cvičení jsou také
                   přizpůsobena vašemu individuálnímu vzdělávacímu stylu. Můžete si vybrat cvičení, která jsou zaměřena na
@@ -78,7 +78,7 @@ import { useUserStore } from "@/stores/user"
 import router from "@/router";
 const scrollPageDown = () => {
   window.scrollTo({
-    top: 5000,
+    top: 750,
     behavior: 'smooth',
   });
 }
