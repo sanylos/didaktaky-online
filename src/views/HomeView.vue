@@ -2,26 +2,33 @@
   <div class="d-flex flex-row main align-items-center">
 
     <div class="firstPart d-flex flex-column justify-content-center" style="height: 100vh; position:absolute; top:0px">
-
       <div class="rainbow_text_animated fs-1">
         <div class="d-flex flex-column main-title mb-5" style="width:100vw">
-
           <span class="fw-bold">Moderní a efektivní příprava</span>
           <span>na přijímací zkoušky a maturitu</span>
-
           <div class="d-flex flex-row justify-content-start">
-            <button class="btn btn-dark bg-secondary-subtle shadow-lg rounded-5 my-3 mx-1 p-2" @click="router.push('/cviceni')">Začít procvičovat</button>
+            <button class="btn btn-dark bg-secondary-subtle shadow-lg rounded-5 my-3 mx-1 p-2"
+              @click="router.push('/cviceni')">Začít procvičovat</button>
             <button class="btn btn-dark bg-secondary-subtle shadow-lg rounded-5 my-3 mx-1 p-2 w-auto px-3"
               @click="scrollPageDown()"><i class="bi bi-chevron-down"></i></button>
-
           </div>
         </div>
-
       </div>
-
       <div class="phone-mockup">
       </div>
-
+      <div style="position: absolute; bottom: 10vh;"
+        class="container-fluid d-flex align-items-center justify-content-start">
+        <div class="card bg-secondary-subtle mx-1" v-if="answeredExerciseCount">
+          <div class="card-body">
+            <div class="fs-2">{{ answeredExerciseCount }}</div><span class="fs-6"> vyplněných cvičení</span>
+          </div>
+        </div>
+        <div class="card bg-secondary-subtle mx-1" v-if="submittedTestCount">
+          <div class="card-body">
+            <div class="fs-2">{{ submittedTestCount }}</div><span class="fs-6"> vyplněných testů</span>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="secondPart" style="height: 100vh; position:absolute; top: 100vh">
@@ -73,15 +80,44 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import { useUserStore } from "@/stores/user"
 import router from "@/router";
+import { supabase } from "@/supabase";
 const scrollPageDown = () => {
   window.scrollTo({
     top: 750,
     behavior: 'smooth',
   });
 }
+
+const answeredExerciseCount = ref(0);
+const submittedTestCount = ref(0);
+
+const getCountOfAnsweredExercises = async () => {
+  const { count, error } = await supabase
+    .from('userAnswers')
+    .select('*', { count: 'exact', head: true });
+  if (error) console.log(error);
+  else {
+    if (count) answeredExerciseCount.value = count;
+  }
+}
+
+const getCountOfSubmittedTests = async () => {
+  const { count, error } = await supabase
+    .from('userTests')
+    .select('*', { count: 'exact', head: true });
+  if (error) console.log(error);
+  else {
+    if (count) submittedTestCount.value = count;
+  }
+}
+
+onMounted(() => {
+  getCountOfAnsweredExercises();
+  getCountOfSubmittedTests();
+})
 
 </script>
 
