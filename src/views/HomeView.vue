@@ -140,8 +140,7 @@ section {
 
   img {
     position: absolute;
-    right: 0;
-    top: 0;
+    left: 50%;
     height: 100vh;
   }
 }
