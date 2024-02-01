@@ -59,6 +59,9 @@ const userStore = useUserStore();
 </script>
 
 <style scoped lang="scss">
+nav {
+  z-index: 999;
+}
 .nav-link {
   text-decoration: none;
 
