@@ -17,24 +17,20 @@
         <img src="@/assets/prijimacky-online-phone-mockup.png" class="desktop">
         <div style="position: absolute; bottom: 10vh;"
           class="container-fluid d-flex align-items-center justify-content-start">
-          <div class="card bg-secondary-subtle mx-1" v-if="answeredExerciseCount">
-            <div class="card-body">
-              <div class="fs-2">{{ answeredExerciseCount }}</div><span class="fs-6"> vyplněných cvičení</span>
-            </div>
+          <div class="mx-5" v-if="answeredExerciseCount">
+            <span class="fs-1 fw-bold">{{ answeredExerciseCount }}</span><span class="fs-6"> vyplněných cvičení</span>
           </div>
-          <div class="card bg-secondary-subtle mx-1" v-if="submittedTestCount">
-            <div class="card-body">
-              <div class="fs-2">{{ submittedTestCount }}</div><span class="fs-6"> vyplněných testů</span>
-            </div>
+          <div class="mx-5" v-if="submittedTestCount">
+            <span class="fs-1 fw-bold">{{ submittedTestCount }}</span><span class="fs-6"> vyplněných testů</span>
           </div>
         </div>
       </div>
     </section>
 
     <section>
-      <div class="">
+      <div class="mt-5 mb-5">
         <div class="text-center mx-2">
-          <div class="row">
+          <div class="row d-flex align-items-center">
 
             <div class="col-sm-4 mb-3 mb-sm-0">
               <div class="card bg-secondary-subtle shadow-lg border-23 border-dark rounded-4">
