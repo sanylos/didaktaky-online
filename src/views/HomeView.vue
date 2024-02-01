@@ -2,7 +2,8 @@
   <div class="d-flex flex-column main align-items-center">
 
     <section class="purpleAnimatedBackground">
-      <div class="d-flex flex-column justify-content-center" style="height: 100vh; position: relative;">
+      <div class="d-flex flex-column justify-content-center mobileImageWrapper"
+        style="height: 100vh; position: relative;">
         <div class="main-title fs-1" style="position: absolute;">
           <div class="fw-bold">Moderní a efektivní příprava</div>
           <div>na přijímací zkoušky a maturitu</div>
@@ -13,7 +14,7 @@
               @click="scrollPageDown()"><i class="bi bi-chevron-down"></i></button>
           </div>
         </div>
-        <img src="@/assets/prijimacky-online-phone-mockup.png">
+        <img src="@/assets/prijimacky-online-phone-mockup.png" class="desktop">
         <div style="position: absolute; bottom: 10vh;"
           class="container-fluid d-flex align-items-center justify-content-start">
           <div class="card bg-secondary-subtle mx-1" v-if="answeredExerciseCount">
@@ -165,24 +166,7 @@ section {
   }
 }
 
-/* .btn.phone-mockup {
-  position: absolute;
-  z-index: 0;
-  width: 100%;
-  height: 50%;
-  top: 0px;
-  left: 45%;
-  background-size: contain;
-  background-repeat: no-repeat;
-  width: 100%;
-  height: 100%;
-  background-image: url('@/assets/prijimacky-online-phone-mockup.png');
-} */
-
 @media only screen and (max-width: 600px) {
-  .phone-mockup {
-    visibility: hidden;
-  }
 
   .main-title {
 
@@ -194,17 +178,35 @@ section {
 
     margin: 0;
   }
+
+  .desktop {
+    visibility: hidden;
+  }
+
+
+  //Makes the purple animation effect overflow the background image
+  .mobileImageWrapper {
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-image: url('@/assets/home-page-mobile-background.jpg');
+      background-size: cover;
+      opacity: 0.2;
+    }
+  }
 }
 
-/*.rainbow_text_animated {
-  font-family: 'Roboto';
-  background: linear-gradient(to right, #6e17fa 0%, #8c39ff 33%, #6C33A3 66%, #812390 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: rainbow_animation 6s ease-in-out infinite;
-  background-size: 400% 100%;
-}*/
+@media only screen and (min-width: 600px) {
+  .mobile {
+    visibility: hidden;
+  }
+}
 
 @keyframes rainbow_animation {
 
