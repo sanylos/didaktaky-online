@@ -132,6 +132,23 @@ section {
   width: 100vw;
 }
 
+//Makes the purple animation effect overflow the background image
+.mobileImageWrapper {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: url('@/assets/home-page-desktop-background.jpg');
+    background-size: cover;
+    opacity: 0.2;
+  }
+}
+
 .purpleAnimatedBackground {
   z-index: 0;
   position: relative;
@@ -183,29 +200,12 @@ section {
     visibility: hidden;
   }
 
-
-  //Makes the purple animation effect overflow the background image
   .mobileImageWrapper {
-    position: relative;
-
     &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
       background-image: url('@/assets/home-page-mobile-background.jpg');
-      background-size: cover;
-      opacity: 0.2;
     }
   }
-}
 
-@media only screen and (min-width: 600px) {
-  .mobile {
-    visibility: hidden;
-  }
 }
 
 @keyframes rainbow_animation {
