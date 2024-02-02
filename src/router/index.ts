@@ -5,6 +5,7 @@ import PrehledView from '@/views/PrehledView.vue'
 import AddExerciseView from '@/views/AddExerciseView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
 import TestView from '@/views/TestView.vue'
+import UserTestView from '@/views/UserTestView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -38,6 +39,11 @@ const router = createRouter({
       path: '/:pathMatch(.*)',
       name: 'NotFound',
       component: NotFoundView
+    },
+    {
+      path: '/test/:id',
+      name: 'NotFound',
+      component: UserTestView
     }
   ]
 })
