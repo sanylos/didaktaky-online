@@ -1,9 +1,49 @@
 <template>
     <div class="main-page text-white-50">
-        <div class="page-title">
-            Náhodné cvičení
+        <div v-if="exerciseState == 'selection'"
+            class="container rounded d-flex flex-column justify-content-center align-items-center mt-2 p-3">
+
+            <!--EXAM TYPE-->
+            <div class="d-flex mb-3">
+                <div class="mx-1" v-for="option in examOptions.examTypes" :key="option.id">
+                    <input type="radio" class="btn-check" name="examOption" :id="option.id" autocomplete="off"
+                        :value="option.id" v-model="selectedFilter.examType[0]">
+                    <label class="btn btn-outline-light" :for="option.id">{{ option.title }}</label>
+                </div>
+            </div>
+
+            <!--EXAM SUBJECT-->
+            <div class="d-flex mb-3">
+                <div class="mx-1" v-for="option in examOptions.examSubjects" :key="option.id">
+                    <input type="checkbox" class="btn-check" name="examSubject" :id="option.id" autocomplete="off"
+                        :value="option.id" v-model="selectedFilter.examSubjects">
+                    <label class="btn btn-outline-light" :for="option.id">{{ option.title }}</label>
+                </div>
+            </div>
+
+            <!--EXAM YEAR-->
+            <div class="d-flex mb-3">
+                <div class="mx-1" v-for="option in examOptions.examYears" :key="option">
+                    <input type="checkbox" class="btn-check" name="examYear" :id="option" autocomplete="off" :value="option"
+                        v-model="selectedFilter.examYears">
+                    <label class="btn btn-outline-light" :for="option">{{ option }}</label>
+                </div>
+            </div>
+
+            <!--EXAM VARIANT-->
+            <div class="d-flex mb-3">
+                <div class="mx-1" v-for="option in examOptions.examVariants" :key="option.id">
+                    <input type="checkbox" class="btn-check" name="examVariant" :id="option.id" autocomplete="off"
+                        :value="option.id" v-model="selectedFilter.examVariants">
+                    <label class="btn btn-outline-light" :for="option.id">{{ option.title }}</label>
+                </div>
+            </div>
+            <button class="btn btn-success" @click="handleExerciseFilterSubmit"
+                :disabled="selectedFilter.examType.length < 1 || selectedFilter.examSubjects.length < 1 || selectedFilter.examYears.length < 1 || selectedFilter.examVariants.length < 1">Začít<i
+                    class="bi bi-rocket-takeoff"></i></button>
+
         </div>
-        <div class="container rounded bg-dark p-3 shadow-lg m-1 w-auto">
+        <div v-if="exerciseState == 'selected'" class="container rounded bg-dark p-3 bg-secondary-subtle shadow m-1 w-auto">
 
             <Spinner :isLoading="loading"></Spinner>
 
@@ -14,10 +54,14 @@
                 <Exercise :answered="answered" :exercises="exercises"></Exercise>
             </div>
 
-            <div class="mt-4 d-flex justify-content-between">
+            <div class="mt-4 d-flex justify-content-between" v-if="exercises.exercise_id">
                 <button :disabled="!answered" class="btn btn-primary" @click="handlePrevious">⮜ Předchozí</button>
-                <button v-if="!answered" :disabled="!exercises.type" class="btn btn-success" @click="handleSubmit">✍🏼Zkontrolovat</button>
+                <button v-if="!answered" :disabled="!exercises.type" class="btn btn-success"
+                    @click="handleSubmit">✍🏼Zkontrolovat</button>
                 <button v-if="answered" class="btn btn-primary" @click="handleNext">Další ⮞</button>
+            </div>
+            <div v-else class="d-flex justify-content-center">
+                <button class="btn btn-secondary w-100" @click="exerciseState = 'selection'">Zpět na filtrování</button>
             </div>
 
         </div>
@@ -44,8 +88,21 @@ const isAnswerCorrect = ref("FALSE");
 const userAnswerId = ref('');
 const exercisePagination = ref(1);
 const exerciseId = ref(0);
+const exerciseState = ref('selection');
 
 const errorMessage = ref('');
+
+const selectedFilter: { examType: string[], examYears: string[], examVariants: string[], examSubjects: string[] } = reactive({
+    examType: [],
+    examYears: [],
+    examVariants: [],
+    examSubjects: [],
+});
+
+const handleExerciseFilterSubmit = () => {
+    getQuestion();
+    exerciseState.value = 'selected';
+}
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -68,7 +125,7 @@ const handleNext = () => {
 }
 
 const getQuestionByPagination = async (pagination: number) => {
-    loading.value=true;
+    loading.value = true;
     try {
         const { data: userData, error } = await supabase
             .from('userAnswers')
@@ -91,7 +148,7 @@ const getQuestionByPagination = async (pagination: number) => {
     } catch (error) {
         console.log(error);
     }
-    loading.value=false;
+    loading.value = false;
 }
 
 const handleSubmit = () => {
@@ -138,10 +195,10 @@ const saveQuestion = async () => {
             .insert({
                 'exercise_id': exercises.value.exercise_id,
                 'answer': userStore.exerciseAnswer,
-                'examType':exercises.value.test_type,
-                'examSubject':exercises.value.test_subject,
-                'exerciseType':exercises.value.type,
-                'exerciseGroup':exercises.value.group
+                'examType': exercises.value.test_type,
+                'examSubject': exercises.value.test_subject,
+                'exerciseType': exercises.value.type,
+                'exerciseGroup': exercises.value.group
             })
             .select();
         if (error) console.log(error);
@@ -162,10 +219,10 @@ const getQuestion = async () => {
     //FETCH RANDOM EXERCISE USING POSTGRES FUNCTION
     try {
         const { data, error } = await supabase.rpc('getrandomexercise', {
-            in_years: userStore.exerciseFilters.examYears,
-            in_subjects: userStore.exerciseFilters.examSubjects,
-            in_variants: userStore.exerciseFilters.examVariants,
-            in_types: userStore.exerciseFilters.examType
+            in_years: selectedFilter.examYears,
+            in_subjects: selectedFilter.examSubjects,
+            in_variants: selectedFilter.examVariants,
+            in_types: selectedFilter.examType
         });
 
         if (error) {
@@ -191,7 +248,25 @@ const getQuestion = async () => {
     loading.value = false;
 }
 
-getQuestion();
+const examOptions = reactive({
+    examTypes: [
+        { "id": "PZ", "title": "Přijímačky" },
+        { "id": "MZ", "title": "Maturita" },
+    ],
+    examSubjects: [
+        { "id": "CJL", "title": "Český jazyk a literatura" },
+        { "id": "MAT", "title": "Matematika" },
+        { "id": "ANJ", "title": "Anglický jazyk" },
+    ],
+    examYears: ["2023", "2022", "2021", "2020"],
+    examVariants: [
+        { "id": "1", "title": "1. řádný" },
+        { "id": "2", "title": "2. řádný" },
+        { "id": "3", "title": "1. náhradní" },
+        { "id": "4", "title": "2. náhradní" },
+        { "id": "5", "title": "Ilustrační" },
+    ],
+})
 
 </script>
 <style scoped>

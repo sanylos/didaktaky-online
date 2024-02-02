@@ -1,7 +1,7 @@
 <template>
     <div class="app-container bg-dark-subtle" data-bs-theme="dark">
         <Navbar />
-        <RouterView />
+        <RouterView class="current-page"/>
         <div class="footer mt-1">
             <a href="https://www.buymeacoffee.com/sanyl">PODPORA PROJEKTU</a>
         </div>
@@ -23,6 +23,9 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.current-page {
+    margin-top: 50px;
+}
 .app-container {
     width: 100%;
     height: 100%;

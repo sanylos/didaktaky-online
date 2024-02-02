@@ -1,8 +1,8 @@
 <template>
   <LoginModal></LoginModal>
-  <nav class="navbar navbar-expand-lg bg-secondary-subtle">
+  <nav class="navbar fixed-top navbar-expand-lg bg-secondary-subtle">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">🧠 DIDAKTAKY-ONLINE</a>
+      <a class="navbar-brand" href="#" @click="router.push('/')">🧠 DIDAKTAKY-ONLINE</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -10,7 +10,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto">
           <li class="nav-item mx-1">
-            <RouterLink to="/" class="nav-link">
+            <RouterLink to="/cviceni" class="nav-link">
               <i class="bi bi-shuffle"></i> Náhodné cvičení
             </RouterLink>
           </li>
@@ -54,10 +54,14 @@
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
 import LoginModal from './LoginModal.vue';
+import router from '@/router';
 const userStore = useUserStore();
 </script>
 
 <style scoped lang="scss">
+nav {
+  z-index: 999;
+}
 .nav-link {
   text-decoration: none;
 
