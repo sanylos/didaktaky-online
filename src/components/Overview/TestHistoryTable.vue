@@ -51,6 +51,7 @@
                         <th scope="col" class="bg-secondary-subtle">MAXIMUM BODŮ</th>
                         <th scope="col" class="bg-secondary-subtle">ÚSPĚŠNOST</th>
                         <th scope="col" class="bg-secondary-subtle">ČAS</th>
+                        <th scope="col" class="bg-secondary-subtle"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -78,6 +79,11 @@
                             <span class="text-success">{{
                                 getTimeRangeOfDate(test?.created_at,
                                     test?.submitted_at) }}s</span>
+                        </td>
+                        <td class="bg-secondary-subtle">
+                            <RouterLink :to="'/test/' + test?.id">
+                                <i class="bi bi-eye bg-dark p-1 rounded px-2 actionIcon"></i>
+                            </RouterLink>
                         </td>
                     </tr>
                 </tbody>
@@ -137,4 +143,10 @@ onMounted(() => {
 })
 </script>
 
-<style></style>
+<style lang="scss">
+.actionIcon {
+    &:hover {
+        background-color: rgb(29, 29, 29) !important;
+    }
+}
+</style>
