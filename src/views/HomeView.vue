@@ -10,8 +10,7 @@
           <div class="d-flex flex-row justify-content-start">
             <button class="btn btn-dark bg-secondary-subtle shadow-lg rounded-5 my-3 mx-1 p-2"
               @click="router.push('/cviceni')">Začít procvičovat</button>
-            <button class="btn btn-dark bg-secondary-subtle shadow-lg rounded-5 my-3 mx-1 p-2 w-auto px-3"
-              @click="scrollPageDown()"><i class="bi bi-chevron-down"></i></button>
+            <a class="btn btn-dark bg-secondary-subtle shadow-lg rounded-5 my-3 mx-1 p-2 w-auto px-3" href="#about"><i class="bi bi-chevron-down"></i></a>
           </div>
         </div>
         <img src="@/assets/prijimacky-online-phone-mockup.png" class="desktop">
@@ -28,7 +27,7 @@
     </section>
 
     <section>
-      <div class="mt-5 mb-5">
+      <div class="mt-5 mb-5" id="about">
         <div class="text-center mx-2">
           <div class="row d-flex align-items-center">
 
@@ -123,6 +122,10 @@ onMounted(() => {
 
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css?family=Roboto');
+
+* {
+  scroll-behavior: smooth;
+}
 
 section {
   width: 100vw;
