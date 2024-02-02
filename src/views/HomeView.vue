@@ -29,7 +29,7 @@
     <section>
       <div class="mt-5 mb-5" id="about">
         <div class="text-center mx-2">
-          <div class="row d-flex align-items-center">
+          <div class="row d-flex align-items-center mx-1">
 
             <div class="col-sm-4 mb-3 mb-sm-0">
               <div class="card bg-secondary-subtle shadow-lg border-23 border-dark rounded-4">
