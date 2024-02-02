@@ -30,6 +30,7 @@
     <section>
       <div class="mt-5 mb-5" id="about">
         <div class="text-center mx-2">
+          <div class="text-white fs-2 fw-normal mb-5">Připravte se na zkoušky s jistotou a zvládněte je s přehledem!</div>
           <div class="row d-flex align-items-center mx-1">
 
             <div class="col-sm-4 mb-3 mb-sm-0">
