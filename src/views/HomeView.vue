@@ -10,7 +10,8 @@
           <div class="d-flex flex-row justify-content-start">
             <button class="btn btn-dark bg-secondary-subtle shadow-lg rounded-5 my-3 mx-1 p-2"
               @click="router.push('/cviceni')">Začít procvičovat</button>
-            <a class="btn btn-dark bg-secondary-subtle shadow-lg rounded-5 my-3 mx-1 p-2 w-auto px-3" href="#about"><i class="bi bi-chevron-down"></i></a>
+            <a class="btn btn-dark bg-secondary-subtle shadow-lg rounded-5 my-3 mx-1 p-2 w-auto px-3" href="#about"><i
+                class="bi bi-chevron-down"></i></a>
           </div>
         </div>
         <img src="@/assets/prijimacky-online-phone-mockup.png" class="desktop">
@@ -35,9 +36,9 @@
               <div class="card bg-secondary-subtle shadow-lg border-23 border-dark rounded-4">
                 <div class="card-body">
                   <i class="bi bi-hdd-fill fs-1"></i>
-                  <p class="card-text">Aplikace Didaktaky-online obsahuje rozsáhlou databázi didaktických testů z
-                    předchozích let, které jsou zaměřeny na přijímací zkoušky a maturitu. Testy jsou rozděleny podle
-                    předmětů a obtížnosti, takže si můžete vybrat ty, které jsou pro vás nejvhodnější.</p>
+                  <div class="fs-3 mb-2 fw-medium">Rozsáhlá databáze testů</div>
+                  <p class="card-text">Procvičujte si autentické testy z minulých let, rozdělené podle předmětů nebo
+                    variant.</p>
                   <a @click="router.push('/test')" class="btn btn-dark">Zkusit test</a>
                 </div>
               </div>
@@ -46,14 +47,9 @@
               <div class="card bg-secondary-subtle shadow-lg border-23 border-dark rounded-4">
                 <div class="card-body">
                   <i class="bi bi-file-earmark-text-fill fs-1"></i>
-                  <p class="card-text">Naše cvičení jsou navržena tak, aby simulovala reálné zkouškové podmínky. Budou vás
-                    testovat na vaše znalosti a dovednosti, a to způsobem, který je realistický a náročný. Cvičení jsou
-                    také
-                    přizpůsobena vašemu individuálnímu vzdělávacímu stylu. Můžete si vybrat cvičení, která jsou zaměřena
-                    na
-                    konkrétní oblasti, které potřebujete zlepšit. Cvičení Didaktaky-Online vám pomohou dosáhnout
-                    akademické
-                    excelence. Připravte se na zkoušky s námi a získejte jistotu, kterou potřebujete k úspěchu.</p>
+                  <div class="fs-3 mb-2 fw-medium">Reálné zkouškové podmínky</div>
+                  <p class="card-text">Naše cvičení simulují reálné zkoušky, abyste si osvojili potřebné znalosti a
+                    dovednosti.</p>
                   <a @click="router.push('/cviceni')" class="btn btn-dark">Začít procvičovat</a>
                 </div>
               </div>
@@ -62,9 +58,8 @@
               <div class="card bg-secondary-subtle shadow-lg border-23 border-dark rounded-4">
                 <div class="card-body">
                   <i class="bi bi-speedometer2 fs-1"></i>
-                  <p class="card-text">Didaktaky-Online vám nabízí přehled vašich pokroků, který vám pomůže zůstat na
-                    správné cestě k úspěchu na zkouškách. Přehled vám poskytuje informace o tom, jak si vedete v
-                    jednotlivých oblastech, a pomáhá vám identifikovat oblasti, které potřebujete zlepšit.</p>
+                  <div class="fs-3 mb-2 fw-medium">Přehled pokroku</div>
+                  <p class="card-text">Sledujte svůj vývoj a motivujte se k dosažení vašich cílů.</p>
                   <a @click="router.push('/prehled')" class="btn btn-dark">Zobrazit přehled</a>
                 </div>
               </div>
@@ -217,5 +212,4 @@ section {
   50% {
     background-position: 100% 0;
   }
-}
-</style>
+}</style>
